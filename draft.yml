@@ -1,0 +1,3 @@
+php artisan make:migration:schema create_categories_table --schema="name:string:unique,slug:string:unique,seo_title:string,seo_des:string,seo_key:string"
+php artisan make:migration:schema create_countries_table --schema="name:string:unique,slug:string:unique,seo_title:string,seo_des:string,seo_key:string"
+php artisan make:migration:schema create_movies_table --schema="name:string:unique,slug:string:unique,seo_title:string,seo_des:string,seo_key:string"

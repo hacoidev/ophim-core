@@ -1,0 +1,1 @@
+@include('ophim::base.fields.ckfinder')

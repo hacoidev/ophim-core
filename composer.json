@@ -1,0 +1,37 @@
+{
+    "name": "hacoidev/ophim-core",
+    "description": "Ophim's core features",
+    "type": "library",
+    "authors": [
+        {
+            "name": "hacoidev",
+            "email": "hacoi.dev@gmail.com"
+        }
+    ],
+    "require": {
+        "laravel/framework": "^6|^7|^8",
+        "ckfinder/ckfinder-laravel-package": "v3.5.2.1",
+        "backpack/crud": "^5",
+        "backpack/settings": "^3"
+    },
+    "require-dev": {
+        "backpack/generators": "^3",
+        "laracasts/generators": "^2.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ophim\\Core\\": "src/",
+            "Ophim\\Core\\Database\\Factories\\": "database/factories/",
+            "Ophim\\Core\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ophim\\Core\\OphimServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable"
+}
