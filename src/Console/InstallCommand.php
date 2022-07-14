@@ -52,62 +52,64 @@ class InstallCommand extends Command
         $this->progressBar->setRedrawFrequency(1);
 
         $this->progressBar->start();
-        
-        $this->call('vendor:publish', [
-            '--provider' => 'Backpack\CRUD\BackpackServiceProvider',
-            '--tag' => 'config',
-        ]);
-        $this->progressBar->advance();$this->newLine(1);
 
         $this->call('vendor:publish', [
             '--provider' => 'Backpack\CRUD\BackpackServiceProvider',
             '--tag' => 'config',
         ]);
-        $this->progressBar->advance();$this->newLine(1);
+        $this->progressBar->advance();
+        $this->newLine(1);
+
+        $this->call('vendor:publish', [
+            '--provider' => 'Backpack\CRUD\BackpackServiceProvider',
+            '--tag' => 'config',
+        ]);
+        $this->progressBar->advance();
+        $this->newLine(1);
 
         $this->call('vendor:publish', [
             '--provider' => 'Backpack\CRUD\BackpackServiceProvider',
             '--tag' => 'errors',
         ]);
-        $this->progressBar->advance();$this->newLine(1);
+        $this->progressBar->advance();
+        $this->newLine(1);
 
         $this->call('vendor:publish', [
             '--provider' => 'Backpack\CRUD\BackpackServiceProvider',
             '--tag' => 'public',
         ]);
-        $this->progressBar->advance();$this->newLine(1);
+        $this->progressBar->advance();
+        $this->newLine(1);
 
         $this->call('vendor:publish', [
             '--provider' => 'Backpack\CRUD\BackpackServiceProvider',
             '--tag' => 'gravatar',
         ]);
-        $this->progressBar->advance();$this->newLine(1);
-        
+        $this->progressBar->advance();
+        $this->newLine(1);
+
 
         $this->call('migrate', $this->option('no-interaction') ? ['--no-interaction' => true] : []);
-        $this->progressBar->advance();$this->newLine(1);
+        $this->progressBar->advance();
+        $this->newLine(1);
 
         $this->call('backpack:publish-middleware');
-        $this->progressBar->advance();$this->newLine(1);
+        $this->progressBar->advance();
+        $this->newLine(1);
 
         $this->call('vendor:publish', [
             '--tag' => 'ophim_custom_crud',
         ]);
-        $this->progressBar->advance();$this->newLine(1);
+        $this->progressBar->advance();
+        $this->newLine(1);
 
         $this->call('vendor:publish', [
             '--tag' => 'cms_menu_content',
         ]);
-        $this->progressBar->advance();$this->newLine(1);
+        $this->progressBar->advance();
+        $this->newLine(1);
 
-        $this->call('vendor:publish', [
-            '--tag' => 'ckfinder-assets',
-        ]);
-        $this->progressBar->advance();$this->newLine(1);
-
-        $this->call('vendor:publish', [
-            '--tag' => 'ckfinder-config',
-        ]);
+        $this->installCKfinder();
 
         $this->call('db:seed', [
             'class' => SettingsTableSeeder::class,
@@ -129,9 +131,24 @@ class InstallCommand extends Command
             'class' => MenusTableSeeder::class,
         ]);
 
-        $this->progressBar->finish();$this->newLine(1);
+        $this->progressBar->finish();
+        $this->newLine(1);
         $this->info('Ophim installation finished.');
 
         return 0;
+    }
+
+    protected function installCKfinder()
+    {
+        $this->call('ckfinder:download');
+        $this->call('vendor:publish', [
+            '--tag' => 'ckfinder-assets',
+        ]);
+        $this->progressBar->advance();
+        $this->newLine(1);
+
+        $this->call('vendor:publish', [
+            '--tag' => 'ckfinder-config',
+        ]);
     }
 }
