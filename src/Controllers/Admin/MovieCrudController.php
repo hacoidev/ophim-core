@@ -97,6 +97,7 @@ class MovieCrudController extends CrudController
         CRUD::addField(['name' => 'poster_url', 'label' => 'Ảnh Poster', 'type' => 'ckfinder', 'tab' => 'Thông tin phim']);
 
         CRUD::addField(['name' => 'showtimes', 'label' => 'Lịch chiếu phim', 'type' => 'text', 'attributes' => ['placeholder' => '21h tối hàng ngày'], 'tab' => 'Thông tin phim']);
+        CRUD::addField(['name' => 'content', 'label' => 'Nội dung', 'type' => 'summernote', 'tab' => 'Thông tin phim']);
         CRUD::addField(['name' => 'notify', 'label' => 'Thông báo / ghi chú', 'type' => 'summernote', 'tab' => 'Thông tin phim']);
 
         CRUD::addField(['name' => 'trailer_url', 'label' => 'Trailer Youtube URL', 'type' => 'text', 'tab' => 'Thông tin phim']);
