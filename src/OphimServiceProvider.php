@@ -53,6 +53,7 @@ class OphimServiceProvider extends ServiceProvider
 
         $ophim_custom_crud = [
             __DIR__ . '/../resources/views/backpack/crud/fields/'      => resource_path('views/vendor/backpack/crud/fields/'),
+            __DIR__ . '/../resources/views/backpack/crud/columns/'      => resource_path('views/vendor/backpack/crud/columns/'),
         ];
 
         $this->publishes($backpack_menu_contents_view, 'cms_menu_content');
