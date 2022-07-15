@@ -34,7 +34,6 @@ $episodes = collect(old('episodes', isset($entry) ? $entry->episodes : []));
         </ul>
         <div class="tab-content" id="episode-server-data">
             @if (count($episodes))
-
                 @foreach ($episodes->groupBy('server') as $server => $data)
                     <div class="tab-pane @if ($loop->first) active @endif"
                         id="episode-server-{{ $loop->index }}" role="tabpanel">
@@ -53,7 +52,8 @@ $episodes = collect(old('episodes', isset($entry) ? $entry->episodes : []));
                                     <tr>
                                         <th>Tên</th>
                                         <th>Slug</th>
-                                        <th colspan="3">Nguồn phát</th>
+                                        <th>Type</th>
+                                        <th>Link</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -72,25 +72,23 @@ $episodes = collect(old('episodes', isset($entry) ? $entry->episodes : []));
                                                     placeholder="tap-1"
                                                     value="{{ $episode['slug'] ?? $episode->slug }}"
                                                     class="form-control" data-attr-name="slug"></td>
-                                            <td><input type="text" name="episodes[{{ $index }}][source][link]"
-                                                    placeholder="" class="form-control" data-attr-name="source.link"
-                                                    value="{{ $episode['source']['link'] ?? ($episode->source['link'] ?? '') }}">
+                                            <td>
+                                                <select name="episodes[{{ $index }}][type]" data-attr-name="type" class="form-control">
+                                                    @foreach (config('ophim.episodes.types', []) as $key => $name)
+                                                        <option value="{{ $key }}"
+                                                            @if (($episode['type'] ?? $episode->type) == $key) selected @endif>
+                                                            {{ $name }}</option>
+                                                    @endforeach
+                                                </select>
                                             </td>
-                                            <td><input type="text"
-                                                    name="episodes[{{ $index }}][source][link_embed]"
-                                                    placeholder="Embed" class="form-control"
-                                                    data-attr-name="source.link_embed"
-                                                    value="{{ $episode['source']['link_embed'] ?? ($episode->source['link_embed'] ?? '') }}">
-                                            </td>
-                                            <td><input type="text"
-                                                    name="episodes[{{ $index++ }}][source][link_m3u8]"
-                                                    placeholder="M3U8" class="form-control"
-                                                    data-attr-name="source.link_m3u8"
-                                                    value="{{ $episode['source']['link_m3u8'] ?? ($episode->source['link_m3u8'] ?? '') }}">
+                                            <td><input type="text" name="episodes[{{ $index }}][link]"
+                                                    placeholder="" class="form-control" data-attr-name="link"
+                                                    value="{{ $episode['link'] ?? ($episode->link ?? '') }}">
                                             </td>
                                             <td class="text-center"><span style="cursor:pointer"
                                                     class="badge outline-badge-danger delete-episode">Xóa</span></td>
                                         </tr>
+                                        @php $index++; @endphp
                                     @endforeach
                                 </tbody>
                             </table>
@@ -114,7 +112,8 @@ $episodes = collect(old('episodes', isset($entry) ? $entry->episodes : []));
                                 <tr>
                                     <th>Tên</th>
                                     <th>Slug</th>
-                                    <th colspan="3">Nguồn phát</th>
+                                    <th>Type</th>
+                                    <th>Link</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -125,18 +124,18 @@ $episodes = collect(old('episodes', isset($entry) ? $entry->episodes : []));
                                     <td><input type="text" name="episodes[0][name]" placeholder="Trailer"
                                             value="1" class="ep_name form-control" data-attr-name="name">
                                     </td>
-                                    <td><input type="text" name="episodes[0][slug]" placeholder="trailer"
-                                            value="tap-1" class="form-control" data-attr-name="slug"></td>
-                                    <td><input type="text" name="episodes[0][source][link]" placeholder=""
-                                            class="form-control" data-attr-name="source.link"></td>
-                                    <td><input type="text" name="episodes[0][source][link_embed]"
-                                            placeholder="Embed" class="form-control"
-                                            data-attr-name="source.link_embed">
+                                    <td><input type="text" name="episodes[0][slug]" placeholder="Trailer"
+                                            value="trailer" class="form-control" data-attr-name="slug"></td>
+                                    <td>
+                                        <select name="episodes[0][type]"  data-attr-name="type" class="form-control">
+                                            @foreach (config('ophim.episodes.types', []) as $key => $name)
+                                                <option value="{{ $key }}">
+                                                    {{ $name }}</option>
+                                            @endforeach
+                                        </select>
                                     </td>
-                                    <td><input type="text" name="episodes[0][source][link_m3u8]"
-                                            placeholder="M3U8" class="form-control"
-                                            data-attr-name="source.link_m3u8">
-                                    </td>
+                                    <td><input type="text" name="episodes[0][link]" placeholder=""
+                                            class="form-control" data-attr-name="link"></td>
                                     <td class="text-center"><span style="cursor:pointer"
                                             class="badge outline-badge-danger delete-episode">Xóa</span></td>
                                 </tr>
@@ -179,7 +178,8 @@ $episodes = collect(old('episodes', isset($entry) ? $entry->episodes : []));
                                     <tr>
                                         <th>Name</th>
                                         <th>Slug</th>
-                                        <th colspan="3">Link</th>
+                                        <th>Type</th>
+                                        <th>Link</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -215,12 +215,15 @@ $episodes = collect(old('episodes', isset($entry) ? $entry->episodes : []));
                         </td>
                         <td><input type="text" placeholder="tap-1" value="tap-1"
                                 class="form-control" data-attr-name="slug"></td>
+                        <td>
+                            <select data-attr-name="type" class="form-control">
+                                @foreach (config('ophim.episodes.types', []) as $key => $name)
+                                    <option value="{{ $key }}">{{ $name }}</option>
+                                @endforeach
+                            </select>
+                        </td>
                         <td><input type="text" placeholder="" value=""
-                                class="form-control" data-attr-name="source.link"></td>
-                        <td><input type="text" placeholder="Embed"
-                                class="form-control" data-attr-name="source.link_embed"></td>
-                        <td><input type="text" placeholder="M3U8"
-                                class="form-control" data-attr-name="source.link_m3u8"></td>
+                                class="form-control" data-attr-name="link"></td>
                         <td class="text-center"><span style="cursor:pointer"
                                 class="badge outline-badge-danger delete-episode">Xóa</span></td>
                     </tr>`

@@ -16,10 +16,11 @@ class CreateEpisodesTable extends Migration
         Schema::create('episodes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('movie_id');
+            $table->string('server');
             $table->string('name');
             $table->string('slug');
-            $table->string('server');
-            $table->text('source')->nullable();
+            $table->string('type');
+            $table->string('link')->nullable();
             $table->boolean('has_report')->default(false);
             $table->string('report_message', 512)->nullable();
             $table->timestamps();
