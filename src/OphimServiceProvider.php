@@ -5,6 +5,7 @@ namespace Ophim\Core;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Ophim\Core\Console\CreateUser;
 use Ophim\Core\Console\InstallCommand;
+use Ophim\Core\Middleware\CKFinderAuth;
 
 class OphimServiceProvider extends ServiceProvider
 {
@@ -22,9 +23,11 @@ class OphimServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'ophim');
 
-        config(['ckfinder.authentication' => function () {
-            return true;
-        }]);
+        config(['ckfinder.authentication' => CKFinderAuth::class]);
+
+        config(['ophim.themes' => array_merge(config('ophim.themes', []), [
+            'default' => 'Mặc định'
+        ])]);
     }
 
     public function boot()

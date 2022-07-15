@@ -23,19 +23,14 @@ class SettingsTableSeeder extends Seeder
                 'description' => 'Giao diện người dùng trang web',
                 'field'       => json_encode([
                     'name' => 'value',
-                    'type' => 'select_from_table',
-                    'options' => [
-                        'table'   => 'themes',
-                        'value_by' => 'key',
-                        'display_by' => 'name',
-                    ]
+                    'type' => 'select_theme',
                 ]),
                 'active'      => 1,
-            ],
+            ]
         ];
 
         foreach ($settings as $index => $setting) {
-            $result = Setting::updateOrCreate($setting);
+            $result = Setting::updateOrCreate(collect($setting)->only('key')->toArray(), collect($setting)->except('key')->toArray());
 
             if (!$result) {
                 $this->command->info("Insert failed at record $index.");
