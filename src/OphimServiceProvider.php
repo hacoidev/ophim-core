@@ -20,6 +20,8 @@ class OphimServiceProvider extends ServiceProvider
 
     public function register()
     {
+        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'ophim');
+
         config(['ckfinder.authentication' => function () {
             return true;
         }]);
@@ -58,5 +60,9 @@ class OphimServiceProvider extends ServiceProvider
 
         $this->publishes($backpack_menu_contents_view, 'cms_menu_content');
         $this->publishes($ophim_custom_crud, 'ophim_custom_crud');
+
+        $this->publishes([
+            __DIR__ . '/../config/config.php' => config_path('ophim.php')
+        ]);
     }
 }
