@@ -5,6 +5,7 @@ namespace Ophim\Core\Models;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
 use Ophim\Core\Traits\ActorLog;
+use Ophim\Core\Traits\HasFactory;
 use Ophim\Core\Traits\Sluggable;
 
 class Movie extends Model
@@ -12,6 +13,7 @@ class Movie extends Model
     use CrudTrait;
     use ActorLog;
     use Sluggable;
+    use HasFactory;
 
     /*
     |--------------------------------------------------------------------------

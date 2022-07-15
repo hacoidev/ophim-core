@@ -62,7 +62,7 @@ class MovieCrudController extends CrudController
         CRUD::addColumn(['name' => 'status', 'label' => 'Tình trạng', 'type' => 'text', 'tab' => 'Thông tin phim']);
         CRUD::addColumn(['name' => 'categories', 'label' => 'Thể loại', 'type' => 'relationship', 'tab' => 'Thông tin phim']);
         CRUD::addColumn(['name' => 'regions', 'label' => 'Khu vực', 'type' => 'relationship', 'tab' => 'Thông tin phim']);
-        CRUD::addColumn(['name' => 'publish_year', 'label' => 'Năm', 'type' => 'number', 'tab' => 'Thông tin phim']);
+        CRUD::addColumn(['name' => 'publish_year', 'label' => 'Năm', 'type' => 'text', 'tab' => 'Thông tin phim']);
         CRUD::addColumn(['name' => 'user_name', 'label' => 'Cập nhật bởi', 'type' => 'text', 'tab' => 'Thông tin phim']);
     }
 

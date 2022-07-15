@@ -4,6 +4,7 @@ namespace Ophim\Core\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Ophim\Core\Traits\HasFactory;
 use Ophim\Core\Traits\HasUniqueName;
 use Ophim\Core\Traits\Sluggable;
 
@@ -12,6 +13,7 @@ class Tag extends Model
     use CrudTrait;
     use Sluggable;
     use HasUniqueName;
+    use HasFactory;
 
     /*
     |--------------------------------------------------------------------------

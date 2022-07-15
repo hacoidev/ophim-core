@@ -4,10 +4,12 @@ namespace Ophim\Core\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Ophim\Core\Traits\HasFactory;
 
 class Theme extends Model
 {
     use CrudTrait;
+    use HasFactory;
 
     /*
     |--------------------------------------------------------------------------

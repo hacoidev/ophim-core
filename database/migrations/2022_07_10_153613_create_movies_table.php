@@ -31,7 +31,7 @@ class CreateMoviesTable extends Migration
             $table->string('language')->nullable()->default('Tiếng Việt');
             $table->string('notify', 512)->nullable();
             $table->string('showtimes', 512)->nullable();
-            $table->integer('publish_year')->nullable();
+            $table->integer('publish_year')->index()->nullable();
             $table->boolean('is_shown_in_theater')->default(false);
             $table->boolean('is_recommended')->default(false);
             $table->boolean('is_copyright')->default(false);

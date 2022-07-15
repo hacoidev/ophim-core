@@ -4,10 +4,12 @@ namespace Ophim\Core\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Model;
+use Ophim\Core\Traits\HasFactory;
 
 class Menu extends Model
 {
     use CrudTrait;
+    use HasFactory;
 
     protected $table = 'menus';
     protected $fillable = ['name', 'type', 'link', 'parent_id'];
