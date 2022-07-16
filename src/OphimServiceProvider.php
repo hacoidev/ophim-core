@@ -34,7 +34,11 @@ class OphimServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+        $this->loadRoutesFrom(__DIR__ . '/../routes/admin.php');
+
+        if (config('ophim.loadRoutes')) {
+            $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+        }
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
@@ -46,6 +50,10 @@ class OphimServiceProvider extends ServiceProvider
             InstallCommand::class,
             CreateUser::class
         ]);
+
+        $this->app->bind(Theme::class, function ($app) {
+            return new Theme();
+        });
     }
 
     protected function publishFiles()

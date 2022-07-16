@@ -10,17 +10,21 @@ use CKSource\CKFinderBridge\Controller\CKFinderController;
 // Routes you generate using Backpack\Generators will be placed here.
 
 Route::group([
+    'prefix'     => config('backpack.base.route_prefix', 'admin'),
     'middleware' => array_merge(
         (array) config('backpack.base.web_middleware', 'web'),
+        (array) config('backpack.base.middleware_key', 'admin')
     ),
-    'namespace'  => 'Ophim\Core\Controllers',
+    'namespace'  => 'Ophim\Core\Controllers\Admin',
 ], function () {
-    Route::get('/', 'MovieSiteController', 'index');
-    Route::get(sprintf('/%s', config('ophim.routes.category', 'the-loai')), 'MovieSiteController', 'category');
-    Route::get(sprintf('/%s/{category}', config('ophim.routes.category', 'the-loai')), 'MovieSiteController', 'getMovieOfCategory');
-    Route::get(sprintf('/%s/{region}', config('ophim.routes.region', 'khu-vuc')), 'MovieSiteController', 'getMovieOfRegion');
-    Route::get(sprintf('/%s/{movie}', config('ophim.routes.movie', 'phim')), 'MovieSiteController', 'getMovieOverview');
-    Route::get(sprintf('/%s/{movie}/{episode}', config('ophim.routes.movie', 'phim')), 'MovieSiteController', 'getEpisode');
+    Route::crud('category', 'CategoryCrudController');
+    Route::crud('region', 'RegionCrudController');
+    Route::crud('movie', 'MovieCrudController');
+    Route::crud('actor', 'ActorCrudController');
+    Route::crud('director', 'DirectorCrudController');
+    Route::crud('studio', 'StudioCrudController');
+    Route::crud('tag', 'TagCrudController');
+    Route::crud('menu', 'MenuCrudController');
 });
 
 Route::group([

@@ -3,17 +3,20 @@
 namespace Ophim\Core\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Hacoidev\CachingModel\Contracts\Cacheable;
+use Hacoidev\CachingModel\HasCache;
 use Illuminate\Database\Eloquent\Model;
 use Ophim\Core\Traits\HasFactory;
 use Ophim\Core\Traits\HasUniqueName;
 use Ophim\Core\Traits\Sluggable;
 
-class Tag extends Model
+class Tag extends Model implements Cacheable
 {
     use CrudTrait;
     use Sluggable;
     use HasUniqueName;
     use HasFactory;
+    use HasCache;
 
     /*
     |--------------------------------------------------------------------------
@@ -34,6 +37,11 @@ class Tag extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+
+    public static function primaryCacheKey(): string
+    {
+        return 'slug';
+    }
 
     /*
     |--------------------------------------------------------------------------
