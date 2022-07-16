@@ -8,7 +8,7 @@ use Exception;
 class Theme
 {
     protected $name;
-    protected $namespace = 'ophim';
+    protected $namespace = 'ophim_themes';
     protected $publicPath;
     protected $themePath;
     protected $payload;
@@ -18,7 +18,7 @@ class Theme
         $this->payload = $payload;
 
         $this->name  = Setting::get('site_theme') ?? config('ophim.theme', 'default');
-        $this->themePath = $this->namespace . '::' . 'themes.' . $this->name;
+        $this->themePath = $this->namespace . '::' . $this->name;
     }
 
     public function render($template, array $data = [])
