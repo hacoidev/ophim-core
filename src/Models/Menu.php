@@ -3,13 +3,16 @@
 namespace Ophim\Core\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Hacoidev\CachingModel\Contracts\Cacheable;
+use Hacoidev\CachingModel\HasCache;
 use Illuminate\Database\Eloquent\Model;
 use Ophim\Core\Traits\HasFactory;
 
-class Menu extends Model
+class Menu extends Model implements Cacheable
 {
     use CrudTrait;
     use HasFactory;
+    use HasCache;
 
     protected $table = 'menus';
     protected $fillable = ['name', 'type', 'link', 'parent_id'];

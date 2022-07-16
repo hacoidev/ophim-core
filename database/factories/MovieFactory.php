@@ -25,7 +25,7 @@ class MovieFactory extends Factory
         return [
             'name' => $name = $this->faker->name,
             'origin_name' => $name,
-            'slug' => Str::slug($name),
+            'slug' => Str::slug($name.microtime(true)),
         ];
     }
 }

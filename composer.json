@@ -12,7 +12,8 @@
         "laravel/framework": "^6|^7|^8",
         "ckfinder/ckfinder-laravel-package": "v3.5.2.1",
         "backpack/crud": "^5",
-        "backpack/settings": "^3"
+        "backpack/settings": "^3",
+        "hacoidev/laravel-caching-model": "^1.0"
     },
     "require-dev": {
         "backpack/generators": "^3",

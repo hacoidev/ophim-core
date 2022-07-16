@@ -2,6 +2,7 @@
 
 namespace Ophim\Core;
 
+use Backpack\Settings\app\Models\Setting;
 use Exception;
 
 class Theme
@@ -12,12 +13,12 @@ class Theme
     protected $themePath;
     protected $payload;
 
-    public function __construct(string $name, array $payload = [])
+    public function __construct(array $payload = [])
     {
-        $this->name = $name;
         $this->payload = $payload;
 
-        $this->themePath = $this->namespace . '::' . 'themes.' . $name;
+        $this->name  = Setting::get('site_theme') ?? config('ophim.theme', 'default');
+        $this->themePath = $this->namespace . '::' . 'themes.' . $this->name;
     }
 
     public function render($template, array $data = [])

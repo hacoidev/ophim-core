@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9c9a54c4e4aa54d3738d2ed32d730ce8",
+    "content-hash": "1eb720b1a427d2fe607654312c883ed5",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1701,6 +1701,47 @@
                 }
             ],
             "time": "2022-06-20T21:43:11+00:00"
+        },
+        {
+            "name": "hacoidev/laravel-caching-model",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hacoidev/laravel-caching-model.git",
+                "reference": "f900b03ed8468ece750b1748f23e1c8d6d9cfe11"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hacoidev/laravel-caching-model/zipball/f900b03ed8468ece750b1748f23e1c8d6d9cfe11",
+                "reference": "f900b03ed8468ece750b1748f23e1c8d6d9cfe11",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^6.0|^7.0|^8.0",
+                "php": "^7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Hacoidev\\CachingModel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "hacoidev",
+                    "email": "hacoi.dev@gmail.com"
+                }
+            ],
+            "description": "A simple cache library for laravel eloquent model",
+            "support": {
+                "issues": "https://github.com/hacoidev/laravel-caching-model/issues",
+                "source": "https://github.com/hacoidev/laravel-caching-model/tree/1.0.1"
+            },
+            "time": "2022-07-16T16:08:13+00:00"
         },
         {
             "name": "laravel/framework",
