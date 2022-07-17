@@ -3,6 +3,7 @@
 namespace Ophim\Core\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Ophim\Core\Contracts\TaxonomyInterface;
 use Hacoidev\CachingModel\Contracts\Cacheable;
 use Hacoidev\CachingModel\HasCache;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Ophim\Core\Traits\ActorLog;
 use Ophim\Core\Traits\HasFactory;
 use Ophim\Core\Traits\Sluggable;
 
-class Category extends Model implements Cacheable
+class Category extends Model implements TaxonomyInterface, Cacheable
 {
     use CrudTrait;
     use ActorLog;
@@ -41,6 +42,11 @@ class Category extends Model implements Cacheable
     public static function primaryCacheKey(): string
     {
         return 'slug';
+    }
+
+    public function getUrl()
+    {
+        return route('categories.movies.index', $this->slug);
     }
 
     /*

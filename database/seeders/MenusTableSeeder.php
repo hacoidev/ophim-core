@@ -41,7 +41,5 @@ class MenusTableSeeder extends Seeder
                 'parent_id' => $regionGroup->id
             ]);
         }
-
-        $this->command->info('Generate menu complete');
     }
 }

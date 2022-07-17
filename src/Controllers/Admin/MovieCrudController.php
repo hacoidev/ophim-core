@@ -5,11 +5,22 @@ namespace Ophim\Core\Controllers\Admin;
 use Ophim\Core\Requests\MovieRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Backpack\Settings\app\Models\Setting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Ophim\Core\Models\Actor;
 use Prologue\Alerts\Facades\Alert;
 use Illuminate\Support\Str;
+use Ophim\Core\Database\Seeders\MenusTableSeeder;
+use Ophim\Core\Models\Category;
 use Ophim\Core\Models\Director;
+use Ophim\Core\Models\Episode;
+use Ophim\Core\Models\Movie;
+use Ophim\Core\Models\Region;
 use Ophim\Core\Models\Tag;
 
 /**
@@ -57,13 +68,17 @@ class MovieCrudController extends CrudController
          * - CRUD::addColumn(['name' => 'price', 'type' => 'number','tab'=>'Thông tin phim']);
          */
 
-        CRUD::addColumn(['name' => 'name', 'label' => 'Tên', 'type' => 'text', 'tab' => 'Thông tin phim']);
-        CRUD::addColumn(['name' => 'thumb_url', 'label' => 'Ảnh thumb', 'type' => 'image', 'tab' => 'Thông tin phim']);
-        CRUD::addColumn(['name' => 'status', 'label' => 'Tình trạng', 'type' => 'text', 'tab' => 'Thông tin phim']);
-        CRUD::addColumn(['name' => 'categories', 'label' => 'Thể loại', 'type' => 'relationship', 'tab' => 'Thông tin phim']);
-        CRUD::addColumn(['name' => 'regions', 'label' => 'Khu vực', 'type' => 'relationship', 'tab' => 'Thông tin phim']);
-        CRUD::addColumn(['name' => 'publish_year', 'label' => 'Năm', 'type' => 'text', 'tab' => 'Thông tin phim']);
-        CRUD::addColumn(['name' => 'user_name', 'label' => 'Cập nhật bởi', 'type' => 'text', 'tab' => 'Thông tin phim']);
+        CRUD::addColumn(['name' => 'name', 'label' => 'Tên', 'type' => 'text',]);
+        CRUD::addColumn([
+            'name' => 'thumb_url', 'label' => 'Ảnh thumb', 'type' => 'image',
+            'height' => '100px',
+            'width'  => 'auto',
+        ]);
+        CRUD::addColumn(['name' => 'status', 'label' => 'Tình trạng', 'type' => 'text',]);
+        CRUD::addColumn(['name' => 'categories', 'label' => 'Thể loại', 'type' => 'relationship',]);
+        CRUD::addColumn(['name' => 'regions', 'label' => 'Khu vực', 'type' => 'relationship',]);
+        CRUD::addColumn(['name' => 'publish_year', 'label' => 'Năm', 'type' => 'text',]);
+        CRUD::addColumn(['name' => 'user_name', 'label' => 'Cập nhật bởi', 'type' => 'text',]);
     }
 
     /**
@@ -92,14 +107,14 @@ class MovieCrudController extends CrudController
         ], 'tab' => 'Thông tin phim']);
         CRUD::addField(['name' => 'slug', 'label' => 'Đường dẫn tĩnh', 'type' => 'text', 'tab' => 'Thông tin phim']);
         CRUD::addField([
-            'name' => 'thumb_url', 'label' => 'Ảnh Thumb', 'type' => 'ckfinder', 'tab' => 'Thông tin phim'
+            'name' => 'thumb_url', 'label' => 'Ảnh Thumb', 'type' => 'ckfinder', 'preview' => ['width' => 'auto', 'height' => '340px'], 'tab' => 'Thông tin phim'
         ]);
-        CRUD::addField(['name' => 'poster_url', 'label' => 'Ảnh Poster', 'type' => 'ckfinder', 'tab' => 'Thông tin phim']);
+        CRUD::addField(['name' => 'poster_url', 'label' => 'Ảnh Poster', 'type' => 'ckfinder', 'preview' => ['width' => 'auto', 'height' => '340px'], 'tab' => 'Thông tin phim']);
 
-        CRUD::addField(['name' => 'showtimes', 'label' => 'Lịch chiếu phim', 'type' => 'text', 'attributes' => ['placeholder' => '21h tối hàng ngày'], 'tab' => 'Thông tin phim']);
         CRUD::addField(['name' => 'content', 'label' => 'Nội dung', 'type' => 'summernote', 'tab' => 'Thông tin phim']);
         CRUD::addField(['name' => 'notify', 'label' => 'Thông báo / ghi chú', 'type' => 'summernote', 'tab' => 'Thông tin phim']);
 
+        CRUD::addField(['name' => 'showtimes', 'label' => 'Lịch chiếu phim', 'type' => 'text', 'attributes' => ['placeholder' => '21h tối hàng ngày'], 'tab' => 'Thông tin phim']);
         CRUD::addField(['name' => 'trailer_url', 'label' => 'Trailer Youtube URL', 'type' => 'text', 'tab' => 'Thông tin phim']);
 
         CRUD::addField(['name' => 'episode_time', 'label' => 'Thời lượng tập phim', 'type' => 'text', 'wrapperAttributes' => [
@@ -209,5 +224,156 @@ class MovieCrudController extends CrudController
         $request['tags'] = $tag_ids;
 
         return [$actor_ids, $director_ids, $tag_ids];
+    }
+
+    protected function setupCrawlRoutes($segment, $routeName, $controller)
+    {
+        Route::any($segment . '/crawl/fetch', [
+            'as'        => $routeName . '.crawl',
+            'uses'      => $controller . '@fetchMovieList',
+            'operation' => 'crawl',
+        ]);
+
+        Route::get($segment . '/crawl', [
+            'as'        => $routeName . '.crawl',
+            'uses'      => $controller . '@showCrawlPage',
+            'operation' => 'crawl',
+        ]);
+
+        Route::post($segment . '/crawl', [
+            'as'        => $routeName . '.crawl',
+            'uses'      => $controller . '@crawl',
+            'operation' => 'crawl',
+        ]);
+    }
+
+    public function fetchMovieList(Request $request)
+    {
+        $data = collect();
+
+        $request['link'] = preg_split('/[\n\r]+/', $request['link']);
+
+        foreach ($request['link'] as $link) {
+            if (preg_match('/(.*?)(\/phim\/)(.*?)/', $link)) {
+                $response = json_decode(file_get_contents($link), true);
+                $data->push(collect($response['movie'])->only('name', 'slug')->toArray());
+            } else {
+                for ($i = $request['from']; $i <= $request['to']; $i++) {
+                    $response = json_decode(Http::timeout(3)->get($link, [
+                        'page' => $i
+                    ]), true);
+                    $data->push(...$response['items']);
+                }
+            }
+        }
+
+        return $data;
+    }
+
+    public function showCrawlPage(Request $request)
+    {
+        $this->crud->hasAccessOrFail('create');
+        $this->crud->setOperation('Crawl');
+
+        return view('crawl');
+    }
+
+    public function crawl(Request $request)
+    {
+        $pattern = sprintf('%s/phim/{slug}', Setting::get('ophim_api_url', 'https://ophim1.com'));
+
+        try {
+            $res = json_decode(file_get_contents(str_replace('{slug}', $request['slug'], $pattern)), true);
+            $info = $res['movie'];
+            $episodes = $res['episodes'];
+            $movie = Movie::firstOrCreate([
+                'name' => $info['name'],
+                'origin_name' => $info['origin_name']
+            ], [
+                'publish_year' => $info['year'],
+                'content' => $info['content'],
+                'type' =>  $this->getMovieType($info, $episodes),
+                'status' => $info['status'],
+                'thumb_url' => $this->getImage($request['slug'], $info['thumb_url']),
+                'poster_url' => $this->getImage($request['slug'], $info['poster_url']),
+                'is_copyright' => $info['is_copyright'] != 'off',
+                'trailer_url' => $info['trailer_url'] ?? "",
+                'quality' => $info['quality'],
+                'language' => $info['lang'],
+                'is_recommended' => rand(0, 1)
+            ]);
+
+            $actors = [];
+            $directors = [];
+            $categories = [];
+            $regions = [];
+            foreach ($info['actor'] as $actor) {
+                $actors[] = Actor::firstOrCreate(['name' => $actor])->id;
+            }
+            foreach ($info['director'] as $director) {
+                $directors[] = Director::firstOrCreate(['name' => $director])->id;
+            }
+            foreach ($info['category'] as $category) {
+                $categories[] = Category::firstOrCreate(['name' => $category['name']])->id;
+            }
+            foreach ($info['country'] as $region) {
+                $regions[] = Region::firstOrCreate(['name' => $region['name']])->id;
+            }
+
+            $movie->actors()->sync($actors);
+            $movie->directors()->sync($directors);
+            $movie->categories()->sync($categories);
+            $movie->regions()->sync($regions);
+
+            foreach ($episodes as $server) {
+                foreach ($server['server_data'] as $episode) {
+                    if ($episode['link_m3u8']) {
+                        Episode::firstOrCreate([
+                            'name' => $episode['name'],
+                            'movie_id' => $movie->id,
+                            'server' => $server['server_name'],
+                            'type' => 'm3u8'
+                        ], [
+                            'link' => $episode['link_m3u8'],
+                            'slug' => 'tap-' . $episode['name']
+                        ]);
+                    }
+                    if ($episode['link_embed']) {
+                        Episode::firstOrCreate([
+                            'name' => $episode['name'],
+                            'movie_id' => $movie->id,
+                            'server' => $server['server_name'],
+                            'type' => 'embed',
+                        ], [
+                            'link' => $episode['link_embed'],
+                            'slug' => 'tap-' . $episode['name']
+                        ]);
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
+
+        (new MenusTableSeeder)->run();
+
+        return response()->json(['message' => 'OK']);
+    }
+
+    protected function getMovieType($info, $episodes)
+    {
+        return $info['type'] == 'series' ? 'series'
+            : ($info['type'] == 'single' ? 'single'
+                : (count(reset($episodes)['server_data'] ?? []) > 1 ? 'series' : 'single'));
+    }
+
+    protected function getImage($slug, string $url): string
+    {
+        if (empty($url)) return '';
+        $contents = file_get_contents($url);
+        $filename = substr($url, strrpos($url, '/') + 1);
+        $path = "{$slug}/{$filename}";
+        Storage::disk('public')->put($path, $contents);
+        return Storage::url($path);
     }
 }

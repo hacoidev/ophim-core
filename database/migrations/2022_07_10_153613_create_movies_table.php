@@ -39,9 +39,6 @@ class CreateMoviesTable extends Migration
 
             $table->integer('episode_server_count')->default(0);
             $table->integer('episode_data_count')->default(0);
-            $table->string('fetch_url', 2048)->nullable();
-            $table->string('fetch_ophim_id')->nullable();
-            $table->string('fetch_ophim_modified')->nullable();
 
             $table->integer('view_total')->default(0);
             $table->integer('view_day')->default(0);

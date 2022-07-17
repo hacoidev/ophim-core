@@ -16,9 +16,12 @@ Route::group([
     ),
 ], function () {
     Route::get('/', [MovieSiteController::class, 'index']);
-    Route::get(sprintf('/%s', config('ophim.routes.category', 'the-loai')), [MovieSiteController::class, 'category']);
-    Route::get(sprintf('/%s/{category}', config('ophim.routes.category', 'the-loai')), [MovieSiteController::class, 'getMovieOfCategory']);
-    Route::get(sprintf('/%s/{region}', config('ophim.routes.region', 'khu-vuc')), [MovieSiteController::class, 'getMovieOfRegion']);
-    Route::get(sprintf('/%s/{movie}', config('ophim.routes.movie', 'phim')), [MovieSiteController::class, 'getMovieOverview']);
-    Route::get(sprintf('/%s/{movie}/{episode}', config('ophim.routes.movie', 'phim')), [MovieSiteController::class, 'getEpisode']);
+    Route::get(sprintf('/%s/{category}', config('ophim.routes.category', 'the-loai')), [MovieSiteController::class, 'getMovieOfCategory'])->name('categories.movies.index');
+    Route::get(sprintf('/%s/{actor}', config('ophim.routes.actors', 'dien-vien')), [MovieSiteController::class, 'getMovieOfActor'])->name('actors.movies.index');
+    Route::get(sprintf('/%s/{director}', config('ophim.routes.directors', 'dao-dien')), [MovieSiteController::class, 'getMovieOfDirector'])->name('directors.movies.index');
+    Route::get(sprintf('/%s/{tag}', config('ophim.routes.tags', 'tu-khoa')), [MovieSiteController::class, 'getMovieOfTag'])->name('tags.movies.index');
+    Route::get(sprintf('/%s/{region}', config('ophim.routes.region', 'quoc-gia')), [MovieSiteController::class, 'getMovieOfRegion'])->name('regions.movies.index');
+    Route::get(sprintf('/%s/{type}', config('ophim.routes.types', 'danh-sach')), [MovieSiteController::class, 'getMovieOfType'])->name('types.movies.index');
+    Route::get(sprintf('/%s/{movie}', config('ophim.routes.movie', 'phim')), [MovieSiteController::class, 'getMovieOverview'])->name('movies.show');
+    Route::get(sprintf('/%s/{movie}/{episode}', config('ophim.routes.movie', 'phim')), [MovieSiteController::class, 'getEpisode'])->name('episodes.show');
 });

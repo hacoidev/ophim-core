@@ -3,6 +3,7 @@
 namespace Ophim\Core\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Ophim\Core\Contracts\TaxonomyInterface;
 use Hacoidev\CachingModel\Contracts\Cacheable;
 use Hacoidev\CachingModel\HasCache;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Ophim\Core\Traits\ActorLog;
 use Ophim\Core\Traits\HasFactory;
 use Ophim\Core\Traits\Sluggable;
 
-class Movie extends Model implements Cacheable
+class Movie extends Model implements TaxonomyInterface, Cacheable
 {
     use CrudTrait;
     use ActorLog;
@@ -43,6 +44,10 @@ class Movie extends Model implements Cacheable
         return 'slug';
     }
 
+    public function getUrl()
+    {
+        return route('movies.show', $this->slug);
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -91,6 +96,16 @@ class Movie extends Model implements Cacheable
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
+
+    public function getStatus()
+    {
+        $statuses = [
+            'trailer' => __('Sắp chiếu'),
+            'ongoing' => __('Đang chiếu'),
+            'completed' => __('Hoàn thành')
+        ];
+        return $statuses[$this->status];
+    }
 
     /*
     |--------------------------------------------------------------------------

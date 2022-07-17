@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.231.5",
+            "version": "3.231.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "4ea642d1c7f8002037ef46e5f17c9fc1273a6021"
+                "reference": "25f7cf72a1d7cf3075436cfbfdc4caed201df3ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4ea642d1c7f8002037ef46e5f17c9fc1273a6021",
-                "reference": "4ea642d1c7f8002037ef46e5f17c9fc1273a6021",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/25f7cf72a1d7cf3075436cfbfdc4caed201df3ec",
+                "reference": "25f7cf72a1d7cf3075436cfbfdc4caed201df3ec",
                 "shasum": ""
             },
             "require": {
@@ -144,9 +144,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.231.5"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.231.7"
             },
-            "time": "2022-07-13T18:36:03+00:00"
+            "time": "2022-07-15T18:16:42+00:00"
         },
         {
             "name": "backpack/crud",

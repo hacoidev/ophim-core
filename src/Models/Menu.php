@@ -33,7 +33,7 @@ class Menu extends Model implements Cacheable
      */
     public static function getTree()
     {
-        $menu = self::orderBy('lft')->get();
+        $menu = self::fromCache()->all()->sortBy('lft');
 
         if ($menu->count()) {
             foreach ($menu as $k => $menu_item) {

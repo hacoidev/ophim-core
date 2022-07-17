@@ -60,6 +60,8 @@ $episodes = collect(old('episodes', isset($entry) ? $entry->episodes : []));
                                 <tbody>
                                     @foreach ($data as $episode)
                                         <tr class="episode">
+                                            <input type="hidden" name="episodes[{{ $index }}][id]"
+                                                value="{{ $episode->id }}">
                                             <input type="hidden" class="episode-server"
                                                 name="episodes[{{ $index }}][server]" value="{{ $server }}"
                                                 data-attr-name="server">
@@ -73,7 +75,8 @@ $episodes = collect(old('episodes', isset($entry) ? $entry->episodes : []));
                                                     value="{{ $episode['slug'] ?? $episode->slug }}"
                                                     class="form-control" data-attr-name="slug"></td>
                                             <td>
-                                                <select name="episodes[{{ $index }}][type]" data-attr-name="type" class="form-control">
+                                                <select name="episodes[{{ $index }}][type]"
+                                                    data-attr-name="type" class="form-control">
                                                     @foreach (config('ophim.episodes.types', []) as $key => $name)
                                                         <option value="{{ $key }}"
                                                             @if (($episode['type'] ?? $episode->type) == $key) selected @endif>
@@ -121,13 +124,13 @@ $episodes = collect(old('episodes', isset($entry) ? $entry->episodes : []));
                                 <tr class="episode">
                                     <input type="hidden" class="episode-server" name="episodes[0][server]"
                                         value="Vietsub #1" data-attr-name="server">
-                                    <td><input type="text" name="episodes[0][name]" placeholder="Trailer"
-                                            value="1" class="ep_name form-control" data-attr-name="name">
+                                    <td><input type="text" name="episodes[0][name]" placeholder="1" value="1"
+                                            class="ep_name form-control" data-attr-name="name">
                                     </td>
-                                    <td><input type="text" name="episodes[0][slug]" placeholder="Trailer"
-                                            value="trailer" class="form-control" data-attr-name="slug"></td>
+                                    <td><input type="text" name="episodes[0][slug]" placeholder="tap-1"
+                                            value="tap-1" class="form-control" data-attr-name="slug"></td>
                                     <td>
-                                        <select name="episodes[0][type]"  data-attr-name="type" class="form-control">
+                                        <select name="episodes[0][type]" data-attr-name="type" class="form-control">
                                             @foreach (config('ophim.episodes.types', []) as $key => $name)
                                                 <option value="{{ $key }}">
                                                     {{ $name }}</option>
@@ -204,7 +207,7 @@ $episodes = collect(old('episodes', isset($entry) ? $entry->episodes : []));
         $(tabLink).closest('.nav-item').remove();
         updateNameAttr();
         $('.episode-server[data-toggle="tab"]').last().click();
-    })
+    });
 
     $(document).on('click', '.add-episode-btn', function(e) {
         const templateEpisode = (i, server) => {

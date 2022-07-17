@@ -25,6 +25,8 @@ Route::group([
     Route::crud('studio', 'StudioCrudController');
     Route::crud('tag', 'TagCrudController');
     Route::crud('menu', 'MenuCrudController');
+    Route::crud('crawl-schedule', 'CrawlScheduleCrudController');
+    Route::crud('episode', 'EpisodeCrudController');
 });
 
 Route::group([

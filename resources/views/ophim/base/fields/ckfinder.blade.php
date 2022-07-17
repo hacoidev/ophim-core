@@ -1,5 +1,9 @@
 <!-- field_type_name -->
 @include('crud::fields.inc.wrapper_start')
+@php
+$field['preview']['width'] = isset($field['preview']['width']) ? $field['preview']['width'] : '90%';
+$field['preview']['height'] = isset($field['preview']['height']) ? $field['preview']['height'] : '90%';
+@endphp
 <label>{!! $field['label'] !!}</label>
 <div class="input-group">
     <input type="text" name="{{ $field['name'] }}"
@@ -11,7 +15,8 @@
     </span>
 </div>
 <img class="mw-100 mt-2 rounded" src="{{ old($field['name'], isset($entry) ? $entry->{$field['name']} : '') }}"
-    id="preview-{{ strtolower($field['name']) }}">
+    id="preview-{{ strtolower($field['name']) }}"
+    style="width: {{ $field['preview']['width'] }};height: {{ $field['preview']['height'] }}">
 
 
 {{-- HINT --}}

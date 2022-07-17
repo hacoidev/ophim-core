@@ -3,18 +3,11 @@
 namespace Ophim\Core\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Ophim\Core\Contracts\HasUrlInterface;
-use Hacoidev\CachingModel\Contracts\Cacheable;
-use Hacoidev\CachingModel\HasCache;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
-use Ophim\Core\Traits\HasFactory;
 
-class Episode extends Model implements Cacheable, HasUrlInterface
+class CrawlSchedule extends Model
 {
     use CrudTrait;
-    use HasFactory;
-    use HasCache;
 
     /*
     |--------------------------------------------------------------------------
@@ -22,7 +15,7 @@ class Episode extends Model implements Cacheable, HasUrlInterface
     |--------------------------------------------------------------------------
     */
 
-    protected $table = 'episodes';
+    protected $table = 'crawl_schedules';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
@@ -36,36 +29,39 @@ class Episode extends Model implements Cacheable, HasUrlInterface
     |--------------------------------------------------------------------------
     */
 
-    public function getUrl()
-    {
-        $movie = Cache::remember("cache_movie_by_id:" . $this->movie_id, 5 * 60, function () {
-            return $this->movie;
-        });
-
-        return route('episodes.show', ['movie' => $movie->slug, 'episode' => $this->slug, 'id' => $this->id]);
-    }
-
-    public function openEpisode($crud = false)
-    {
-        return '<a class="btn btn-sm btn-link" target="_blank" href="' . $this->getUrl() . '" data-toggle="tooltip" title="Just a demo custom button."><i class="fa fa-search"></i> Open it</a>';
-    }
-
     /*
     |--------------------------------------------------------------------------
     | RELATIONS
     |--------------------------------------------------------------------------
     */
 
-    public function movie()
-    {
-        return $this->belongsTo(Movie::class);
-    }
-
     /*
     |--------------------------------------------------------------------------
     | SCOPES
     |--------------------------------------------------------------------------
     */
+
+    public function scopeShouldRun($query)
+    {
+        return $query->where(function ($q) {
+            $q->where('at_month', '*')
+                ->orWhere('at_month', now()->format('m'));
+        })->where(function ($q) {
+            $q->where('at_week', '*')
+                ->orWhere('at_week', now()->weekOfMonth);
+        })->where(function ($q) {
+            $q->where('at_day', '*')
+                ->orWhere('at_day', now()->format('d'))
+                ->orWhere('at_day', '*/' . pow(((now()->format('i') + (now()->format('H') - 1) * 60) / (24 * 60)), -1));
+        })->where(function ($q) {
+            $q->where('at_hour', '*')
+                ->orWhere('at_hour', now()->format('H'))
+                ->orWhere('at_hour', '*/' . pow(((now()->format('i')-2) / 60), -1));
+        })->where(function ($q) {
+            $q->where('at_minute', '*')
+                ->orWhere('at_minute', now()->format('i'));
+        });
+    }
 
     /*
     |--------------------------------------------------------------------------
