@@ -22,6 +22,11 @@ class CrawlSchedule extends Model
     // protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
+    protected $casts = [
+        'fields' => 'array',
+        'exclude_regions' => 'array',
+        'exclude_categories' => 'array',
+    ];
 
     /*
     |--------------------------------------------------------------------------
@@ -51,12 +56,10 @@ class CrawlSchedule extends Model
                 ->orWhere('at_week', now()->weekOfMonth);
         })->where(function ($q) {
             $q->where('at_day', '*')
-                ->orWhere('at_day', now()->format('d'))
-                ->orWhere('at_day', '*/' . pow(((now()->format('i') + (now()->format('H') - 1) * 60) / (24 * 60)), -1));
+                ->orWhere('at_day', now()->format('d'));
         })->where(function ($q) {
             $q->where('at_hour', '*')
-                ->orWhere('at_hour', now()->format('H'))
-                ->orWhere('at_hour', '*/' . pow(((now()->format('i')-2) / 60), -1));
+                ->orWhere('at_hour', now()->format('H'));
         })->where(function ($q) {
             $q->where('at_minute', '*')
                 ->orWhere('at_minute', now()->format('i'));
@@ -68,6 +71,11 @@ class CrawlSchedule extends Model
     | ACCESSORS
     |--------------------------------------------------------------------------
     */
+
+    public function getHandlerAttribute()
+    {
+        return isset(config('ophim.crawlers', [])[$this->type]) ? config('ophim.crawlers', [])[$this->type] : '';
+    }
 
     /*
     |--------------------------------------------------------------------------

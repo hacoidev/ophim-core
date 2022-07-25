@@ -47,6 +47,7 @@ class CreateMoviesTable extends Migration
             $table->integer('rating_count')->default(0);
             $table->decimal('rating_star', 3, 1)->default(0);
 
+            $table->string('update_handler', 1024)->nullable();
             $table->unsignedBigInteger('user_id')->nullable()->index();
             $table->string('user_name')->nullable();
             $table->timestamps();

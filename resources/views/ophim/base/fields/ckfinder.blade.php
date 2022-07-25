@@ -1,6 +1,7 @@
 <!-- field_type_name -->
 @include('crud::fields.inc.wrapper_start')
 @php
+$field['has_preview'] = isset($field['has_preview']) ? $field['has_preview'] : false;
 $field['preview']['width'] = isset($field['preview']['width']) ? $field['preview']['width'] : '90%';
 $field['preview']['height'] = isset($field['preview']['height']) ? $field['preview']['height'] : '90%';
 @endphp
@@ -14,9 +15,12 @@ $field['preview']['height'] = isset($field['preview']['height']) ? $field['previ
             onclick="selectFileWithCKFinder('{{ strtolower($field['name']) }}')">Browse</button>
     </span>
 </div>
-<img class="mw-100 mt-2 rounded" src="{{ old($field['name'], isset($entry) ? $entry->{$field['name']} : '') }}"
-    id="preview-{{ strtolower($field['name']) }}"
-    style="width: {{ $field['preview']['width'] }};height: {{ $field['preview']['height'] }}">
+@if ($field['has_preview'] && old($field['name'], isset($entry) ? $entry->{$field['name']} : ''))
+    <img class="mw-100 mt-2 rounded" src="{{ old($field['name'], isset($entry) ? $entry->{$field['name']} : '') }}"
+        id="preview-{{ strtolower($field['name']) }}"
+        style="width: {{ $field['preview']['width'] }};height: {{ $field['preview']['height'] }}">
+@endif
+
 
 
 {{-- HINT --}}
@@ -42,7 +46,8 @@ $field['preview']['height'] = isset($field['preview']['height']) ? $field['previ
         @include('ckfinder::setup')
         <script>
             function selectFileWithCKFinder(elementId) {
-                CKFinder.modal({
+                CKFinder.popup({
+                    startupPath: '/images/sherwood-phan-1/',
                     chooseFiles: true,
                     width: 800,
                     height: 600,

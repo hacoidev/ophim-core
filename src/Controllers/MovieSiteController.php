@@ -28,9 +28,26 @@ class MovieSiteController
                 });
             })->when(!empty($request['filter']['year']), function ($movie) {
                 $movie->where('publish_year', request('filter')['year']);
-            })->where(function ($query) {
-                $query->where('name', 'like', '%' . request('search') . '%')
-                    ->orWhere('origin_name', 'like', '%' . request('search')  . '%');
+            })->when(!empty($request['filter']['type']), function ($movie) {
+                $movie->where('type', request('filter')['type']);
+            })->when(!empty($request['search']), function ($query) {
+                $query->where(function ($query) {
+                    $query->where('name', 'like', '%' . request('search') . '%')
+                        ->orWhere('origin_name', 'like', '%' . request('search')  . '%');
+                });
+            })->when(!empty($request['filter']['sort']), function ($movie) {
+                if (request('filter')['sort'] == 'create') {
+                    return $movie->orderBy('created_at', 'desc');
+                }
+                if (request('filter')['sort'] == 'update') {
+                    return $movie->orderBy('updated_at', 'desc');
+                }
+                if (request('filter')['sort'] == 'year') {
+                    return $movie->orderBy('publish_year', 'desc');
+                }
+                if (request('filter')['sort'] == 'view') {
+                    return $movie->orderBy('view_total', 'desc');
+                }
             })->paginate();
 
             return $theme->render('catalog', [
@@ -39,8 +56,8 @@ class MovieSiteController
             ]);
         }
 
-        return Cache::remember('index', 1, function () use ($theme) {
-            $lists = explode('|', Setting::get('index_latest_update_lists'));
+        return Cache::remember('index', Setting::get('site.cache.ttl', 300), function () use ($theme) {
+            $lists = preg_split('/[\n\r]+/', Setting::get('site.movies.latest'));
 
             $data = [];
             foreach ($lists as $list) {
@@ -64,7 +81,8 @@ class MovieSiteController
             }
 
             return $theme->render('index', [
-                'data' => $data
+                'data' => $data,
+                'title' => Setting::get('site.homepage.title')
             ])->render();
         });
     }
@@ -74,7 +92,8 @@ class MovieSiteController
         $movie = Movie::fromCache()->find($movie);
 
         return $theme->render('single', [
-            'movie' => $movie
+            'movie' => $movie,
+            'title' => $movie->getTitle()
         ]);
     }
 
@@ -86,12 +105,43 @@ class MovieSiteController
             return $collection->where('id', request('id'));
         })->firstWhere('slug', $slug);
 
-        // $episodes = $movie->episodes->sortBy('name', SORT_NATURAL);
+        $movie->increment('view_total', 1);
+        $movie->increment('view_day', 1);
+        $movie->increment('view_week', 1);
+        $movie->increment('view_month', 1);
 
         return $theme->render('episode', [
             'movie' => $movie,
-            'episode' => $episode
+            'episode' => $episode,
+            'title' => $episode->getTitle()
         ]);
+    }
+
+    public function reportEpisode(Request $request, Theme $theme, $movie, $slug)
+    {
+        $movie = Movie::fromCache()->find($movie)->load('episodes');
+
+        $episode = $movie->episodes->when(request('id'), function ($collection) {
+            return $collection->where('id', request('id'));
+        })->firstWhere('slug', $slug);
+
+        $episode->update([
+            'report_message' => request('message', ''),
+            'has_report' => true
+        ]);
+
+        return response([], 204);
+    }
+
+    public function rateMovie(Request $request, Theme $theme, $movie, $slug)
+    {
+        $movie = Movie::fromCache()->find($movie)->load('episodes');
+
+        $movie->refresh()->increment('rating_count', 1, [
+            'rating_star' => $movie->rating_star +  ((int) request('rating') - $movie->rating_star) / ($movie->rating_count + 1)
+        ]);
+
+        return response([], 204);
     }
 
     public function getMovieOfCategory(Request $request, Theme $theme, $slug)
@@ -104,7 +154,7 @@ class MovieSiteController
 
         return $theme->render('catalog', [
             'data' => $movies,
-            'category' => $category
+            'category' => $category,
         ]);
     }
 

@@ -39,7 +39,9 @@ class ActorCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
+        if (!backpack_user()->hasPermissionTo('edit articles')) {
+            abort(403);
+        }
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:

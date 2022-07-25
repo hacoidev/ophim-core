@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace Ophim\Core\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -25,7 +25,8 @@ class CrawlScheduleRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
+            'type' => 'required',
+            'fields' => 'required'
         ];
     }
 

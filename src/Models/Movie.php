@@ -3,6 +3,7 @@
 namespace Ophim\Core\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Backpack\Settings\app\Models\Setting;
 use Ophim\Core\Contracts\TaxonomyInterface;
 use Hacoidev\CachingModel\Contracts\Cacheable;
 use Hacoidev\CachingModel\HasCache;
@@ -47,6 +48,15 @@ class Movie extends Model implements TaxonomyInterface, Cacheable
     public function getUrl()
     {
         return route('movies.show', $this->slug);
+    }
+
+    public function getTitle()
+    {
+        $pattern = Setting::get('site.episode.title', '');
+
+        $pattern = str_replace('{name}', $this->name, $pattern);
+
+        return $pattern;
     }
 
     /*

@@ -1,14 +1,16 @@
 <!-- field_type_name -->
 @include('crud::fields.inc.wrapper_start')
-
 @php
-$selected = $field['value'] ?? [];
-@endphp
+$field['allows_multiple'] = $field['allows_multiple'] ?? false;
+$field['options'] = $field['options'] ?? [];
+$field['value'] = $field['value'] ?? [];
 
+@endphp
 <label>{!! $field['label'] !!}</label>
-<select class="form-control select2-tags" name="{{ $field['name'] }}[]" multiple @include('crud::fields.inc.attributes')>
-    @foreach ($selected as $option)
-        <option value="{{ $option }}" selected>{{ $option }}
+<select class="form-control select2-from-array" name="{{ $field['name'] }}[]" @if ($field['allows_multiple']) multiple @endif
+    @include('crud::fields.inc.attributes')>
+    @foreach ($field['options'] as $key => $option)
+        <option value="{{ $key }}" @if (($field['allows_multiple'] && in_array($key, $field['value'])) || $key == $field['value']) selected @endif>{{ $option }}
         </option>
     @endforeach
 </select>
@@ -35,9 +37,7 @@ $selected = $field['value'] ?? [];
     @push('crud_fields_scripts')
         <script>
             $(function() {
-                $(".select2-tags").select2({
-                    tags: true
-                });
+                $(".select2-from-array").select2({});
             })
         </script>
     @endpush

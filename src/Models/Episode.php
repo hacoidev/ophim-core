@@ -3,6 +3,7 @@
 namespace Ophim\Core\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Backpack\Settings\app\Models\Setting;
 use Ophim\Core\Contracts\HasUrlInterface;
 use Hacoidev\CachingModel\Contracts\Cacheable;
 use Hacoidev\CachingModel\HasCache;
@@ -48,6 +49,16 @@ class Episode extends Model implements Cacheable, HasUrlInterface
     public function openEpisode($crud = false)
     {
         return '<a class="btn btn-sm btn-link" target="_blank" href="' . $this->getUrl() . '" data-toggle="tooltip" title="Just a demo custom button."><i class="fa fa-search"></i> Open it</a>';
+    }
+
+    public function getTitle()
+    {
+        $pattern = Setting::get('site.episode.watch.title', '');
+
+        $pattern = str_replace('{movie.name}', $this->movie->name, $pattern);
+        $pattern = str_replace('{name}', $this->name, $pattern);
+
+        return $pattern;
     }
 
     /*

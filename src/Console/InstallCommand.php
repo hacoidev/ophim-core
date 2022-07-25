@@ -109,27 +109,27 @@ class InstallCommand extends Command
         $this->progressBar->advance();
         $this->newLine(1);
 
+        $this->call('vendor:publish', [
+            '--tag' => 'players',
+        ]);
+        $this->progressBar->advance();
+        $this->newLine(1);
+
         $this->installCKfinder();
+        $this->progressBar->advance();
+        $this->newLine(1);
 
         $this->call('db:seed', [
             'class' => SettingsTableSeeder::class,
         ]);
-
-        $this->call('db:seed', [
-            'class' => CategoriesTableSeeder::class,
-        ]);
-
-        $this->call('db:seed', [
-            'class' => RegionsTableSeeder::class,
-        ]);
-
-        $this->call('db:seed', [
-            'class' => ThemesTableSeeder::class,
-        ]);
+        $this->progressBar->advance();
+        $this->newLine(1);
 
         $this->call('db:seed', [
             'class' => MenusTableSeeder::class,
         ]);
+        $this->progressBar->advance();
+        $this->newLine(1);
 
         $this->progressBar->finish();
         $this->newLine(1);

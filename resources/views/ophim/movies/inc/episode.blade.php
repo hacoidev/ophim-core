@@ -47,51 +47,56 @@ $episodes = collect(old('episodes', isset($entry) ? $entry->episodes : []));
                             </button>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-bordered mb-4">
+                            <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Tên</th>
-                                        <th>Slug</th>
-                                        <th>Type</th>
-                                        <th>Link</th>
+                                        <th style="min-width: 100px;">Tên</th>
+                                        <th style="min-width: 100px;">Slug</th>
+                                        <th style="min-width: 100px;">Type</th>
+                                        <th style="min-width: 300px;">Link</th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($data as $episode)
-                                        <tr class="episode">
-                                            <input type="hidden" name="episodes[{{ $index }}][id]"
-                                                value="{{ $episode->id }}">
-                                            <input type="hidden" class="episode-server"
-                                                name="episodes[{{ $index }}][server]" value="{{ $server }}"
-                                                data-attr-name="server">
-                                            <td><input type="text" name="episodes[{{ $index }}][name]"
-                                                    placeholder="Tập 1"
-                                                    value="{{ $episode['name'] ?? $episode->name }}"
-                                                    class="ep_name form-control" data-attr-name="name">
-                                            </td>
-                                            <td><input type="text" name="episodes[{{ $index }}][slug]"
-                                                    placeholder="tap-1"
-                                                    value="{{ $episode['slug'] ?? $episode->slug }}"
-                                                    class="form-control" data-attr-name="slug"></td>
-                                            <td>
-                                                <select name="episodes[{{ $index }}][type]"
-                                                    data-attr-name="type" class="form-control">
-                                                    @foreach (config('ophim.episodes.types', []) as $key => $name)
-                                                        <option value="{{ $key }}"
-                                                            @if (($episode['type'] ?? $episode->type) == $key) selected @endif>
-                                                            {{ $name }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td><input type="text" name="episodes[{{ $index }}][link]"
-                                                    placeholder="" class="form-control" data-attr-name="link"
-                                                    value="{{ $episode['link'] ?? ($episode->link ?? '') }}">
-                                            </td>
-                                            <td class="text-center"><span style="cursor:pointer"
-                                                    class="badge outline-badge-danger delete-episode">Xóa</span></td>
-                                        </tr>
-                                        @php $index++; @endphp
+                                    @foreach ($data->sortBy('name', SORT_NATURAL)->groupBy('name') as $sortedEpisodes)
+                                    @foreach ($sortedEpisodes as $episode)
+                                    <tr class="episode">
+                                        <input type="hidden" name="episodes[{{ $index }}][id]"
+                                            value="{{ $episode->id }}">
+                                        <input type="hidden" class="episode-server"
+                                            name="episodes[{{ $index }}][server]" value="{{ $server }}"
+                                            data-attr-name="server">
+                                        <td><input type="text" name="episodes[{{ $index }}][name]"
+                                                placeholder="Tập 1"
+                                                value="{{ $episode['name'] ?? $episode->name }}"
+                                                class="ep_name form-control" data-attr-name="name">
+                                        </td>
+                                        <td><input type="text" name="episodes[{{ $index }}][slug]"
+                                                placeholder="tap-1"
+                                                value="{{ $episode['slug'] ?? $episode->slug }}"
+                                                class="form-control" data-attr-name="slug"></td>
+                                        <td>
+                                            <select name="episodes[{{ $index }}][type]"
+                                                data-attr-name="type" class="form-control">
+                                                @foreach (config('ophim.episodes.types', []) as $key => $name)
+                                                    <option value="{{ $key }}"
+                                                        @if (($episode['type'] ?? $episode->type) == $key) selected @endif>
+                                                        {{ $name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td><input type="text" name="episodes[{{ $index }}][link]"
+                                                placeholder="" class="form-control" data-attr-name="link"
+                                                value="{{ $episode['link'] ?? ($episode->link ?? '') }}">
+                                        </td>
+                                        <td class="text-center"><span style="cursor:pointer"
+                                                class="badge outline-badge-danger delete-episode">Xóa</span></td>
+                                    </tr>
+                                    @php $index++; @endphp
+                                    @endforeach
+                                    <tr>
+                                        <td colspan="5"></td>
+                                    </tr>
                                     @endforeach
                                 </tbody>
                             </table>

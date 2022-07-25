@@ -2,9 +2,11 @@
 
 namespace Ophim\Core;
 
+use Backpack\Settings\app\Models\Setting;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Ophim\Core\Console\CreateUser;
 use Ophim\Core\Console\InstallCommand;
+use Ophim\Core\Console\MovieUpdateCommand;
 use Ophim\Core\Middleware\CKFinderAuth;
 
 class OphimServiceProvider extends ServiceProvider
@@ -23,16 +25,21 @@ class OphimServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'ophim');
 
-        config(['ckfinder.authentication' => CKFinderAuth::class]);
-
         config(['ophim.themes' => array_merge(config('ophim.themes', []), [
             'default' => 'Mặc định'
         ])]);
+
+        $this->mergeBackpackConfigs();
+
+        $this->mergeCkfinderConfigs();
     }
 
     public function boot()
     {
         $this->registerPolicies();
+
+        config(['ckfinder.licenseName' => Setting::get('ckfinder.license.name', '')]);
+        config(['ckfinder.licenseKey' => Setting::get('ckfinder.license.key', '')]);
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/admin.php');
 
@@ -44,13 +51,14 @@ class OphimServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__ . '/../resources/views/ophim/', 'ophim');
 
-        $this->loadViewsFrom(__DIR__ . '/../resources/views/themes/', 'ophim_themes');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views/themes', 'themes');
 
         $this->publishFiles();
 
         $this->commands([
             InstallCommand::class,
-            CreateUser::class
+            CreateUser::class,
+            MovieUpdateCommand::class
         ]);
 
         $this->app->bind(Theme::class, function ($app) {
@@ -71,11 +79,45 @@ class OphimServiceProvider extends ServiceProvider
             __DIR__ . '/../resources/views/backpack/crud/columns/'      => resource_path('views/vendor/backpack/crud/columns/'),
         ];
 
+        $players = [
+            __DIR__ . '/../resources/views/assets/js/inc/hls.min.js' => public_path('js/hls.min.js'),
+            __DIR__ . '/../resources/views/assets/js/inc/jwplayer-8.9.3.js' => public_path('js/jwplayer-8.9.3.js'),
+            __DIR__ . '/../resources/views/assets/js/inc/hls.min.js' => public_path('js/jwplayer.hlsjs.min.js'),
+        ];
+
         $this->publishes($backpack_menu_contents_view, 'cms_menu_content');
         $this->publishes($ophim_custom_crud, 'ophim_custom_crud');
+        $this->publishes($players, 'players');
 
         $this->publishes([
             __DIR__ . '/../config/config.php' => config_path('ophim.php')
         ]);
+    }
+
+    protected function mergeBackpackConfigs()
+    {
+        config(['backpack.base.styles' => array_merge(config('backpack.base.styles', []), [
+            'packages/select2/dist/css/select2.css',
+            'packages/select2-bootstrap-theme/dist/select2-bootstrap.min.css'
+        ])]);
+
+        config(['backpack.base.scripts' => array_merge(config('backpack.base.scripts', []), [
+            'packages/select2/dist/js/select2.full.min.js'
+        ])]);
+
+        config(['backpack.base.middleware_class' => array_merge(config('backpack.base.middleware_class'), [
+            \Backpack\CRUD\app\Http\Middleware\UseBackpackAuthGuardInsteadOfDefaultAuthGuard::class,
+        ])]);
+
+        config(['backpack.base.project_logo' => '<b>Ophim</b>TV']);
+        config(['backpack.base.developer_name' => 'hacoidev']);
+        config(['backpack.base.developer_link' => 'mailto:hacoi.dev@gmail.com']);
+        config(['backpack.base.show_powered_by' => false]);
+    }
+
+    protected function mergeCkfinderConfigs()
+    {
+        config(['ckfinder.authentication' => CKFinderAuth::class]);
+        config(['ckfinder.backends.default' => config('ophim.ckfinder.backends')]);
     }
 }

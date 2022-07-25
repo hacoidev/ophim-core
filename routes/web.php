@@ -24,4 +24,6 @@ Route::group([
     Route::get(sprintf('/%s/{type}', config('ophim.routes.types', 'danh-sach')), [MovieSiteController::class, 'getMovieOfType'])->name('types.movies.index');
     Route::get(sprintf('/%s/{movie}', config('ophim.routes.movie', 'phim')), [MovieSiteController::class, 'getMovieOverview'])->name('movies.show');
     Route::get(sprintf('/%s/{movie}/{episode}', config('ophim.routes.movie', 'phim')), [MovieSiteController::class, 'getEpisode'])->name('episodes.show');
+    Route::post(sprintf('/%s/{movie}/{episode}', config('ophim.routes.movie', 'phim')), [MovieSiteController::class, 'reportEpisode'])->name('episodes.report');
+    Route::post(sprintf('/%s/{movie}/{episode}/rate', config('ophim.routes.movie', 'phim')), [MovieSiteController::class, 'rateMovie'])->name('movie.rating');
 });

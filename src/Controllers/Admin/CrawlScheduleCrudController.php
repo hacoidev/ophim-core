@@ -2,10 +2,12 @@
 
 namespace Ophim\Core\Controllers\Admin;
 
-use App\Http\Requests\CrawlScheduleRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Backpack\Settings\app\Models\Setting;
+use Illuminate\Support\Facades\Cache;
 use Ophim\Core\Models\Category;
+use Ophim\Core\Requests\CrawlScheduleRequest;
 
 /**
  * Class CrawlScheduleCrudController
@@ -27,9 +29,10 @@ class CrawlScheduleCrudController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(\App\Models\CrawlSchedule::class);
+        CRUD::setModel(\Ophim\Core\Models\CrawlSchedule::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/crawl-schedule');
-        CRUD::setEntityNameStrings('crawl schedule', 'crawl schedules');
+        CRUD::setEntityNameStrings('lịch cập nhật', 'danh sách lịch cập nhật');
+        $this->crud->denyAccess('show');
     }
 
     /**
@@ -48,9 +51,8 @@ class CrawlScheduleCrudController extends CrudController
          * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
 
-        CRUD::addColumn(['name' => 'type', 'label' => 'Type', 'type' => 'text']);
+        CRUD::addColumn(['name' => 'handler', 'label' => 'Handler', 'type' => 'text']);
         CRUD::addColumn(['name' => 'link', 'label' => 'Link', 'type' => 'text']);
-        CRUD::addColumn(['name' => 'fields', 'label' => 'Fields', 'type' => 'text']);
     }
 
     /**
@@ -63,34 +65,48 @@ class CrawlScheduleCrudController extends CrudController
     {
         CRUD::setValidation(CrawlScheduleRequest::class);
 
-
-
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
-         */
-
-        CRUD::addField(['name' => 'type', 'label' => 'Type', 'type' => 'text', 'tab' => 'Nguồn phim']);
-        CRUD::addField(['name' => 'link', 'label' => 'Link', 'type' => 'text', 'tab' => 'Nguồn phim']);
-        CRUD::addField(['name' => 'fields', 'label' => 'Fields', 'type' => 'text', 'tab' => 'Nguồn phim']);
+        CRUD::addField(['name' => 'type', 'label' => 'Handler', 'type' => 'select_from_array', 'options' => config('ophim.crawlers', []), 'tab' => 'Nguồn phim']);
         CRUD::addField([
-            'name' => 'excldue_categories', 'label' => 'Loại trừ thể loại', 'type' => 'text',
+            'name' => 'link',
+            'label' => 'Link',
+            'type' => 'textarea',
+            'attributes' => [
+                'rows' => 5
+            ],
+            'hint' => 'Mỗi link cách nhau 1 dòng',
+            'default' => 'https://ophim1.com/danh-sach/phim-moi-cap-nhat', 'tab' => 'Nguồn phim'
+        ]);
+        CRUD::addField([
+            'name' => 'exclude_categories',
+            'label' => 'Loại trừ thể loại',
+            'type' => 'select2_tags',
+            'hint' => 'Nhập thể loại rồi ấn Enter',
             'tab' => 'Nguồn phim'
         ]);
         CRUD::addField([
-            'name' => 'excldue_regions', 'label' => 'Loại trừ quốc gia', 'type' => 'text',
+            'name' => 'exclude_regions',
+            'label' => 'Loại trừ quốc gia',
+            'type' => 'select2_tags',
+            'hint' => 'Nhập quốc gia rồi ấn Enter',
             'tab' => 'Nguồn phim'
         ]);
 
-        CRUD::addField(['name' => 'from_page', 'label' => 'Từ trang', 'type' => 'number', 'default' => 1, 'tab' => 'Nguồn phim']);
+        CRUD::addField([
+            'name' => 'from_page',
+            'label' => 'Từ trang',
+            'type' => 'number',
+            'default' => 1,
+            'tab' => 'Nguồn phim'
+        ]);
         CRUD::addField(['name' => 'to_page', 'label' => 'Đến trang', 'type' => 'number', 'default' => 1, 'tab' => 'Nguồn phim']);
 
-        CRUD::addField(['name' => 'at_month', 'label' => 'Tháng', 'type' => 'text', 'tab' => 'Thời gian chạy']);
-        CRUD::addField(['name' => 'at_week', 'label' => 'Tuần', 'type' => 'text', 'tab' => 'Thời gian chạy']);
-        CRUD::addField(['name' => 'at_day', 'label' => 'Ngày', 'type' => 'text', 'tab' => 'Thời gian chạy']);
-        CRUD::addField(['name' => 'at_hour', 'label' => 'Giờ', 'type' => 'text', 'tab' => 'Thời gian chạy']);
-        CRUD::addField(['name' => 'at_minute', 'label' => 'Phút', 'type' => 'text', 'tab' => 'Thời gian chạy']);
+        CRUD::addField(['name' => 'fields', 'type' => 'view', 'view' => 'ophim::base.fields.update_fields_option', 'tab' => 'Tùy chọn cập nhật']);
+
+        CRUD::addField(['name' => 'at_month', 'label' => 'Tháng', 'type' => 'text', 'default' => '*', 'tab' => 'Thời gian chạy']);
+        CRUD::addField(['name' => 'at_week', 'label' => 'Tuần', 'type' => 'text', 'default' => '*', 'tab' => 'Thời gian chạy']);
+        CRUD::addField(['name' => 'at_day', 'label' => 'Ngày', 'type' => 'text', 'default' => '*', 'tab' => 'Thời gian chạy']);
+        CRUD::addField(['name' => 'at_hour', 'label' => 'Giờ', 'type' => 'text', 'default' => '*', 'tab' => 'Thời gian chạy']);
+        CRUD::addField(['name' => 'at_minute', 'label' => 'Phút', 'type' => 'text', 'default' => '0',  'tab' => 'Thời gian chạy']);
     }
 
     /**
