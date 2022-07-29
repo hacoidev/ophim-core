@@ -92,13 +92,13 @@ class ActorCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
-        $this->authorize('update', $this->crud->entry);
+        $this->authorize('update', $this->crud->model);
 
         $this->setupCreateOperation();
     }
 
     protected function setupDeleteOperation()
     {
-        $this->authorize('delete', $this->crud->entry);
+        $this->authorize('delete', $this->crud->model);
     }
 }
