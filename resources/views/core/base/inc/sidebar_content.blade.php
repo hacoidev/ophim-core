@@ -47,9 +47,12 @@
 @endif
 
 <li class="nav-title">Giao diện</li>
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url('customizer') }}"><i
-            class="nav-icon la la-calendar-check-o"></i>Tuỳ chỉnh</a></li>
-
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('customizer') }}"><i class="nav-icon la la-css3"></i>Tuỳ
+        chỉnh</a>
+</li>
+<li class='nav-item'><a class='nav-link' href='{{ backpack_url('menu') }}'><i class='nav-icon la la-list'></i>
+        Menu</a>
+</li>
 
 @if (backpack_user()->hasRole('Admin'))
     <li class="nav-title">{{ trans('backpack::base.administration') }}</li>
@@ -65,8 +68,7 @@
                         class="nav-icon la la-key"></i> <span>Permissions</span></a></li>
         </ul>
     </li>
-    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('menu') }}'><i class='nav-icon la la-list'></i>
-            Menu</a></li>
+
 
     <li class='nav-item'><a class='nav-link' href='{{ backpack_url('setting') }}'><i class='nav-icon la la-cog'></i>
             <span>Settings</span></a></li>

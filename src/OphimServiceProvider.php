@@ -47,7 +47,7 @@ class OphimServiceProvider extends ServiceProvider
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
-        $this->loadViewsFrom(__DIR__ . '/../resources/views/ophim/', 'ophim');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views/core/', 'ophim');
 
         $this->loadViewsFrom(__DIR__ . '/../resources/views/themes', 'themes');
 
