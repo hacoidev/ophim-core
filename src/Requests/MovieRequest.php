@@ -30,8 +30,6 @@ class MovieRequest extends FormRequest
             'slug' => 'max:255|unique:movies,slug,' . $this->id . ',id',
             'type' => 'required|in:single,series',
             'status' => 'required|in:trailer,ongoing,completed',
-            'categories' => 'required',
-            'regions' => 'required',
         ];
     }
 

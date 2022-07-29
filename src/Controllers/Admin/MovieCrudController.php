@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use Ophim\Core\Models\Actor;
 use Ophim\Core\Models\Director;
 use Ophim\Core\Models\Movie;
+use Ophim\Core\Models\Studio;
 use Ophim\Core\Models\Tag;
 
 /**
@@ -151,11 +152,7 @@ class MovieCrudController extends CrudController
         CRUD::addField(['name' => 'directors', 'label' => 'Đạo diễn', 'type' => 'select2_relationship_tags', 'tab' => 'Phân loại']);
         CRUD::addField(['name' => 'actors', 'label' => 'Diễn viên',  'type' => 'select2_relationship_tags', 'tab' => 'Phân loại']);
         CRUD::addField(['name' => 'tags', 'label' => 'Tags',  'type' => 'select2_relationship_tags', 'tab' => 'Phân loại']);
-        CRUD::addField(['name' => 'is_shown_in_theater', 'label' => 'Phim chiếu rạp', 'type' => 'boolean', 'tab' => 'Phân loại']);
-        CRUD::addField(['name' => 'is_copyright', 'label' => 'Có bản quyền phim', 'type' => 'boolean', 'tab' => 'Phân loại']);
-
-        CRUD::addField(['name' => 'is_sensitive_content', 'label' => 'Cảnh báo nội dung người lớn', 'type' => 'boolean', 'tab' => 'Thông tin phim']);
-        CRUD::addField(['name' => 'is_recommended', 'label' => 'Đề cử', 'type' => 'boolean', 'tab' => 'Thông tin phim']);
+        CRUD::addField(['name' => 'studios', 'label' => 'Studios',  'type' => 'select2_relationship_tags', 'tab' => 'Phân loại']);
 
         CRUD::addField([
             'name' => 'episodes',
@@ -164,7 +161,13 @@ class MovieCrudController extends CrudController
             'tab' => 'Danh sách tập phim'
         ],);
 
-        CRUD::addField(['name' => 'update_handler', 'label' => 'Trình cập nhật', 'type' => 'select_from_array', 'options' => config('ophim.updaters', []), 'tab' => 'Khác']);
+        CRUD::addField(['name' => 'update_handler', 'label' => 'Trình cập nhật', 'type' => 'select_from_array', 'options' => config('ophim.updaters', []), 'tab' => 'Cập nhật']);
+        CRUD::addField(['name' => 'update_url', 'label' => 'Cập nhật theo URL', 'type' => 'text', 'tab' => 'Cập nhật']);
+
+        CRUD::addField(['name' => 'is_shown_in_theater', 'label' => 'Phim chiếu rạp', 'type' => 'boolean', 'tab' => 'Khác']);
+        CRUD::addField(['name' => 'is_copyright', 'label' => 'Có bản quyền phim', 'type' => 'boolean', 'tab' => 'Khác']);
+        CRUD::addField(['name' => 'is_sensitive_content', 'label' => 'Cảnh báo nội dung người lớn', 'type' => 'boolean', 'tab' => 'Khác']);
+        CRUD::addField(['name' => 'is_recommended', 'label' => 'Đề cử', 'type' => 'boolean', 'tab' => 'Khác']);
     }
 
     /**
@@ -227,11 +230,19 @@ class MovieCrudController extends CrudController
             ])->id;
         }
 
+        $studio_ids = [];
+        foreach ($tags as $tag) {
+            $studio_ids[] = Studio::firstOrCreate([
+                'name_md5' => md5($tag)
+            ], [
+                'name' => $tag
+            ])->id;
+        }
+
         $request['actors'] = $actor_ids;
         $request['directors'] = $director_ids;
         $request['tags'] = $tag_ids;
-
-        return [$actor_ids, $director_ids, $tag_ids];
+        $request['studios'] = $studio_ids;
     }
 
     protected function setupDeleteOperation()

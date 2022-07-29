@@ -95,6 +95,11 @@ class Movie extends Model implements TaxonomyInterface, Cacheable
         return $this->hasMany(Episode::class);
     }
 
+    public function studios()
+    {
+        return $this->belongsToMany(Studio::class);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES
