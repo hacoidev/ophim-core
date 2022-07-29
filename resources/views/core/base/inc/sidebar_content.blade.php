@@ -33,7 +33,7 @@
         Phim lỗi</a>
 </li>
 
-@if (!empty(config('ophim.crawlers', [])))
+@if (!empty(config('ophim.updaters', [])))
     <li class="nav-title">Trình cập nhật</li>
     <li class="nav-item"><a class="nav-link" href="{{ backpack_url('crawl-schedule') }}"><i
                 class="nav-icon la la-calendar-check-o"></i> Tự động cập nhật</a></li>

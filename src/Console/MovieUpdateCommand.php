@@ -3,7 +3,9 @@
 namespace Ophim\Core\Console;
 
 use Illuminate\Console\Command;
-use Ophim\Core\Crawler\BaseScheduledCrawler;
+use Illuminate\Support\Facades\Log;
+use Ophim\Core\Crawler\BaseCrawler;
+use Ophim\Core\Database\Seeders\MenusTableSeeder;
 use Ophim\Core\Models\CrawlSchedule;
 
 class MovieUpdateCommand extends Command
@@ -42,15 +44,31 @@ class MovieUpdateCommand extends Command
         $schedules = CrawlSchedule::shouldRun()->get();
 
         foreach ($schedules as $schedule) {
-            $handler = $schedule->type;
-
-            if (!class_exists($handler) || !is_subclass_of($handler, BaseScheduledCrawler::class)) {
-                throw new \Exception("Crawler does not exists or is not instance of BaseScheduledCrawler");
-            }
-
-            (new  $handler($schedule))->execute();
+            $this->onSchedule($schedule);
         }
 
         return 0;
+    }
+
+    protected function onSchedule(CrawlSchedule $schedule)
+    {
+        $handler = $schedule->type;
+
+        if (!class_exists($handler) || !is_subclass_of($handler, BaseCrawler::class)) {
+            throw new \Exception("Crawler does not exists or is not instance of BaseCrawler");
+        }
+
+        $movieLinks = $handler::getMovieLinks(preg_split('/[\n\r]+/', $schedule->link), $schedule->from_page, $schedule->to_page);
+
+        foreach ($movieLinks as $link) {
+            $time = microtime(true);
+            try {
+                (new $handler($link, $schedule->fields, $schedule->excluded_categories ?? [], $schedule->excluded_regions ?? []))->handle();
+                echo "Crawl success {$link} in " . (microtime(true) - $time) . " s </br>";
+            } catch (\Exception $e) {
+                echo "Crawl error {$link} in " . (microtime(true) - $time) . " s </br>";
+                Log::error($e->getMessage());
+            }
+        }
     }
 }

@@ -21,6 +21,7 @@ use Ophim\Core\Models\Studio;
 use Ophim\Core\Models\Tag;
 use Ophim\Core\Policies\ActorPolicy;
 use Ophim\Core\Policies\CategoryPolicy;
+use Ophim\Core\Policies\CrawlSchedulePolicy;
 use Ophim\Core\Policies\DirectorPolicy;
 use Ophim\Core\Policies\EpisodePolicy;
 use Ophim\Core\Policies\MenuPolicy;
@@ -48,6 +49,7 @@ class OphimServiceProvider extends ServiceProvider
             Movie::class => MoviePolicy::class,
             Episode::class => EpisodePolicy::class,
             Menu::class => MenuPolicy::class,
+            CrawlSchedule::class => CrawlSchedulePolicy::class
         ];
     }
 

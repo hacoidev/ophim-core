@@ -68,7 +68,7 @@ class CrawlScheduleCrudController extends CrudController
 
         CRUD::setValidation(CrawlScheduleRequest::class);
 
-        CRUD::addField(['name' => 'type', 'label' => 'Handler', 'type' => 'select_from_array', 'options' => config('ophim.crawlers', []), 'tab' => 'Nguồn phim']);
+        CRUD::addField(['name' => 'type', 'label' => 'Handler', 'type' => 'select_from_array', 'options' => config('ophim.updaters', []), 'tab' => 'Nguồn phim']);
         CRUD::addField([
             'name' => 'link',
             'label' => 'Link',
@@ -80,14 +80,14 @@ class CrawlScheduleCrudController extends CrudController
             'default' => 'https://ophim1.com/danh-sach/phim-moi-cap-nhat', 'tab' => 'Nguồn phim'
         ]);
         CRUD::addField([
-            'name' => 'exclude_categories',
+            'name' => 'excluded_categories',
             'label' => 'Loại trừ thể loại',
             'type' => 'select2_tags',
             'hint' => 'Nhập thể loại rồi ấn Enter',
             'tab' => 'Nguồn phim'
         ]);
         CRUD::addField([
-            'name' => 'exclude_regions',
+            'name' => 'excluded_regions',
             'label' => 'Loại trừ quốc gia',
             'type' => 'select2_tags',
             'hint' => 'Nhập quốc gia rồi ấn Enter',

@@ -18,8 +18,8 @@ class CreateCrawlSchedulesTable extends Migration
             $table->text('fields');
             $table->string('type');
             $table->string('link');
-            $table->text('exclude_categories')->nullable();
-            $table->text('exclude_regions')->nullable();
+            $table->text('excluded_categories')->nullable();
+            $table->text('excluded_regions')->nullable();
             $table->integer('from_page')->default(1);
             $table->integer('to_page')->default(1);
             $table->string('at_month',10)->nullable();

@@ -74,7 +74,7 @@ class CrawlSchedule extends Model
 
     public function getHandlerAttribute()
     {
-        return isset(config('ophim.crawlers', [])[$this->type]) ? config('ophim.crawlers', [])[$this->type] : '';
+        return isset(config('ophim.updaters', [])[$this->type]) ? config('ophim.updaters', [])[$this->type] : '';
     }
 
     /*
