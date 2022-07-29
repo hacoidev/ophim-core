@@ -55,6 +55,11 @@ class Studio extends Model implements TaxonomyInterface, Cacheable
     |--------------------------------------------------------------------------
     */
 
+    public function movies()
+    {
+        return $this->belongsToMany(Movie::class);
+    }
+
     /*
     |--------------------------------------------------------------------------
     | SCOPES

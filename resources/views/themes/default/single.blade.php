@@ -22,15 +22,15 @@
                     alt="" />
                 <div class="flex py-3 justify-between">
                     <div class="flex w-full justify-center space-x-2">
-                        @if ($firstEpisode = $movie->episodes->first())
-                            <a class="bg-[#d9534f] text-gray-50 inline-block px-2 py-1 rounded"
-                                title="Thỏa Thuận Bán Thân - Dangerous Memorandum Signed By The Body (2021)"
-                                href="{{ $movie->episodes->sortByDesc('name', SORT_NATURAL)->first()->getUrl() }}">Xem phim
-                            </a>
-                        @elseif($movie->trailer_url)
+                        @if ($movie->status == 'trailer' && $movie->trailer_url)
                             <a class="bg-[#d9534f] text-gray-50 inline-block px-2 py-1 rounded"
                                 title="Thỏa Thuận Bán Thân - Dangerous Memorandum Signed By The Body (2021)"
                                 href="{{ $movie->trailer_url }}" target="__blank">Xem trailer
+                            </a>
+                        @elseif($movie->status != 'trailer' && count($movie->episodes))
+                            <a class="bg-[#d9534f] text-gray-50 inline-block px-2 py-1 rounded"
+                                title="Thỏa Thuận Bán Thân - Dangerous Memorandum Signed By The Body (2021)"
+                                href="{{ $movie->episodes->sortByDesc('name', SORT_NATURAL)->first()->getUrl() }}">Xem phim
                             </a>
                         @else
                             <p class="text-white">Đang cập nhật...</p>

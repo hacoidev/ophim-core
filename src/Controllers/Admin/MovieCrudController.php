@@ -202,6 +202,7 @@ class MovieCrudController extends CrudController
         $actors = request('actors', []);
         $directors = request('directors', []);
         $tags = request('tags', []);
+        $studios = request('studios', []);
 
         $actor_ids = [];
         foreach ($actors as $actor) {
@@ -231,11 +232,11 @@ class MovieCrudController extends CrudController
         }
 
         $studio_ids = [];
-        foreach ($tags as $tag) {
+        foreach ($studios as $studio) {
             $studio_ids[] = Studio::firstOrCreate([
-                'name_md5' => md5($tag)
+                'name_md5' => md5($studio)
             ], [
-                'name' => $tag
+                'name' => $studio
             ])->id;
         }
 
