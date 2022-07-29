@@ -1,9 +1,11 @@
 @extends('themes::default.layout')
 @php
-$years = \Ophim\Core\Models\Movie::select('publish_year')
-    ->distinct()
-    ->pluck('publish_year')
-    ->sortDesc();
+$years = Cache::remember('all_years', \Backpack\Settings\app\Models\Setting::get('site.cache.ttl', 5 * 60), function () {
+    return \Ophim\Core\Models\Movie::select('publish_year')
+        ->distinct()
+        ->pluck('publish_year')
+        ->sortDesc();
+});
 @endphp
 
 @section('content')

@@ -46,6 +46,11 @@
     </li>
 @endif
 
+<li class="nav-title">Giao diện</li>
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('customizer') }}"><i
+            class="nav-icon la la-calendar-check-o"></i>Tuỳ chỉnh</a></li>
+
+
 @if (backpack_user()->hasRole('Admin'))
     <li class="nav-title">{{ trans('backpack::base.administration') }}</li>
     <li class="nav-item nav-dropdown">

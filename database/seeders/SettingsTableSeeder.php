@@ -15,7 +15,7 @@ class SettingsTableSeeder extends Seeder
      */
     public function run()
     {
-        $settings = [
+        $generals = [
             [
                 'key'         => 'site.theme',
                 'name'        => 'Theme',
@@ -25,41 +25,6 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'select_theme',
                 ]),
                 'value' => 'default',
-                'active'      => 1,
-            ],
-            [
-                'key'         => 'site.movies.latest',
-                'name'        => 'Danh sách phim mới cập nhật',
-                'description' => 'site.movies.latest',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'textarea',
-                    'hint' => 'display_label:relation:find_by_field:value:limit:show_more_url',
-                ]),
-                'value' => 'Phim bộ mới::type:series:8:/danh-sach/phim-bo',
-                'active'      => 1,
-            ],
-            [
-                'key'         => 'site.movies.tops',
-                'name'        => 'Bảng xếp hạng phim',
-                'description' => 'site.movies.tops',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'textarea',
-                    'hint' => 'display_label:relation:find_by_field:value:sort_by_field:sort_algo:limit',
-                ]),
-                'value' => 'Top phim bộ::type:series:view_total:desc:4
-                Top phim lẻ::type:single:view_total:desc:4',
-                'active'      => 1,
-            ],
-            [
-                'key'         => 'site.movies.recommendations.limit',
-                'name'        => 'Giới hạn phim đề cử trên slider',
-                'description' => 'site.movies.recommendations.limit',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'number',
-                ]),
                 'active'      => 1,
             ],
             [
@@ -112,6 +77,106 @@ class SettingsTableSeeder extends Seeder
                 ]),
                 'active'      => 1,
             ],
+
+            [
+                'key'         => 'ckfinder.license.name',
+                'description' => 'ckfinder.license.name',
+                'name'        => 'ckfinder.license.name',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                ]),
+                'value' => 'localhost',
+                'active'      => 1,
+            ],
+            [
+                'key'         => 'ckfinder.license.key',
+                'description' => 'ckfinder.license.key',
+                'name'        => 'ckfinder.license.key',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                ]),
+                'value' => 'LAUAS1L5T6FNWUANJEB74PF9V8SBM',
+                'active'      => 1,
+            ],
+            [
+                'key'         => 'site.footer',
+                'description' => 'site.footer',
+                'name'        => 'Footer',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'textarea',
+                    'attributes' => [
+                        'rows' => 20
+                    ]
+                ]),
+                'value' => '
+                    <div class="w-full mx-auto flex flex-wrap">
+                        <div class="flex w-full">
+                            <div class="px-2"><span class="font-bold text-gray-100">Giới Thiệu...</span>
+                                <p class="text-gray-300 text-sm">Xem phim online chất lượng cao miễn phí với phụ đề tiếng
+                                    việt - thuyết minh - lồng tiếng, có nhiều thể loại phim phong phú, đặc sắc,
+                                    nhiều bộ phim hay nhất - mới nhất.</p>
+                                <p class="text-gray-300 text-sm">Website với giao diện trực quan, thuận tiện,
+                                    tốc độ tải nhanh, ít quảng cáo hứa hẹn sẽ đem lại những trải nghiệm tốt cho người dùng.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="px-2 space-x-2"><a class="text-gray-500">Liên Hệ</a>
+                                <a class="text-[#44e2ff] hover:text-yellow-300" href="/ban-quyen">Khiếu nại bản
+                                    quyền</a>
+                                <ul class="list-reset items-center text-sm pt-3">
+                                    <li class="text-gray-300"></li>
+                                    <li></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>',
+                'active'      => 1,
+            ]
+        ];
+
+        $themes = [
+            // [
+            //     'key'         => 'site.movies.latest',
+            //     'name'        => 'Danh sách phim mới cập nhật',
+            //     'description' => 'site.movies.latest',
+            //     'field'       => json_encode([
+            //         'name' => 'value',
+            //         'type' => 'textarea',
+            //         'hint' => 'display_label:relation:find_by_field:value:limit:show_more_url',
+            //     ]),
+            //     'value' => 'Phim bộ mới::type:series:8:/danh-sach/phim-bo',
+            //     'active'      => 1,
+            // ],
+            // [
+            //     'key'         => 'site.movies.tops',
+            //     'name'        => 'Bảng xếp hạng phim',
+            //     'description' => 'site.movies.tops',
+            //     'field'       => json_encode([
+            //         'name' => 'value',
+            //         'type' => 'textarea',
+            //         'hint' => 'display_label:relation:find_by_field:value:sort_by_field:sort_algo:limit',
+            //     ]),
+            //     'value' => 'Top phim bộ::type:series:view_total:desc:4
+            //     Top phim lẻ::type:single:view_total:desc:4',
+            //     'active'      => 1,
+            // ],
+            // [
+            //     'key'         => 'site.movies.recommendations.limit',
+            //     'name'        => 'Giới hạn phim đề cử trên slider',
+            //     'description' => 'site.movies.recommendations.limit',
+            //     'field'       => json_encode([
+            //         'name' => 'value',
+            //         'type' => 'number',
+            //     ]),
+            //     'active'      => 1,
+            // ],
+        ];
+
+        $metas = [
             [
                 'key'         => 'site.homepage.title',
                 'description' => 'site.homepage.title',
@@ -198,68 +263,11 @@ class SettingsTableSeeder extends Seeder
                 'value' => '{poster_url}',
                 'active'      => 1,
             ],
-            [
-                'key'         => 'ckfinder.license.name',
-                'description' => 'ckfinder.license.name',
-                'name'        => 'ckfinder.license.name',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                ]),
-                'value' => 'localhost',
-                'active'      => 1,
-            ],
-            [
-                'key'         => 'ckfinder.license.key',
-                'description' => 'ckfinder.license.key',
-                'name'        => 'ckfinder.license.key',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                ]),
-                'value' => 'LAUAS1L5T6FNWUANJEB74PF9V8SBM',
-                'active'      => 1,
-            ],
-            [
-                'key'         => 'site.footer',
-                'description' => 'site.footer',
-                'name'        => 'Footer',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'textarea',
-                    'attributes' => [
-                        'rows' => 20
-                    ]
-                ]),
-                'value' => '
-                    <div class="w-full mx-auto flex flex-wrap">
-                        <div class="flex w-full">
-                            <div class="px-2"><span class="font-bold text-gray-100">Giới Thiệu...</span>
-                                <p class="text-gray-300 text-sm">Xem phim online chất lượng cao miễn phí với phụ đề tiếng
-                                    việt - thuyết minh - lồng tiếng, có nhiều thể loại phim phong phú, đặc sắc,
-                                    nhiều bộ phim hay nhất - mới nhất.</p>
-                                <p class="text-gray-300 text-sm">Website với giao diện trực quan, thuận tiện,
-                                    tốc độ tải nhanh, ít quảng cáo hứa hẹn sẽ đem lại những trải nghiệm tốt cho người dùng.
-                                </p>
-                            </div>
-                        </div>
-                        <div class="flex">
-                            <div class="px-2 space-x-2"><a class="text-gray-500">Liên Hệ</a>
-                                <a class="text-[#44e2ff] hover:text-yellow-300" href="/ban-quyen">Khiếu nại bản
-                                    quyền</a>
-                                <ul class="list-reset items-center text-sm pt-3">
-                                    <li class="text-gray-300"></li>
-                                    <li></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>',
-                'active'      => 1,
-            ]
         ];
 
-        foreach ($settings as $index => $setting) {
-            $result = Setting::updateOrCreate(collect($setting)->only('key')->toArray(), collect($setting)->except('key')->toArray());
+        foreach ($generals as $index => $setting) {
+            $result = Setting::updateOrCreate(collect($setting)->only('key')->toArray(), collect($setting)
+                ->merge(['group' => 'generals'])->except('key')->toArray());
 
             if (!$result) {
                 $this->command->info("Insert failed at record $index.");
@@ -268,6 +276,24 @@ class SettingsTableSeeder extends Seeder
             }
         }
 
-        $this->command->info('Inserted ' . count($settings) . ' settings.');
+        foreach ($metas as $index => $setting) {
+            $result = Setting::updateOrCreate(collect($setting)->only('key')->toArray(), collect($setting)->merge(['group' => 'metas'])->except('key')->toArray());
+
+            if (!$result) {
+                $this->command->info("Insert failed at record $index.");
+
+                return;
+            }
+        }
+
+        foreach ($themes as $index => $setting) {
+            $result = Setting::updateOrCreate(collect($setting)->only('key')->toArray(), collect($setting)->merge(['group' => 'themes'])->except('key')->toArray());
+
+            if (!$result) {
+                $this->command->info("Insert failed at record $index.");
+
+                return;
+            }
+        }
     }
 }

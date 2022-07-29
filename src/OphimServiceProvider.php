@@ -2,7 +2,6 @@
 
 namespace Ophim\Core;
 
-use Backpack\Settings\app\Models\Setting;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Ophim\Core\Console\CreateUser;
 use Ophim\Core\Console\InstallCommand;
@@ -25,9 +24,7 @@ class OphimServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'ophim');
 
-        config(['ophim.themes' => array_merge(config('ophim.themes', []), [
-            'default' => 'Mặc định'
-        ])]);
+        $this->setupDefaultThemeCustomizer();
 
         $this->mergeBackpackConfigs();
 
@@ -38,8 +35,9 @@ class OphimServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        config(['ckfinder.licenseName' => Setting::get('ckfinder.license.name', '')]);
-        config(['ckfinder.licenseKey' => Setting::get('ckfinder.license.key', '')]);
+        foreach (glob(__DIR__ . '/Helpers/*.php') as $filename) {
+            require_once $filename;
+        }
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/admin.php');
 
@@ -91,7 +89,7 @@ class OphimServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__ . '/../config/config.php' => config_path('ophim.php')
-        ]);
+        ], 'config');
     }
 
     protected function mergeBackpackConfigs()
@@ -119,5 +117,14 @@ class OphimServiceProvider extends ServiceProvider
     {
         config(['ckfinder.authentication' => CKFinderAuth::class]);
         config(['ckfinder.backends.default' => config('ophim.ckfinder.backends')]);
+    }
+
+    protected function setupDefaultThemeCustomizer()
+    {
+        config(['ophim.themes' => array_merge(config('ophim.themes', []), [
+            'default' => 'Mặc định'
+        ])]);
+
+        $this->mergeConfigFrom(__DIR__ . '/../config/customizers.php', 'customizers');
     }
 }
