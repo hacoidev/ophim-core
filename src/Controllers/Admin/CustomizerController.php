@@ -52,7 +52,9 @@ class CustomizerController extends CrudController
      */
     public function edit()
     {
-        $this->crud->hasAccessOrFail('update');
+        if (!backpack_user()->hasPermissionTo('Customize theme')) {
+            abort(403);
+        }
 
         $theme = Setting::get('site.theme') ?? config('ophim.theme', 'default');
 
@@ -83,7 +85,9 @@ class CustomizerController extends CrudController
      */
     public function update()
     {
-        $this->crud->hasAccessOrFail('update');
+        if (!backpack_user()->hasPermissionTo('Customize theme')) {
+            abort(403);
+        }
 
         // execute the FormRequest authorization and validation, if one is required
         $request = $this->crud->validateRequest();
@@ -135,7 +139,7 @@ class CustomizerController extends CrudController
     {
         $fields = $this->crud->fields();
         $entry = ($id != false) ? $this->getEntry($id) : $this->crud->getCurrentEntry();
-        $options = json_decode($entry->value, true);
+        $options = json_decode($entry->value, true) ?? [];
 
         foreach ($options as $k => $v) {
             $fields[$k]['value'] = $v;

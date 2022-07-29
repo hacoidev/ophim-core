@@ -25,48 +25,83 @@ class MenuCrudController extends CrudController
         $this->crud->setModel(Menu::class);
         $this->crud->setRoute(config('backpack.base.route_prefix') . '/menu');
         $this->crud->setEntityNameStrings('menu item', 'menu items');
-
         $this->crud->enableReorder('name', 2);
+    }
 
-        $this->crud->operation('list', function () {
-            $this->crud->addColumn([
-                'name' => 'name',
-                'label' => 'Label',
-            ]);
-            $this->crud->addColumn([
-                'label' => 'Parent',
-                'type' => 'select',
-                'name' => 'parent_id',
-                'entity' => 'parent',
-                'attribute' => 'name',
-                'model' => Menu::class,
-            ]);
-            $this->crud->addColumn([
-                'name' => 'link',
-                'label' => 'Link',
-                'type' => 'url',
-            ]);
-        });
+    /**
+     * Define what happens when the List operation is loaded.
+     *
+     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     * @return void
+     */
+    protected function setupListOperation()
+    {
+        $this->authorize('browse', Menu::class);
 
-        $this->crud->operation(['create', 'update'], function () {
-            $this->crud->addField([
-                'name' => 'name',
-                'label' => 'Label',
-            ]);
-            $this->crud->addField([
-                'label' => 'Parent',
-                'type' => 'select',
-                'name' => 'parent_id',
-                'entity' => 'parent',
-                'attribute' => 'name',
-                Menu::class
-            ]);
+        $this->crud->addColumn([
+            'name' => 'name',
+            'label' => 'Label',
+        ]);
+        $this->crud->addColumn([
+            'label' => 'Parent',
+            'type' => 'select',
+            'name' => 'parent_id',
+            'entity' => 'parent',
+            'attribute' => 'name',
+            'model' => Menu::class,
+        ]);
+        $this->crud->addColumn([
+            'name' => 'link',
+            'label' => 'Link',
+            'type' => 'url',
+        ]);
+    }
 
-            $this->crud->addField([
-                'name' => ['type', 'link', 'internal_link'],
-                'label' => 'Type',
-                'type' => 'page_or_link',
-            ]);
-        });
+    /**
+     * Define what happens when the Create operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-create
+     * @return void
+     */
+    protected function setupCreateOperation()
+    {
+        $this->authorize('create', Menu::class);
+
+        $this->crud->addField([
+            'name' => 'name',
+            'label' => 'Label',
+        ]);
+        $this->crud->addField([
+            'label' => 'Parent',
+            'type' => 'select',
+            'name' => 'parent_id',
+            'entity' => 'parent',
+            'attribute' => 'name',
+            Menu::class
+        ]);
+
+        $this->crud->addField([
+            'name' => ['type', 'link', 'internal_link'],
+            'label' => 'Type',
+            'type' => 'page_or_link',
+        ]);
+    }
+
+        /**
+     * Define what happens when the Update operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-update
+     * @return void
+     */
+    protected function setupUpdateOperation()
+    {
+        $this->authorize('update', $this->crud->entry);
+
+        $this->setupCreateOperation();
+    }
+
+    protected function setupDeleteOperation()
+    {
+        $this->authorize('delete', $this->crud->entry);
     }
 }

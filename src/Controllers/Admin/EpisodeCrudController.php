@@ -5,6 +5,7 @@ namespace Ophim\Core\Controllers\Admin;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Http\Request;
+use Ophim\Core\Models\Episode;
 
 /**
  * Class EpisodeCrudController
@@ -46,6 +47,8 @@ class EpisodeCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        $this->authorize('browse', Episode::class);
+
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
@@ -85,6 +88,8 @@ class EpisodeCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+        $this->authorize('update', $this->crud->entry);
+
         CRUD::addField(['name' => 'type', 'label' => 'Type', 'type' => 'select_from_array', 'options' => config('ophim.episodes.types')]);
         CRUD::addField(['name' => 'link', 'label' => 'Nguồn phát', 'type' => 'url']);
         CRUD::addField(['name' => 'has_report', 'label' => 'Đánh dấu đang lỗi', 'type' => 'checkbox']);

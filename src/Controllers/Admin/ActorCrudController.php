@@ -5,6 +5,7 @@ namespace Ophim\Core\Controllers\Admin;
 use Ophim\Core\Requests\ActorRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Ophim\Core\Models\Actor;
 
 /**
  * Class ActorCrudController
@@ -39,9 +40,7 @@ class ActorCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        if (!backpack_user()->hasPermissionTo('edit articles')) {
-            abort(403);
-        }
+        $this->authorize('browse', Actor::class);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -62,9 +61,9 @@ class ActorCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
+        $this->authorize('create', Actor::class);
+
         CRUD::setValidation(ActorRequest::class);
-
-
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
@@ -93,6 +92,13 @@ class ActorCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+        $this->authorize('update', $this->crud->entry);
+
         $this->setupCreateOperation();
+    }
+
+    protected function setupDeleteOperation()
+    {
+        $this->authorize('delete', $this->crud->entry);
     }
 }

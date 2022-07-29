@@ -91,6 +91,8 @@ class MovieSiteController
     {
         $movie = Movie::fromCache()->find($movie);
 
+        if (is_null($movie)) abort(404);
+
         return $theme->render('single', [
             'movie' => $movie,
             'title' => $movie->getTitle()
@@ -101,9 +103,13 @@ class MovieSiteController
     {
         $movie = Movie::fromCache()->find($movie)->load('episodes');
 
+        if (is_null($movie)) abort(404);
+
         $episode = $movie->episodes->when(request('id'), function ($collection) {
             return $collection->where('id', request('id'));
         })->firstWhere('slug', $slug);
+
+        if (is_null($episode)) abort(404);
 
         $movie->increment('view_total', 1);
         $movie->increment('view_day', 1);

@@ -4,6 +4,7 @@ namespace Ophim\Core\Controllers\Admin;
 
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Ophim\Core\Models\Tag;
 use Ophim\Core\Requests\TagRequest;
 
 /**
@@ -39,7 +40,7 @@ class TagCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
+        $this->authorize('browse', Tag::class);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -59,9 +60,9 @@ class TagCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
+        $this->authorize('create', Tag::class);
+
         CRUD::setValidation(TagRequest::class);
-
-
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
@@ -81,6 +82,13 @@ class TagCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+        $this->authorize('update', $this->crud->entry);
+
         $this->setupCreateOperation();
+    }
+
+    protected function setupDeleteOperation()
+    {
+        $this->authorize('delete', $this->crud->entry);
     }
 }

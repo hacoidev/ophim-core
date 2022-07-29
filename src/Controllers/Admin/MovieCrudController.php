@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Ophim\Core\Models\Actor;
 use Ophim\Core\Models\Director;
+use Ophim\Core\Models\Movie;
 use Ophim\Core\Models\Tag;
 
 /**
@@ -50,6 +51,8 @@ class MovieCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        $this->authorize('browse', Movie::class);
+
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
@@ -90,9 +93,9 @@ class MovieCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
+        $this->authorize('create', Movie::class);
+
         CRUD::setValidation(MovieRequest::class);
-
-
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
@@ -172,6 +175,8 @@ class MovieCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+        $this->authorize('update', $this->crud->entry);
+
         $this->setupCreateOperation();
     }
 
@@ -227,5 +232,10 @@ class MovieCrudController extends CrudController
         $request['tags'] = $tag_ids;
 
         return [$actor_ids, $director_ids, $tag_ids];
+    }
+
+    protected function setupDeleteOperation()
+    {
+        $this->authorize('delete', $this->crud->entry);
     }
 }

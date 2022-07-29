@@ -5,6 +5,7 @@ namespace Ophim\Core\Controllers\Admin;
 use Ophim\Core\Requests\DirectorRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Ophim\Core\Models\Director;
 
 /**
  * Class DirectorCrudController
@@ -39,7 +40,7 @@ class DirectorCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
+        $this->authorize('browse', Director::class);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -62,9 +63,9 @@ class DirectorCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
+        $this->authorize('create', Director::class);
+
         CRUD::setValidation(DirectorRequest::class);
-
-
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
@@ -93,6 +94,13 @@ class DirectorCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+        $this->authorize('update', $this->crud->entry);
+
         $this->setupCreateOperation();
+    }
+
+    protected function setupDeleteOperation()
+    {
+        $this->authorize('delete', $this->crud->entry);
     }
 }

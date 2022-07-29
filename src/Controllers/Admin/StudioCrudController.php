@@ -5,6 +5,7 @@ namespace Ophim\Core\Controllers\Admin;
 use Ophim\Core\Requests\StudioRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Ophim\Core\Models\Studio;
 
 /**
  * Class StudioCrudController
@@ -39,7 +40,7 @@ class StudioCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
+        $this->authorize('browse', Studio::class);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -60,9 +61,9 @@ class StudioCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
+        $this->authorize('create', Studio::class);
+
         CRUD::setValidation(StudioRequest::class);
-
-
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
@@ -83,6 +84,13 @@ class StudioCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+        $this->authorize('update', $this->crud->entry);
+
         $this->setupCreateOperation();
+    }
+
+    protected function setupDeleteOperation()
+    {
+        $this->authorize('delete', $this->crud->entry);
     }
 }

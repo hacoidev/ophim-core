@@ -5,6 +5,7 @@ namespace Ophim\Core\Controllers\Admin;
 use Ophim\Core\Requests\CategoryRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Ophim\Core\Models\Category;
 
 /**
  * Class CategoryCrudController
@@ -39,6 +40,8 @@ class CategoryCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        $this->authorize('browse', Category::class);
+
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->label('price')->type('number');
@@ -59,6 +62,8 @@ class CategoryCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
+        $this->authorize('create', Category::class);
+
         CRUD::setValidation(CategoryRequest::class);
 
         /**
@@ -81,6 +86,13 @@ class CategoryCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+        $this->authorize('update', $this->crud->entry);
+
         $this->setupCreateOperation();
+    }
+
+    protected function setupDeleteOperation()
+    {
+        $this->authorize('delete', $this->crud->entry);
     }
 }

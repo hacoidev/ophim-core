@@ -7,6 +7,7 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Backpack\Settings\app\Models\Setting;
 use Illuminate\Support\Facades\Cache;
 use Ophim\Core\Models\Category;
+use Ophim\Core\Models\CrawlSchedule;
 use Ophim\Core\Requests\CrawlScheduleRequest;
 
 /**
@@ -43,7 +44,7 @@ class CrawlScheduleCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
+        $this->authorize('browse', CrawlSchedule::class);
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -63,6 +64,8 @@ class CrawlScheduleCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
+        $this->authorize('create', CrawlSchedule::class);
+
         CRUD::setValidation(CrawlScheduleRequest::class);
 
         CRUD::addField(['name' => 'type', 'label' => 'Handler', 'type' => 'select_from_array', 'options' => config('ophim.crawlers', []), 'tab' => 'Nguồn phim']);
@@ -117,6 +120,13 @@ class CrawlScheduleCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+        $this->authorize('update', $this->crud->entry);
+
         $this->setupCreateOperation();
+    }
+
+    protected function setupDeleteOperation()
+    {
+        $this->authorize('delete', $this->crud->entry);
     }
 }

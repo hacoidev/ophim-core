@@ -2,11 +2,32 @@
 
 namespace Ophim\Core;
 
+use Ophim\Core\Policies\PermissionPolicy;
+use Ophim\Core\Policies\RolePolicy;
+use Ophim\Core\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Ophim\Core\Console\CreateUser;
 use Ophim\Core\Console\InstallCommand;
 use Ophim\Core\Console\MovieUpdateCommand;
 use Ophim\Core\Middleware\CKFinderAuth;
+use Ophim\Core\Models\Actor;
+use Ophim\Core\Models\Category;
+use Ophim\Core\Models\Director;
+use Ophim\Core\Models\Episode;
+use Ophim\Core\Models\Menu;
+use Ophim\Core\Models\Movie;
+use Ophim\Core\Models\Region;
+use Ophim\Core\Models\Studio;
+use Ophim\Core\Models\Tag;
+use Ophim\Core\Policies\ActorPolicy;
+use Ophim\Core\Policies\CategoryPolicy;
+use Ophim\Core\Policies\DirectorPolicy;
+use Ophim\Core\Policies\EpisodePolicy;
+use Ophim\Core\Policies\MenuPolicy;
+use Ophim\Core\Policies\MoviePolicy;
+use Ophim\Core\Policies\RegionPolicy;
+use Ophim\Core\Policies\StudioPolicy;
+use Ophim\Core\Policies\TagPolicy;
 
 class OphimServiceProvider extends ServiceProvider
 {
@@ -17,7 +38,17 @@ class OphimServiceProvider extends ServiceProvider
      */
     public function policies()
     {
-        return [];
+        return [
+            Actor::class => ActorPolicy::class,
+            Category::class => CategoryPolicy::class,
+            Region::class => RegionPolicy::class,
+            Director::class => DirectorPolicy::class,
+            Tag::class => TagPolicy::class,
+            Studio::class => StudioPolicy::class,
+            Movie::class => MoviePolicy::class,
+            Episode::class => EpisodePolicy::class,
+            Menu::class => MenuPolicy::class,
+        ];
     }
 
     public function register()
@@ -29,6 +60,8 @@ class OphimServiceProvider extends ServiceProvider
         $this->mergeBackpackConfigs();
 
         $this->mergeCkfinderConfigs();
+
+        $this->mergePolicies();
     }
 
     public function boot()
@@ -126,5 +159,12 @@ class OphimServiceProvider extends ServiceProvider
         ])]);
 
         $this->mergeConfigFrom(__DIR__ . '/../config/customizers.php', 'customizers');
+    }
+
+    protected function mergePolicies()
+    {
+        config(['backpack.permissionmanager.policies.permission' => PermissionPolicy::class]);
+        config(['backpack.permissionmanager.policies.role' => RolePolicy::class]);
+        config(['backpack.permissionmanager.policies.user' => UserPolicy::class]);
     }
 }

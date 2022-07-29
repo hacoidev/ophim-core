@@ -5,6 +5,7 @@ namespace Ophim\Core\Controllers\Admin;
 use Ophim\Core\Requests\RegionRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Ophim\Core\Models\Region;
 
 /**
  * Class RegionCrudController
@@ -39,6 +40,8 @@ class RegionCrudController extends CrudController
      */
     protected function setupListOperation()
     {
+        $this->authorize('browse', Region::class);
+
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->label('price')->type('number');
@@ -59,6 +62,8 @@ class RegionCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
+        $this->authorize('create', Region::class);
+
         CRUD::setValidation(RegionRequest::class);
 
         /**
@@ -80,6 +85,13 @@ class RegionCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
+        $this->authorize('update', $this->crud->entry);
+
         $this->setupCreateOperation();
+    }
+
+    protected function setupDeleteOperation()
+    {
+        $this->authorize('delete', $this->crud->entry);
     }
 }
