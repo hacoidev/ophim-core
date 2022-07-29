@@ -1,1 +1,0 @@
-@include('ophim::base.fields.select2_tags')

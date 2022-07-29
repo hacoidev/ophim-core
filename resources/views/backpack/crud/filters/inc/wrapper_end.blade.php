@@ -1,1 +1,0 @@
-</{{ $filter->wrapper['element'] ?? 'div' }}>
