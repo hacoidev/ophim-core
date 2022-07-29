@@ -4,7 +4,6 @@ namespace Ophim\Core\Controllers;
 
 use Backpack\Settings\app\Models\Setting;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Ophim\Core\Models\Actor;
 use Ophim\Core\Models\Category;
 use Ophim\Core\Models\Director;
@@ -55,36 +54,9 @@ class MovieSiteController
                 'search' => $request['search'],
             ]);
         }
-
-        return Cache::remember('index', Setting::get('site.cache.ttl', 300), function () use ($theme) {
-            $lists = preg_split('/[\n\r]+/', Setting::get('site.movies.latest'));
-
-            $data = [];
-            foreach ($lists as $list) {
-                if (trim($list)) {
-                    [$label, $relation, $field, $val, $limit, $link] = explode(':', $list);
-                    try {
-                        $data[] = [
-                            'label' => $label,
-                            'data' => Movie::when($relation, function ($query) use ($relation, $field, $val) {
-                                $query->whereHas($relation, function ($rel) use ($field, $val) {
-                                    $rel->where($field, $val);
-                                });
-                            })->when(!$relation, function ($query) use ($field, $val) {
-                                $query->where($field, $val);
-                            })->limit($limit)->orderBy('updated_at', 'desc')->get(),
-                            'link' => $link ?: '#'
-                        ];
-                    } catch (\Throwable $th) {
-                    }
-                }
-            }
-
-            return $theme->render('index', [
-                'data' => $data,
-                'title' => Setting::get('site.homepage.title')
-            ])->render();
-        });
+        return $theme->render('index', [
+            'title' => Setting::get('site.homepage.title')
+        ])->render();
     }
 
     public function getMovieOverview(Request $request, Theme $theme, $movie)

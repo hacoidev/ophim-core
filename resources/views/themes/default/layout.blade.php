@@ -1,11 +1,12 @@
 @php
 $menu = \Ophim\Core\Models\Menu::getTree();
 $tops = Cache::remember('site.movies.tops', \Backpack\Settings\app\Models\Setting::get('site.cache.ttl', 5 * 60), function () {
-    $lists = preg_split('/[\n\r]+/', \Backpack\Settings\app\Models\Setting::get('site.movies.tops'));
+    $lists = preg_split('/[\n\r]+/', get_theme_attr('hotest'));
     $data = [];
     foreach ($lists as $list) {
         if (trim($list)) {
-            [$label, $relation, $field, $val, $sortKey, $alg, $limit] = explode(':', $list);
+            $list = explode('|', $list);
+            [$label, $relation, $field, $val, $sortKey, $alg, $limit] = array_merge($list, ['Phim hot', '', 'type', 'series', 'view_total', 'desc', 4]);
             try {
                 $data[] = [
                     'label' => $label,
@@ -51,7 +52,7 @@ $tops = Cache::remember('site.movies.tops', \Backpack\Settings\app\Models\Settin
                         @yield('content')
                     </div>
                 </div>
-                <div class="w-full lg:w-1/4 xl:w-1/4 pl-0 lg:pl-2 mt-3 lg:mt-0">
+                <div class="w-full lg:w-1/4 xl:w-1/4 pl-0 lg:pl-3 mt-3 lg:mt-0">
                     @foreach ($tops as $top)
                         <div class="rounded mb-3">
                             <a class="flex bg-[#1511116d] rounded-lg p-0 mb-0">
@@ -64,7 +65,7 @@ $tops = Cache::remember('site.movies.tops', \Backpack\Settings\app\Models\Settin
                                 <ul class="list-movies">
                                     @foreach ($top['data'] ?? [] as $movie)
                                         <a href="{{ $movie->getUrl() }}"
-                                            class="flex bg-[#1511116d] rounded-lg w-15 h-20 my-1">
+                                            class="flex bg-[#1511116d] rounded-lg w-15 h-20 my-2">
                                             <img class="object-cover rounded-l-lg" style="aspect-ratio: 256 / 340"
                                                 src="{{ $movie->thumb_url }}" alt="">
                                             <div class="px-3 py-1 truncate">
