@@ -169,7 +169,7 @@ class OphimServiceProvider extends ServiceProvider
                     'label' => 'Danh sách hot',
                     'type' => 'textarea',
                     'hint' => 'display_label|relation|find_by_field|value|sort_by_field|sort_algo|limit',
-                    'value' => 'Top phim bộ||type|series|view_total|desc|4\n\rTop phim lẻ||type|single|view_total|desc|4',
+                    'value' => 'Top phim bộ||type|series|view_total|desc|4',
                     'attributes' => [
                         'rows' => 5
                     ]
@@ -194,10 +194,6 @@ class OphimServiceProvider extends ServiceProvider
                             <div class="px-2 space-x-2"><a class="text-gray-500">Liên Hệ</a>
                                 <a class="text-[#44e2ff] hover:text-yellow-300" href="/ban-quyen">Khiếu nại bản
                                     quyền</a>
-                                <ul class="list-reset items-center text-sm pt-3">
-                                    <li class="text-gray-300"></li>
-                                    <li></li>
-                                </ul>
                             </div>
                         </div>
                     </div>

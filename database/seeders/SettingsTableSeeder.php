@@ -36,15 +36,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                     'hint' => 'giây (s)',
                 ]),
-                'active'      => 1,
-            ],
-            [
-                'key'         => 'domain.ophim.api',
-                'name'        => 'Ophim API Domain URL',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                ]),
+                'value' => 60,
                 'active'      => 1,
             ],
             [
@@ -77,29 +69,6 @@ class SettingsTableSeeder extends Seeder
                 ]),
                 'active'      => 1,
             ],
-
-            [
-                'key'         => 'ckfinder.license.name',
-                'description' => 'ckfinder.license.name',
-                'name'        => 'ckfinder.license.name',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                ]),
-                'value' => 'localhost',
-                'active'      => 1,
-            ],
-            [
-                'key'         => 'ckfinder.license.key',
-                'description' => 'ckfinder.license.key',
-                'name'        => 'ckfinder.license.key',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                ]),
-                'value' => 'LAUAS1L5T6FNWUANJEB74PF9V8SBM',
-                'active'      => 1,
-            ],
         ];
 
         $metas = [
@@ -122,6 +91,17 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                 ]),
                 'value' => 'Phim {name} | OphimTV.com',
+                'active'      => 1,
+            ],
+            [
+                'key'         => 'site.episode.watch.title',
+                'description' => 'site.episode.watch.title',
+                'name'        => 'Mẫu tiêu đề trang xem phim',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                ]),
+                'value' => 'Xem phim {movie.name} - tập {name} | OphimTV.com',
                 'active'      => 1,
             ],
             [

@@ -1,6 +1,6 @@
 @php
 $menu = \Ophim\Core\Models\Menu::getTree();
-$tops = Cache::remember('site.movies.tops', \Backpack\Settings\app\Models\Setting::get('site.cache.ttl', 5 * 60), function () {
+$tops = Cache::remember('site.movies.tops', \Backpack\Settings\app\Models\Setting::get('site.cache.ttl', 60), function () {
     $lists = preg_split('/[\n\r]+/', get_theme_var('hotest'));
     $data = [];
     foreach ($lists as $list) {
