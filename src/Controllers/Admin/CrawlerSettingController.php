@@ -33,14 +33,16 @@ class CrawlerSettingController extends CrudController
      */
     protected function setupListOperation()
     {
-        $this->authorize('browse', Category::class);
+        if (!backpack_user()->hasPermissionTo('Config crawler')) {
+            abort(403);
+        }
 
         foreach (config('ophim.updaters', []) as $crawler) {
             Setting::firstOrCreate([
                 'key' => 'crawlers.' . strtolower($crawler['name']) . '.options',
             ], [
                 'name' => $crawler['name'],
-                'field' => '',
+                'field' => json_encode(['name' => 'value', 'type', 'hidden']),
                 'group' => 'crawler',
                 'active' => false
             ]);
@@ -81,7 +83,7 @@ class CrawlerSettingController extends CrudController
      */
     public function edit($id)
     {
-        if (!backpack_user()->hasPermissionTo('Customize theme')) {
+        if (!backpack_user()->hasPermissionTo('Config crawler')) {
             abort(403);
         }
 
@@ -119,7 +121,7 @@ class CrawlerSettingController extends CrudController
      */
     public function update($crawler)
     {
-        if (!backpack_user()->hasPermissionTo('Customize theme')) {
+        if (!backpack_user()->hasPermissionTo('Config crawler')) {
             abort(403);
         }
 
@@ -142,16 +144,6 @@ class CrawlerSettingController extends CrudController
         Alert::success(trans('backpack::crud.update_success'))->flash();
 
         return redirect(backpack_url('crawler-settings'));
-    }
-
-    /**
-     * Define what happens when the Update operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
-     * @return void
-     */
-    protected function setupUpdateOperation()
-    {
     }
 
     /**

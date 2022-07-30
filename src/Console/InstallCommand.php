@@ -2,10 +2,12 @@
 
 namespace Ophim\Core\Console;
 
+use Backpack\Settings\app\Models\Setting;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Ophim\Core\Database\Seeders\CategoriesTableSeeder;
 use Ophim\Core\Database\Seeders\MenusTableSeeder;
+use Ophim\Core\Database\Seeders\PermissionsSeeder;
 use Ophim\Core\Database\Seeders\RegionsTableSeeder;
 use Ophim\Core\Database\Seeders\SettingsTableSeeder;
 use Ophim\Core\Database\Seeders\ThemesTableSeeder;
@@ -118,6 +120,16 @@ class InstallCommand extends Command
         $this->progressBar->advance();
         $this->newLine(1);
 
+        $this->call('db:seed', [
+            'class' => PermissionsSeeder::class,
+        ]);
+        $this->progressBar->advance();
+        $this->newLine(1);
+
+        $this->installDefaultTheme();
+        $this->newLine(1);
+        $this->info('Installed default theme');
+
         $this->progressBar->finish();
         $this->newLine(1);
         $this->info('Ophim installation finished.');
@@ -136,6 +148,23 @@ class InstallCommand extends Command
 
         $this->call('vendor:publish', [
             '--tag' => 'ckfinder-config',
+        ]);
+    }
+
+    protected function installDefaultTheme()
+    {
+        $setting = Setting::firstOrCreate([
+            'key' => 'themes.default.customize',
+        ], [
+            'name' => "Default theme customizer",
+            'field' => json_encode(['name' => 'value', 'type', 'hidden']),
+            'active' => false
+        ]);
+
+        $fields = collect(config('customizers.default', []));
+
+        $setting->update([
+            'value' => $fields->pluck('value', 'name')->toArray()
         ]);
     }
 }

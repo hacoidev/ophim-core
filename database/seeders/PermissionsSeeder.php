@@ -65,12 +65,13 @@ class PermissionsSeeder extends Seeder
             'Create episode',
             'Update episode',
             'Delete episode',
-            'Customize theme',
             'Browse menu',
             'Create menu',
             'Update menu',
             'Delete menu',
             'Delete menu item',
+            'Config crawler',
+            'Customize theme',
         ];
 
         $admin = Role::firstOrCreate(['name' => "Admin", 'guard_name' => 'backpack']);
