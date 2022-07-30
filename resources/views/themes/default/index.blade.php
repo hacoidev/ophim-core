@@ -16,7 +16,7 @@ $recommendations = Cache::remember('site.movies.recommendations', Setting::get('
 });
 
 $data = Cache::remember('site.movies.latest', Setting::get('site.cache.ttl', 5 * 60), function () {
-    $lists = preg_split('/[\n\r]+/', get_theme_attr('latest'));
+    $lists = preg_split('/[\n\r]+/', get_theme_var('latest'));
     $data = [];
     foreach ($lists as $list) {
         if (trim($list)) {

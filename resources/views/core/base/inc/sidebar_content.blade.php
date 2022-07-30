@@ -44,11 +44,13 @@
             @include('ophim::base.inc.crawlers')
         </ul>
     </li>
+    <li class="nav-item"><a class="nav-link" href="{{ backpack_url('crawler-settings') }}"><i
+                class="nav-icon la la-cogs"></i>Cấu hình</a></li>
 @endif
 
 <li class="nav-title">Giao diện</li>
 <li class="nav-item"><a class="nav-link" href="{{ backpack_url('customizer') }}"><i class="nav-icon la la-css3"></i>Tuỳ
-        chỉnh</a>
+        chỉnh giao diện</a>
 </li>
 <li class='nav-item'><a class='nav-link' href='{{ backpack_url('menu') }}'><i class='nav-icon la la-list'></i>
         Menu</a>

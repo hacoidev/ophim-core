@@ -68,7 +68,9 @@ class CrawlScheduleCrudController extends CrudController
 
         CRUD::setValidation(CrawlScheduleRequest::class);
 
-        CRUD::addField(['name' => 'type', 'label' => 'Handler', 'type' => 'select_from_array', 'options' => config('ophim.updaters', []), 'tab' => 'Nguồn phim']);
+        $updaters = collect(config('ophim.updaters', []))->pluck('name','handler')->toArray();
+
+        CRUD::addField(['name' => 'type', 'label' => 'Handler', 'type' => 'select_from_array', 'options' => $updaters, 'tab' => 'Nguồn phim']);
         CRUD::addField([
             'name' => 'link',
             'label' => 'Link',

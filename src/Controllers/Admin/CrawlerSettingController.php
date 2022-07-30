@@ -6,12 +6,12 @@ use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\Settings\app\Models\Setting;
 use Illuminate\Support\Facades\Route;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Illuminate\Http\Request;
 use Prologue\Alerts\Facades\Alert;
 
-class CustomizerController extends CrudController
+class CrawlerSettingController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -21,8 +21,35 @@ class CustomizerController extends CrudController
     public function setup()
     {
         CRUD::setModel(Setting::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/customizer');
-        CRUD::setEntityNameStrings('theme customizer', 'theme customizer');
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/crawler-settings');
+        CRUD::setEntityNameStrings('crawler setting', 'crawler setting');
+    }
+
+    /**
+     * Define what happens when the List operation is loaded.
+     *
+     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     * @return void
+     */
+    protected function setupListOperation()
+    {
+        $this->authorize('browse', Category::class);
+
+        foreach (config('ophim.updaters', []) as $crawler) {
+            Setting::firstOrCreate([
+                'key' => 'crawlers.' . strtolower($crawler['name']) . '.options',
+            ], [
+                'name' => $crawler['name'],
+                'field' => '',
+                'group' => 'crawler',
+                'active' => false
+            ]);
+        }
+
+        $this->crud->addClause('where', 'group', 'crawler');
+        $this->crud->addClause('where', 'active', false);
+
+        CRUD::column('name')->label('Crawler')->type('text');
     }
 
     /**
@@ -34,7 +61,7 @@ class CustomizerController extends CrudController
      */
     protected function setupUpdateRoutes($segment, $routeName, $controller)
     {
-        Route::get($segment . '/', [
+        Route::get($segment . '/{id}/edit', [
             'as'        => $routeName . '.edit',
             'uses'      => $controller . '@edit',
             'operation' => 'update',
@@ -45,12 +72,6 @@ class CustomizerController extends CrudController
             'uses'      => $controller . '@update',
             'operation' => 'update',
         ]);
-
-        Route::post($segment . '/{id}/reset', [
-            'as'        => $routeName . '.reset',
-            'uses'      => $controller . '@reset',
-            'operation' => 'update',
-        ]);
     }
 
     /**
@@ -58,23 +79,28 @@ class CustomizerController extends CrudController
      *
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit()
+    public function edit($id)
     {
         if (!backpack_user()->hasPermissionTo('Customize theme')) {
             abort(403);
         }
 
-        $theme = Setting::get('site.theme') ?? config('ophim.theme', 'default');
-
-        $id = Setting::firstOrCreate([
-            'key' => 'themes.' . strtolower($theme) . '.customize',
-        ], [
-            'name' => "{$theme}\'s customizer",
-            'field' => json_encode(['name' => 'value', 'type', 'hidden']),
-            'active' => false
-        ])->id;
-
         $this->data['entry'] = $this->crud->getEntryWithLocale($id);
+
+        $crawlers = collect(config('ophim.updaters', []));
+
+        $crawler = $crawlers->filter(function ($v, $k) {
+            return 'crawlers.' . strtolower($v['name']) . '.options' === $this->data['entry']->key;
+        })->first();
+
+        if (isset($crawler['options']) && is_array($crawler['options'])) {
+            CRUD::addField(['name' => 'fields', 'type' => 'hidden', 'value' => collect($crawler['options'])->implode('name', ',')]);
+
+            foreach ($crawler['options'] as $field) {
+                CRUD::addField($field);
+            }
+        }
+
         $this->crud->setOperationSetting('fields', $this->getUpdateFields());
 
         $this->data['crud'] = $this->crud;
@@ -82,7 +108,8 @@ class CustomizerController extends CrudController
         $this->data['title'] = $this->crud->getTitle() ?? trans('backpack::crud.edit') . ' ' . $this->crud->entity_name;
         $this->data['id'] = $id;
 
-        return view('ophim::customizer', $this->data);
+        // load the view from /resources/views/vendor/hacoidev/crud/ if it exists, otherwise load the one in the package
+        return view($this->crud->getEditView(), $this->data);
     }
 
     /**
@@ -90,7 +117,7 @@ class CustomizerController extends CrudController
      *
      * @return array|\Illuminate\Http\RedirectResponse
      */
-    public function update()
+    public function update($crawler)
     {
         if (!backpack_user()->hasPermissionTo('Customize theme')) {
             abort(403);
@@ -109,12 +136,12 @@ class CustomizerController extends CrudController
                 'value' => json_encode(request()->only(explode(',', request('fields'))))
             ]
         );
-
         $this->data['entry'] = $this->crud->entry = $item;
 
+        // show a success message
         Alert::success(trans('backpack::crud.update_success'))->flash();
 
-        return redirect(backpack_url('customizer'));
+        return redirect(backpack_url('crawler-settings'));
     }
 
     /**
@@ -125,17 +152,6 @@ class CustomizerController extends CrudController
      */
     protected function setupUpdateOperation()
     {
-        $theme = Setting::get('site.theme') ?? config('ophim.theme', 'default');
-
-        $fields = config('customizers.' . $theme, []);
-
-        CRUD::addField(['name' => 'fields', 'type' => 'hidden', 'value' => collect($fields)->implode('name', ',')]);
-
-        foreach ($fields as $field) {
-            CRUD::addField($field);
-        }
-
-        $this->data['reset_form'] = $this->getResetFormHTML($theme);
     }
 
     /**
@@ -163,50 +179,5 @@ class CustomizerController extends CrudController
         }
 
         return $fields;
-    }
-
-    public function reset(Request $request, $id)
-    {
-        $setting = Setting::fromCache()->findByKey('id', $id);
-
-        if (is_null($setting)) {
-            Alert::warning("Không tìm thấy dữ liệu giao diện")->flash();
-            return redirect(backpack_url('customizer'));
-        }
-
-        $theme = Setting::get('site.theme') ?? config('ophim.theme', 'default');
-
-        $fields = collect(config('customizers.' . $theme, []));
-
-        $setting->update([
-            'value' => $fields->pluck('value', 'name')->toArray()
-        ]);
-
-        Alert::success(trans('backpack::crud.update_success'))->flash();
-
-        return redirect(backpack_url('customizer'));
-    }
-
-    protected function getResetFormHTML($theme)
-    {
-        $setting = Setting::fromCache()->find('themes.' . strtolower($theme) . '.customize');
-
-        if (is_null($setting)) {
-            return;
-        }
-
-        $template = <<<EOT
-        <form action="{actionRoute}" method="post" onsubmit="return confirm('Chắc chắn muốn đặt về mặc định?');">
-            {csrfField}
-            <button class="btn btn-secondary" type="submit">{name}</button>
-        </form>
-        EOT;
-
-
-        $html = str_replace("{actionRoute}", route('customizer.reset', $setting->id), $template);
-        $html = str_replace("{csrfField}", csrf_field(), $html);
-        $html = str_replace("{name}", 'Reset to default', $html);
-
-        return $html;
     }
 }

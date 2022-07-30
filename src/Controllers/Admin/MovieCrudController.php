@@ -161,7 +161,7 @@ class MovieCrudController extends CrudController
             'tab' => 'Danh sách tập phim'
         ],);
 
-        CRUD::addField(['name' => 'update_handler', 'label' => 'Trình cập nhật', 'type' => 'select_from_array', 'options' => config('ophim.updaters', []), 'tab' => 'Cập nhật']);
+        CRUD::addField(['name' => 'update_handler', 'label' => 'Trình cập nhật', 'type' => 'select_from_array', 'options' => collect(config('ophim.updaters', []))->pluck('name','handler')->toArray(), 'tab' => 'Cập nhật']);
         CRUD::addField(['name' => 'update_url', 'label' => 'Cập nhật theo URL', 'type' => 'text', 'tab' => 'Cập nhật']);
 
         CRUD::addField(['name' => 'is_shown_in_theater', 'label' => 'Phim chiếu rạp', 'type' => 'boolean', 'tab' => 'Khác']);

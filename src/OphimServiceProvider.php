@@ -160,7 +160,31 @@ class OphimServiceProvider extends ServiceProvider
             'default' => 'Mặc định'
         ])]);
 
-        $this->mergeConfigFrom(__DIR__ . '/../config/customizers.php', 'customizers');
+        config(['customizers' => array_merge(config('customizers', []), [
+            'default' => [
+                [
+                    'name' => 'latest',
+                    'label' => 'Danh sách mới cập nhật',
+                    'type' => 'textarea',
+                    'hint' => 'display_label|relation|find_by_field|value|limit|show_more_url',
+                    'value' => 'Phim bộ mới||type|series|8|/danh-sach/phim-bo',
+                    'attributes' => [
+                        'rows' => 5
+                    ]
+                ],
+                [
+                    'name' => 'hotest',
+                    'label' => 'Danh sách hot',
+                    'type' => 'textarea',
+                    'hint' => 'display_label|relation|find_by_field|value|sort_by_field|sort_algo|limit',
+                    'value' => 'Top phim bộ||type|series|view_total|desc|4\n\rTop phim lẻ||type|single|view_total|desc|4',
+                    'attributes' => [
+                        'rows' => 5
+                    ]
+                ],
+            ],
+
+        ])]);
     }
 
     protected function mergePolicies()

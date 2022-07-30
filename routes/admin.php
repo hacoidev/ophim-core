@@ -28,6 +28,7 @@ Route::group([
     Route::crud('crawl-schedule', 'CrawlScheduleCrudController');
     Route::crud('episode', 'EpisodeCrudController');
     Route::crud('customizer', 'CustomizerController');
+    Route::crud('crawler-settings', 'CrawlerSettingController');
 });
 
 Route::group([
