@@ -3,6 +3,7 @@
 namespace Ophim\Core\Console;
 
 use Illuminate\Console\Command;
+use Spatie\Permission\Models\Role;
 
 class CreateUser extends Command
 {
@@ -33,15 +34,21 @@ class CreateUser extends Command
     {
         $this->info('Creating a new user');
 
-        if (! $name = $this->option('name')) {
+        if (!$name = $this->option('name')) {
             $name = $this->ask('Name');
         }
 
-        if (! $email = $this->option('email')) {
+        if (!$email = $this->option('email')) {
             $email = $this->ask('Email');
         }
 
-        if (! $password = $this->option('password')) {
+        if (!$this->confirm('Is administrator? [y|N]', $isAdmin = false)) {
+            $isAdmin = false;
+        } else {
+            $isAdmin = true;
+        }
+
+        if (!$password = $this->option('password')) {
             $password = $this->secret('Password');
         }
 
@@ -57,6 +64,9 @@ class CreateUser extends Command
 
         if ($user->save()) {
             $this->info('Successfully created new user');
+            if ($isAdmin) {
+                $user->roles()->attach(Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'backpack']));
+            }
         } else {
             $this->error('Something went wrong trying to save your user');
         }

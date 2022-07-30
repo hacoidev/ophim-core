@@ -102,24 +102,16 @@ class OphimServiceProvider extends ServiceProvider
     protected function publishFiles()
     {
         $backpack_menu_contents_view = [
-            __DIR__ . '/../resources/views/backpack/base/inc/sidebar_content.blade.php'      => resource_path('views/vendor/backpack/base/inc/sidebar_content.blade.php'),
-            __DIR__ . '/../resources/views/backpack/base/inc/topbar_left_content.blade.php'  => resource_path('views/vendor/backpack/base/inc/topbar_left_content.blade.php'),
-            __DIR__ . '/../resources/views/backpack/base/inc/topbar_right_content.blade.php' => resource_path('views/vendor/backpack/base/inc/topbar_right_content.blade.php'),
-        ];
-
-        $ophim_custom_crud = [
-            __DIR__ . '/../resources/views/backpack/crud/fields/'      => resource_path('views/vendor/backpack/crud/fields/'),
-            __DIR__ . '/../resources/views/backpack/crud/columns/'      => resource_path('views/vendor/backpack/crud/columns/'),
+            __DIR__ . '/../resources/views/core/base/inc/sidebar_content.blade.php'      => resource_path('views/vendor/hacoidev/base/inc/sidebar_content.blade.php'),
         ];
 
         $players = [
-            __DIR__ . '/../resources/views/assets/js/inc/hls.min.js' => public_path('js/hls.min.js'),
-            __DIR__ . '/../resources/views/assets/js/inc/jwplayer-8.9.3.js' => public_path('js/jwplayer-8.9.3.js'),
-            __DIR__ . '/../resources/views/assets/js/inc/hls.min.js' => public_path('js/jwplayer.hlsjs.min.js'),
+            __DIR__ . '/../resources/assets/js/hls.min.js' => public_path('js/hls.min.js'),
+            __DIR__ . '/../resources/assets/js/jwplayer-8.9.3.js' => public_path('js/jwplayer-8.9.3.js'),
+            __DIR__ . '/../resources/assets/js/jwplayer.hlsjs.min.js' => public_path('js/jwplayer.hlsjs.min.js'),
         ];
 
         $this->publishes($backpack_menu_contents_view, 'cms_menu_content');
-        $this->publishes($ophim_custom_crud, 'ophim_custom_crud');
         $this->publishes($players, 'players');
 
         $this->publishes([
@@ -138,7 +130,7 @@ class OphimServiceProvider extends ServiceProvider
             'packages/select2/dist/js/select2.full.min.js'
         ])]);
 
-        config(['backpack.base.middleware_class' => array_merge(config('backpack.base.middleware_class'), [
+        config(['backpack.base.middleware_class' => array_merge(config('backpack.base.middleware_class', []), [
             \Backpack\CRUD\app\Http\Middleware\UseBackpackAuthGuardInsteadOfDefaultAuthGuard::class,
         ])]);
 
@@ -182,6 +174,35 @@ class OphimServiceProvider extends ServiceProvider
                         'rows' => 5
                     ]
                 ],
+                [
+                    'name' => 'footer',
+                    'label' => 'Footer',
+                    'type' => 'summernote',
+                    'value' => <<<EOT
+                    <div class="w-full mx-auto flex flex-wrap">
+                        <div class="flex w-full">
+                            <div class="px-2"><span class="font-bold text-gray-100">Giới Thiệu...</span>
+                                <p class="text-gray-300 text-sm">Xem phim online chất lượng cao miễn phí với phụ đề tiếng
+                                    việt - thuyết minh - lồng tiếng, có nhiều thể loại phim phong phú, đặc sắc,
+                                    nhiều bộ phim hay nhất - mới nhất.</p>
+                                <p class="text-gray-300 text-sm">Website với giao diện trực quan, thuận tiện,
+                                    tốc độ tải nhanh, ít quảng cáo hứa hẹn sẽ đem lại những trải nghiệm tốt cho người dùng.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex">
+                            <div class="px-2 space-x-2"><a class="text-gray-500">Liên Hệ</a>
+                                <a class="text-[#44e2ff] hover:text-yellow-300" href="/ban-quyen">Khiếu nại bản
+                                    quyền</a>
+                                <ul class="list-reset items-center text-sm pt-3">
+                                    <li class="text-gray-300"></li>
+                                    <li></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    EOT
+                ]
             ],
 
         ])]);

@@ -69,13 +69,6 @@ class InstallCommand extends Command
 
         $this->call('vendor:publish', [
             '--provider' => 'Backpack\CRUD\BackpackServiceProvider',
-            '--tag' => 'errors',
-        ]);
-        $this->progressBar->advance();
-        $this->newLine(1);
-
-        $this->call('vendor:publish', [
-            '--provider' => 'Backpack\CRUD\BackpackServiceProvider',
             '--tag' => 'public',
         ]);
         $this->progressBar->advance();
@@ -94,12 +87,6 @@ class InstallCommand extends Command
         $this->newLine(1);
 
         $this->call('backpack:publish-middleware');
-        $this->progressBar->advance();
-        $this->newLine(1);
-
-        $this->call('vendor:publish', [
-            '--tag' => 'ophim_custom_crud',
-        ]);
         $this->progressBar->advance();
         $this->newLine(1);
 

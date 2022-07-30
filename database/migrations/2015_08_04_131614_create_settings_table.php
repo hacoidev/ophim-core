@@ -20,8 +20,11 @@ class CreateSettingsTable extends Migration
             $table->string('description')->nullable();
             $table->text('value')->nullable();
             $table->text('field');
-            $table->tinyInteger('active');
+            $table->string('group')->nullable()->index();
+            $table->boolean('active')->index();
             $table->timestamps();
+
+            $table->index(['group', 'active']);
         });
     }
 
