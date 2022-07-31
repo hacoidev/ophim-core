@@ -3,8 +3,7 @@
 ## Installation:
 1. CD to project root and run: `composer require hacoidev/ophim-core`
 2. Then, run command: `php artisan ophim:install`
-3. Create new user by command: `php artisan ophim:user`
-4. Change app\Models\User:
+3. Change app\Models\User:
 ```php
 use Ophim\Core\Models\User as OphimUser;
 
@@ -12,6 +11,8 @@ class User extends OphimUser {
     use HasApiTokens, HasFactory, Notifiable;
     // ...
 }
+4. Create new user by command: `php artisan ophim:user`
+
 ```
 5. Remove this route definition in routes/web.php
 ```php
