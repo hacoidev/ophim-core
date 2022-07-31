@@ -1,4 +1,7 @@
 @extends('themes::default.layout')
+@php
+    use Backpack\Settings\app\Models\Setting;
+@endphp
 
 @section('content')
     <div class="breadcrumb w-full py-[5px] px-[10px] mb-2 list-none bg-[#151111] rounded" itemscope=""
@@ -123,11 +126,6 @@
     <script src="/js/jwplayer-8.9.3.js"></script>
     <script src="/js/hls.min.js"></script>
     <script src="/js/jwplayer.hlsjs.min.js"></script>
-    <script type="text/javascript">
-        var ads = [
-            // 'https://player.meophimz.tv/player/assets/ads/i999/vast-ad.xml',
-        ];
-    </script>
     <script>
         const wrapper = document.getElementById('player-wrapper');
 
@@ -167,7 +165,7 @@
                 wrapper.innerHTML = `<div id="jwplayer"></div>`;
                 const player = jwplayer("jwplayer");
                 const objSetup = {
-                    key: "ITWMv7t88JGzI0xPwW8I0+LveiXX9SWbfdmt0ArUSyc=",
+                    key: "{{ Setting::get('jwplayer.license') }}",
                     aspectratio: "16:9",
                     width: "100%",
                     file: link,
@@ -186,15 +184,15 @@
                     volume: 100,
                     mute: false,
                     logo: {
-                        // file: "https://ophim.tv/logo-ophim-4.png",
-                        // link: "https://meophimz.tv",
-                        // position: "top-left"
+                        file: "{{ Setting::get('jwplayer.logo.file') }}",
+                        link: "{{ Setting::get('jwplayer.logo.link') }}",
+                        position: "{{ Setting::get('jwplayer.logo.position') }}",
                     },
                     advertising: {
-                        tag: ads[Math.floor(Math.random() * ads.length)],
+                        tag: "{{ Setting::get('jwplayer.advertising.file') }}",
                         client: "vast",
                         vpaidmode: "insecure",
-                        skipoffset: 5, // Bỏ qua quảng cáo trong vòng 5 giây
+                        skipoffset: {{ (int) Setting::get('jwplayer.advertising.skipoffset') ?: 5 }}, // Bỏ qua quảng cáo trong vòng 5 giây
                         skipmessage: "Bỏ qua sau xx giây",
                         skiptext: "Bỏ qua"
                     }

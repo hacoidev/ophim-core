@@ -101,7 +101,7 @@ class SettingsTableSeeder extends Seeder
                     'name' => 'value',
                     'type' => 'text',
                 ]),
-                'value' => 'Xem phim {movie.name} - tập {name} | OphimTV.com',
+                'value' => 'Xem phim {name} - tập {name} | OphimTV.com',
                 'active'      => 1,
             ],
             [
@@ -171,6 +171,89 @@ class SettingsTableSeeder extends Seeder
             ],
         ];
 
+        $players = [
+            [
+                'key'         => 'jwplayer.license',
+                'description' => 'jwplayer.license',
+                'name'        => 'Jwplayer license',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                ]),
+                'value' => 'ITWMv7t88JGzI0xPwW8I0+LveiXX9SWbfdmt0ArUSyc=',
+                'active'      => 1,
+            ],
+            [
+                'key'         => 'jwplayer.logo.file',
+                'description' => 'jwplayer.logo.file',
+                'name'        => 'Jwplayer logo image',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'ckfinder',
+                ]),
+                'active'      => 1,
+            ],
+            [
+                'key'         => 'jwplayer.logo.link',
+                'description' => 'jwplayer.logo.link',
+                'name'        => 'Jwplayer logo link',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                ]),
+                'active'      => 1,
+            ],
+            [
+                'key'         => 'jwplayer.logo.position',
+                'description' => 'jwplayer.logo.position',
+                'name'        => 'Jwplayer logo position',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'select_from_array',
+                    'options' => [
+                        'top-left' => 'Top left',
+                        'top-right' => 'Top right',
+                        'bottom-right' => 'Bottom right',
+                        'bottom-left' => 'Bottom left',
+                        'control-bar' => 'Control bar',
+                    ]
+                ]),
+                'active'      => 1,
+            ],
+            [
+                'key'         => 'jwplayer.advertising.file',
+                'description' => 'jwplayer.advertising.file',
+                'name'        => 'Jwplayer advertising vast file',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'ckfinder',
+                ]),
+                'active'      => 1,
+            ],
+            [
+                'key'         => 'jwplayer.advertising.file',
+                'description' => 'jwplayer.advertising.file',
+                'name'        => 'Jwplayer advertising vast file',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'ckfinder',
+                ]),
+                'active'      => 1,
+            ],
+            [
+                'key'         => 'jwplayer.advertising.skipoffset',
+                'description' => 'jwplayer.advertising.skipoffset',
+                'name'        => 'Jwplayer advertising skipoffset',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'number',
+                    'hint' => 'giây'
+                ]),
+                'value' => 5,
+                'active'      => 1,
+            ],
+        ];
+
         foreach ($generals as $index => $setting) {
             $result = Setting::updateOrCreate(collect($setting)->only('key')->toArray(), collect($setting)
                 ->merge(['group' => 'generals'])->except('key')->toArray());
@@ -184,6 +267,16 @@ class SettingsTableSeeder extends Seeder
 
         foreach ($metas as $index => $setting) {
             $result = Setting::updateOrCreate(collect($setting)->only('key')->toArray(), collect($setting)->merge(['group' => 'metas'])->except('key')->toArray());
+
+            if (!$result) {
+                $this->command->info("Insert failed at record $index.");
+
+                return;
+            }
+        }
+
+        foreach ($players as $index => $setting) {
+            $result = Setting::updateOrCreate(collect($setting)->only('key')->toArray(), collect($setting)->merge(['group' => 'jwplayer'])->except('key')->toArray());
 
             if (!$result) {
                 $this->command->info("Insert failed at record $index.");

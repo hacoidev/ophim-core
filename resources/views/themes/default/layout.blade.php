@@ -1,6 +1,6 @@
 @php
 $menu = \Ophim\Core\Models\Menu::getTree();
-$tops = Cache::remember('site.movies.tops', \Backpack\Settings\app\Models\Setting::get('site.cache.ttl', 60), function () {
+$tops = Cache::remember('site.movies.tops', \Backpack\Settings\app\Models\Setting::get('site.cache.ttl', 5 * 60), function () {
     $lists = preg_split('/[\n\r]+/', get_theme_var('hotest'));
     $data = [];
     foreach ($lists as $list) {
@@ -37,15 +37,34 @@ $tops = Cache::remember('site.movies.tops', \Backpack\Settings\app\Models\Settin
 
 <head>
     @include('themes::default.inc.meta')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/flowbite@1.4.7/dist/flowbite.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+        integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.20.0/dist/full.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+        integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+        integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+        integrity="sha512-1sCRPdkRXhBV2PBLUdRb4tMg1w2YPf37qatUFeS7zlBy7jJI8Lf4VHwWfZZfpXtYSLy85pkm9GaYVYMfw5BC1A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body class="bg-[#2f2f2f] font-sans leading-normal tracking-normal">
     @include('themes::default.inc.header')
     <div class="w-full pt-14">
         <div class="container mx-auto px-8 xl:px-40 md:mt-8 mb-16 text-gray-800 leading-normal">
+            <div class="flex flex-row flex-wrap flex-grow mt-2">
+                {!! get_theme_var('ads_header') !!}
+            </div>
             <div class="flex flex-row flex-wrap flex-grow mt-2">
                 <div class="w-full lg:w-3/4 xl:w-3/4">
                     <div class="w-full">
@@ -55,12 +74,12 @@ $tops = Cache::remember('site.movies.tops', \Backpack\Settings\app\Models\Settin
                 <div class="w-full lg:w-1/4 xl:w-1/4 pl-0 lg:pl-3 mt-3 lg:mt-0">
                     @foreach ($tops as $top)
                         <div class="rounded mb-3">
-                            <a class="flex bg-[#1511116d] rounded-lg p-0 mb-0">
+                            <div class="flex bg-[#1511116d] rounded-lg p-0 mb-0">
                                 <div class="section-heading bg-[red] rounded-l-lg">
                                     <h3 class="px-2 py-1"><span
                                             class="h-text text-white uppercase ">{{ $top['label'] }}</span></h3>
                                 </div>
-                            </a>
+                            </div>
                             <div class="mt-2">
                                 <ul class="list-movies">
                                     @foreach ($top['data'] ?? [] as $movie)
@@ -97,8 +116,14 @@ $tops = Cache::remember('site.movies.tops', \Backpack\Settings\app\Models\Settin
         </div>
     </div>
     @include('themes::default.inc.footer')
+    <div class="relative">
+        <div class="container mx-auto px-8 xl:px-40 fixed bottom-0 right-0 left-0 z-40">
+            {!! get_theme_var('ads_catfish') !!}
+        </div>
+    </div>
     <div id="fb-root"></div>
     {!! \Backpack\Settings\app\Models\Setting::get('site.scripts.facebook.sdk') !!}
+    @stack('scripts')
 </body>
 
 </html>

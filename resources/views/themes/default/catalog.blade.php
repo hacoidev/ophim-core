@@ -1,6 +1,6 @@
 @extends('themes::default.layout')
 @php
-$years = Cache::remember('all_years', \Backpack\Settings\app\Models\Setting::get('site.cache.ttl', 60), function () {
+$years = Cache::remember('all_years', \Backpack\Settings\app\Models\Setting::get('site.cache.ttl', 5 * 60), function () {
     return \Ophim\Core\Models\Movie::select('publish_year')
         ->distinct()
         ->pluck('publish_year')
@@ -99,23 +99,7 @@ $years = Cache::remember('all_years', \Backpack\Settings\app\Models\Setting::get
     @if (count($data))
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 mb-3">
             @foreach ($data ?? [] as $movie)
-                <a class="block" href="{{ $movie->getUrl() }}">
-                    <div class="flex justify-center items-center">
-                        <div
-                            class="max-w-xs container bg-[#151111] rounded-lg shadow-lg transform transition duration-500 hover:scale-105 hover:shadow-2xl">
-                            <img class="w-full cursor-pointer rounded-t-lg" style="aspect-ratio: 256/340"
-                                src="{{ $movie->thumb_url }}" alt="" />
-                            <div class="flex p-4 justify-between">
-                                <div class="flex w-full justify-between space-x-2">
-                                    <h2 class="text-gray-200 font-bold cursor-pointer truncate">{{ $movie->name ?? '' }}
-                                    </h2>
-                                    <h2 class="text-gray-200 cursor-pointer uppercase badge badge-success float-right">
-                                        {{ $movie->quality ?? '' }}</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
+                @include('themes::default.inc.movie_card')
             @endforeach
         </div>
     @else

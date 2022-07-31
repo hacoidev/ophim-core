@@ -39,7 +39,7 @@ class Episode extends Model implements Cacheable, HasUrlInterface
 
     public function getUrl()
     {
-        $movie = Cache::remember("cache_movie_by_id:" . $this->movie_id, 60, function () {
+        $movie = Cache::remember("cache_movie_by_id:" . $this->movie_id, 5 * 60, function () {
             return $this->movie;
         });
 
