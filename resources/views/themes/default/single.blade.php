@@ -17,7 +17,7 @@
     </div>
     <div class="flex flex-wrap flex-grow">
         <div class="w-full sm:w-1/2 md:w-[fit-content] flex justify-center pr-0 sm:pr-3">
-            <div class="max-w-xs container bg-[#151111] rounded-lg h-[fit-content]">
+            <div class="max-w-xs container bg-[#151111] rounded-lg w-[15em] h-[fit-content]">
                 <img class="w-full cursor-pointer rounded-t-lg" style="aspect-ratio: 256/340" src="{{ $movie->thumb_url }}"
                     alt="" />
                 <div class="flex py-3 justify-between">
@@ -161,7 +161,7 @@
 
         </div>
 
-        <article class="mt-2.5 p-3 bg-[#272727] mb-3 mr-2 rounded-lg">
+        <article class="mt-2.5 p-3 bg-[#272727] mb-3 rounded-lg">
             <h2 class="text-sm font-bold text-[#dacb46] uppercase mt-1.5 mb-3">Nội dung phim</h2>
             <div class="content text-white">
                 @if ($movie->content)
@@ -184,7 +184,8 @@
 
         </article>
 
-        <div class="fb-comments w-full rounded-lg" data-href="{{ $movie->getUrl() }}" data-width="100%" data-numposts="5">
+        <div class="fb-comments w-full rounded-lg bg-white" data-href="{{ $movie->getUrl() }}" data-width="100%"
+            data-numposts="5" data-colorscheme="light" data-lazy="true">
         </div>
     </div>
 @endsection

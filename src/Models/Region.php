@@ -3,12 +3,14 @@
 namespace Ophim\Core\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Backpack\Settings\app\Models\Setting;
 use Ophim\Core\Contracts\TaxonomyInterface;
 use Hacoidev\CachingModel\Contracts\Cacheable;
 use Hacoidev\CachingModel\HasCache;
 use Illuminate\Database\Eloquent\Model;
 use Ophim\Core\Traits\ActorLog;
 use Ophim\Core\Traits\HasFactory;
+use Ophim\Core\Traits\HasTitle;
 use Ophim\Core\Traits\Sluggable;
 
 class Region extends Model implements TaxonomyInterface, Cacheable
@@ -18,6 +20,7 @@ class Region extends Model implements TaxonomyInterface, Cacheable
     use Sluggable;
     use HasFactory;
     use HasCache;
+    use HasTitle;
 
     /*
     |--------------------------------------------------------------------------
@@ -48,6 +51,12 @@ class Region extends Model implements TaxonomyInterface, Cacheable
     {
         return route('regions.movies.index', $this->slug);
     }
+
+    protected function titlePattern(): string
+    {
+        return Setting::get('site.region.title', '');
+    }
+
 
     /*
     |--------------------------------------------------------------------------

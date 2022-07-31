@@ -61,12 +61,9 @@ class MovieUpdateCommand extends Command
         $movieLinks = $handler::getMovieLinks(preg_split('/[\n\r]+/', $schedule->link), $schedule->from_page, $schedule->to_page);
 
         foreach ($movieLinks as $link) {
-            $time = microtime(true);
             try {
                 (new $handler($link, $schedule->fields, $schedule->excluded_categories ?? [], $schedule->excluded_regions ?? []))->handle();
-                echo "Crawl success {$link} in " . (microtime(true) - $time) . " s </br>";
             } catch (\Exception $e) {
-                echo "Crawl error {$link} in " . (microtime(true) - $time) . " s </br>";
                 Log::error($e->getMessage());
             }
         }

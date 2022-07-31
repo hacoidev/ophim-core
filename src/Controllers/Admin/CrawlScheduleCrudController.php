@@ -4,9 +4,6 @@ namespace Ophim\Core\Controllers\Admin;
 
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Backpack\Settings\app\Models\Setting;
-use Illuminate\Support\Facades\Cache;
-use Ophim\Core\Models\Category;
 use Ophim\Core\Models\CrawlSchedule;
 use Ophim\Core\Requests\CrawlScheduleRequest;
 
@@ -68,7 +65,7 @@ class CrawlScheduleCrudController extends CrudController
 
         CRUD::setValidation(CrawlScheduleRequest::class);
 
-        $updaters = collect(config('ophim.updaters', []))->pluck('name','handler')->toArray();
+        $updaters = collect(config('ophim.updaters', []))->pluck('name', 'handler')->toArray();
 
         CRUD::addField(['name' => 'type', 'label' => 'Handler', 'type' => 'select_from_array', 'options' => $updaters, 'tab' => 'Nguồn phim']);
         CRUD::addField([
@@ -105,8 +102,7 @@ class CrawlScheduleCrudController extends CrudController
         ]);
         CRUD::addField(['name' => 'to_page', 'label' => 'Đến trang', 'type' => 'number', 'default' => 1, 'tab' => 'Nguồn phim']);
 
-        CRUD::addField(['name' => 'fields', 'type' => 'view', 'view' => 'ophim::base.fields.update_fields_option', 'tab' => 'Tùy chọn cập nhật']);
-
+        CRUD::addField(['name' => 'fields', 'type' => 'group_checklist', 'options' => $this->movieUpdateOptions(), 'tab' => 'Tùy chọn cập nhật']);
         CRUD::addField(['name' => 'at_month', 'label' => 'Tháng', 'type' => 'text', 'default' => '*', 'tab' => 'Thời gian chạy']);
         CRUD::addField(['name' => 'at_week', 'label' => 'Tuần', 'type' => 'text', 'default' => '*', 'tab' => 'Thời gian chạy']);
         CRUD::addField(['name' => 'at_day', 'label' => 'Ngày', 'type' => 'text', 'default' => '*', 'tab' => 'Thời gian chạy']);
@@ -130,5 +126,42 @@ class CrawlScheduleCrudController extends CrudController
     protected function setupDeleteOperation()
     {
         $this->authorize('delete', $this->crud->model);
+    }
+
+    protected function movieUpdateOptions(): array
+    {
+        return [
+            'Tiến độ phim' => [
+                'episodes' => 'Tập mới',
+                'status' => 'Trạng thái phim',
+                'episode_time' => 'Thời lượng tập phim',
+                'episode_current' => 'Số tập phim hiện tại',
+                'episode_total' => 'Tổng số tập phim',
+            ],
+            'Thông tin phim' => [
+                'name' => 'Tên phim',
+                'origin_name' => 'Tên gốc phim',
+                'content' => 'Mô tả nội dung phim',
+                'thumb_url' => 'Ảnh Thumb',
+                'poster_url' => 'Ảnh Poster',
+                'trailer_url' => 'Trailer URL',
+                'quality' => 'Chất lượng phim',
+                'language' => 'Ngôn ngữ',
+                'notify' => 'Nội dung thông báo',
+                'showtimes' => 'Giờ chiếu phim',
+                'publish_year' => 'Năm xuất bản',
+                'is_copyright' => 'Đánh dấu có bản quyền',
+            ],
+            'Phân loại' => [
+                'type' => 'Định dạng phim',
+                'is_shown_in_theater' => 'Đánh dấu phim chiếu rạp',
+                'actors' => 'Diễn viên',
+                'directors' => 'Đạo diễn',
+                'categories' => 'Thể loại',
+                'regions' => 'Khu vực',
+                'tags' => 'Từ khóa',
+                'studios' => 'Studio',
+            ]
+        ];
     }
 }

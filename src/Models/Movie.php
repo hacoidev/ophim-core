@@ -10,6 +10,7 @@ use Hacoidev\CachingModel\HasCache;
 use Illuminate\Database\Eloquent\Model;
 use Ophim\Core\Traits\ActorLog;
 use Ophim\Core\Traits\HasFactory;
+use Ophim\Core\Traits\HasTitle;
 use Ophim\Core\Traits\Sluggable;
 
 class Movie extends Model implements TaxonomyInterface, Cacheable
@@ -19,6 +20,7 @@ class Movie extends Model implements TaxonomyInterface, Cacheable
     use Sluggable;
     use HasFactory;
     use HasCache;
+    use HasTitle;
 
     /*
     |--------------------------------------------------------------------------
@@ -48,15 +50,6 @@ class Movie extends Model implements TaxonomyInterface, Cacheable
     public function getUrl()
     {
         return route('movies.show', $this->slug);
-    }
-
-    public function getTitle()
-    {
-        $pattern = Setting::get('site.episode.title', '');
-
-        $pattern = str_replace('{name}', $this->name, $pattern);
-
-        return $pattern;
     }
 
     /*
@@ -121,6 +114,12 @@ class Movie extends Model implements TaxonomyInterface, Cacheable
         ];
         return $statuses[$this->status];
     }
+
+    protected function titlePattern(): string
+    {
+        return Setting::get('site.movie.title', '');
+    }
+
 
     /*
     |--------------------------------------------------------------------------

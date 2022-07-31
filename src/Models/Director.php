@@ -3,11 +3,13 @@
 namespace Ophim\Core\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
+use Backpack\Settings\app\Models\Setting;
 use Ophim\Core\Contracts\TaxonomyInterface;
 use Hacoidev\CachingModel\Contracts\Cacheable;
 use Hacoidev\CachingModel\HasCache;
 use Illuminate\Database\Eloquent\Model;
 use Ophim\Core\Traits\HasFactory;
+use Ophim\Core\Traits\HasTitle;
 use Ophim\Core\Traits\HasUniqueName;
 use Ophim\Core\Traits\Sluggable;
 
@@ -18,6 +20,7 @@ class Director extends Model implements TaxonomyInterface, Cacheable
     use HasUniqueName;
     use HasFactory;
     use HasCache;
+    use HasTitle;
 
     /*
     |--------------------------------------------------------------------------
@@ -48,6 +51,12 @@ class Director extends Model implements TaxonomyInterface, Cacheable
     {
         return route('directors.movies.index', $this->slug);
     }
+
+    protected function titlePattern(): string
+    {
+        return Setting::get('site.director.title', '');
+    }
+
 
     /*
     |--------------------------------------------------------------------------

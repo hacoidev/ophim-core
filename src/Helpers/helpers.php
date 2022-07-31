@@ -2,8 +2,8 @@
 
 use Backpack\Settings\app\Models\Setting;
 
-if (!function_exists('get_theme_var')) {
-    function get_theme_var($key, $fallback = null)
+if (!function_exists('get_theme_option')) {
+    function get_theme_option($key, $fallback = null)
     {
         $theme = Setting::get('site.theme') ?? config('ophim.theme', 'default');
 
@@ -17,10 +17,10 @@ if (!function_exists('get_theme_var')) {
     }
 }
 
-if (!function_exists('get_crawler_var')) {
-    function get_crawler_var($name, $key, $fallback = null)
+if (!function_exists('get_addon_option')) {
+    function get_addon_option($name, $key, $fallback = null)
     {
-        $setting = Setting::get('crawlers.' . strtolower($name) . '.options');
+        $setting = Setting::get('addons.' . strtolower($name) . '.options');
 
         if (is_null($setting)) return $fallback;
 

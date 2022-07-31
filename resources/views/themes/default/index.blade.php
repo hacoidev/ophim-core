@@ -16,7 +16,7 @@ $recommendations = Cache::remember('site.movies.recommendations', Setting::get('
 });
 
 $data = Cache::remember('site.movies.latest', Setting::get('site.cache.ttl', 5 * 60), function () {
-    $lists = preg_split('/[\n\r]+/', get_theme_var('latest'));
+    $lists = preg_split('/[\n\r]+/', get_theme_option('latest'));
     $data = [];
     foreach ($lists as $list) {
         if (trim($list)) {
@@ -48,30 +48,30 @@ $data = Cache::remember('site.movies.latest', Setting::get('site.cache.ttl', 5 *
 
 @section('content')
     @if (count($recommendations))
-        <div class="owl-carousel">
+        <div class="owl-carousel recommend-carousel owl-theme">
             @foreach ($recommendations as $movie)
-                <div class="px-1">
-                    @include('themes::default.inc.movie_card')
-                </div>
+                @include('themes::default.inc.movie_card')
             @endforeach
         </div>
         <div class="mb-5"></div>
     @endif
 
     @foreach ($data as $item)
-        <div class="section-heading flex bg-[#1511116d] rounded-lg p-0 mb-3 justify-between content-between">
-            <h2 class="inline p-2 bg-[red] rounded-l-lg">
-                <span class="h-text font-bold text-white uppercase">{{ $item['label'] }}</span>
-            </h2>
-            <a class="inline uppercase self-center pr-3" href="{{ $item['link'] }}"><span
-                    class="text-white hover:text-yellow-300">Xem
-                    Thêm</span>
-            </a>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-            @foreach ($item['data'] ?? [] as $movie)
-                @include('themes::default.inc.movie_card')
-            @endforeach
+        <div class="mb-5 ">
+            <div class="section-heading flex bg-[#1511116d] rounded-lg p-0 mb-3 justify-between content-between">
+                <h2 class="inline p-2 bg-[red] rounded-l-lg">
+                    <span class="h-text font-bold text-white uppercase">{{ $item['label'] }}</span>
+                </h2>
+                <a class="inline uppercase self-center pr-3" href="{{ $item['link'] }}"><span
+                        class="text-white hover:text-yellow-300">Xem
+                        Thêm</span>
+                </a>
+            </div>
+            <div class="owl-carousel movie-list-{{ $loop->index }} owl-theme">
+                @foreach ($item['data'] ?? [] as $movie)
+                    @include('themes::default.inc.movie_card')
+                @endforeach
+            </div>
         </div>
     @endforeach
 @endsection
@@ -79,11 +79,13 @@ $data = Cache::remember('site.movies.latest', Setting::get('site.cache.ttl', 5 *
 @push('scripts')
     <script>
         $(document).ready(function() {
-            $(".owl-carousel").owlCarousel({
+            $(".recommend-carousel").owlCarousel({
                 items: 2,
-                center:true,
-                loop:true,
+                center: true,
+                loop: true,
                 dots: false,
+                margin: 10,
+                stageOuterClass: 'owl-stage-outer p-2',
                 responsive: {
                     1280: {
                         items: 5
@@ -100,9 +102,30 @@ $data = Cache::remember('site.movies.latest', Setting::get('site.cache.ttl', 5 *
                 slideSpeed: 800,
                 paginationSpeed: 400,
                 stopOnHover: true,
-                autoPlay: 8000,
-                navText: ['<i class="fa fa-angle-left text-white"></i>', '<i class="fa fa-angle-right text-white"></i>'],
+                autoplay: true,
             });
+            @foreach ($data as $item)
+                $(".movie-list-{{ $loop->index }}").owlCarousel({
+                    items: 2,
+                    center: true,
+                    loop: true,
+                    dots: true,
+                    margin: 10,
+                    stageOuterClass: 'owl-stage-outer p-2',
+                    responsive: {
+                        1280: {
+                            items: 5
+                        },
+                        1024: {
+                            items: 4
+                        },
+                        768: {
+                            items: 3
+                        },
+                    },
+                    lazyLoad: true,
+                });
+            @endforeach
         });
     </script>
 @endpush

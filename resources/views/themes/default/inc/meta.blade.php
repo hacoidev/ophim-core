@@ -1,10 +1,12 @@
 @php
-$title = isset($title) ? $title : Backpack\Settings\app\Models\Setting::get('site.homepage.title') ?: '';
-$metaSiteName = isset($metaSiteName) ? $metaSiteName : Backpack\Settings\app\Models\Setting::get('site.meta.siteName') ?: '';
-$metaShortcutIcon = Backpack\Settings\app\Models\Setting::get('site.meta.shortcut.icon') ?: '';
-$metaKeywords = isset($metaKeywords) ? $metaKeywords : Backpack\Settings\app\Models\Setting::get('site.meta.keywords') ?: '';
-$metaDescription = isset($metaDescription) ? $metaDescription : Backpack\Settings\app\Models\Setting::get('site.meta.description') ?: '';
-$metaImage = isset($metaImage) ? $metaImage : Backpack\Settings\app\Models\Setting::get('site.meta.image') ?: '';
+use Backpack\Settings\app\Models\Setting;
+
+$title = isset($title) ? $title : Setting::get('site.homepage.title') ?: '';
+$metaSiteName = isset($metaSiteName) ? $metaSiteName : Setting::get('site.meta.siteName') ?: '';
+$metaShortcutIcon = Setting::get('site.meta.shortcut.icon') ?: '';
+$metaKeywords = isset($metaKeywords) ? $metaKeywords : Setting::get('site.meta.keywords') ?: '';
+$metaDescription = isset($metaDescription) ? $metaDescription : Setting::get('site.meta.description') ?: '';
+$metaImage = isset($metaImage) ? $metaImage : Setting::get('site.meta.image') ?: '';
 $metaTitle = isset($metaTitle) ? $metaTitle : $title;
 @endphp
 

@@ -134,6 +134,8 @@ class OphimServiceProvider extends ServiceProvider
             \Backpack\CRUD\app\Http\Middleware\UseBackpackAuthGuardInsteadOfDefaultAuthGuard::class,
         ])]);
 
+        config(['cachebusting_string' => \PackageVersions\Versions::getVersion('hacoidev/crud')]);
+
         config(['backpack.base.project_logo' => '<b>Ophim</b>TV']);
         config(['backpack.base.developer_name' => 'hacoidev']);
         config(['backpack.base.developer_link' => 'mailto:hacoi.dev@gmail.com']);
@@ -168,11 +170,17 @@ class OphimServiceProvider extends ServiceProvider
                     'name' => 'hotest',
                     'label' => 'Danh sách hot',
                     'type' => 'textarea',
-                    'hint' => 'display_label|relation|find_by_field|value|sort_by_field|sort_algo|limit',
-                    'value' => 'Top phim bộ||type|series|view_total|desc|4\n\rTop phim lẻ||type|single|view_total|desc|4',
+                    'hint' => 'Label|relation|find_by_field|value|sort_by_field|sort_algo|limit',
+                    'value' => 'Top phim bộ||type|series|view_total|desc|4',
                     'attributes' => [
                         'rows' => 5
                     ]
+                ],
+                [
+                    'name' => 'bg_class_color',
+                    'label' => 'Body class',
+                    'type' => 'text',
+                    'value' => "bg-slate-800"
                 ],
                 [
                     'name' => 'footer',

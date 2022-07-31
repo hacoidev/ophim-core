@@ -11,9 +11,9 @@ class User extends OphimUser {
     use HasApiTokens, HasFactory, Notifiable;
     // ...
 }
+```
 4. Create new user by command: `php artisan ophim:user`
 
-```
 5. Remove this route definition in routes/web.php
 ```php
 Route::get('/', function () {
@@ -32,5 +32,5 @@ protected function schedule(Schedule $schedule)
 ```
 2. Setup crontab, add this entry: 
 ```
-* * * * * /path/to/project/php artisan schedule:run`
+* * * * * /path/to/project/php artisan schedule:run
 ```

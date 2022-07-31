@@ -40,16 +40,6 @@ class SettingsTableSeeder extends Seeder
                 'active'      => 1,
             ],
             [
-                'key'         => 'site.scripts.facebook.sdk',
-                'description' => 'site.scripts.facebook.sdk',
-                'name'        => 'Facebook JS SDK script tag',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'textarea',
-                ]),
-                'active'      => 1,
-            ],
-            [
                 'key'         => 'site.brand',
                 'description' => 'site.brand',
                 'name'        => 'Site Brand',
@@ -83,14 +73,80 @@ class SettingsTableSeeder extends Seeder
                 'active'      => 1,
             ],
             [
-                'key'         => 'site.episode.title',
-                'description' => 'site.episode.title',
+                'key'         => 'site.movie.title',
+                'description' => 'site.movie.title',
                 'name'        => 'Mẫu tiêu đề trang thông tin phim',
                 'field'       => json_encode([
                     'name' => 'value',
                     'type' => 'text',
                 ]),
                 'value' => 'Phim {name} | OphimTV.com',
+                'active'      => 1,
+            ],
+            [
+                'key'         => 'site.category.title',
+                'description' => 'site.category.title',
+                'name'        => 'Mẫu tiêu đề theo thể loại',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                ]),
+                'value' => 'Danh sách phim {name} - tổng hợp phim {name} | OphimTV.com',
+                'active'      => 1,
+            ],
+            [
+                'key'         => 'site.region.title',
+                'description' => 'site.region.title',
+                'name'        => 'Mẫu tiêu đề quốc gia',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                ]),
+                'value' => 'Danh sách phim khu vực {name} - tổng hợp phim {name} | OphimTV.com',
+                'active'      => 1,
+            ],
+            [
+                'key'         => 'site.actor.title',
+                'description' => 'site.actor.title',
+                'name'        => 'Mẫu tiêu đề diễn viên',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                ]),
+                'value' => '{name} - tổng hợp phim {name} | OphimTV.com',
+                'active'      => 1,
+            ],
+            [
+                'key'         => 'site.director.title',
+                'description' => 'site.director.title',
+                'name'        => 'Mẫu tiêu đề đạo diễn',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                ]),
+                'value' => '{name} - tổng hợp phim {name} | OphimTV.com',
+                'active'      => 1,
+            ],
+            [
+                'key'         => 'site.tag.title',
+                'description' => 'site.tag.title',
+                'name'        => 'Mẫu tiêu đề từ tag',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                ]),
+                'value' => '{name} - tổng hợp phim {name} | OphimTV.com',
+                'active'      => 1,
+            ],
+            [
+                'key'         => 'site.studio.title',
+                'description' => 'site.studio.title',
+                'name'        => 'Mẫu tiêu đề nhà làm phim',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                ]),
+                'value' => '{name} - tổng hợp phim {name} | OphimTV.com',
                 'active'      => 1,
             ],
             [
@@ -101,7 +157,7 @@ class SettingsTableSeeder extends Seeder
                     'name' => 'value',
                     'type' => 'text',
                 ]),
-                'value' => 'Xem phim {name} - tập {name} | OphimTV.com',
+                'value' => 'Xem phim {movie.name} - tập {name} | OphimTV.com',
                 'active'      => 1,
             ],
             [
@@ -250,6 +306,29 @@ class SettingsTableSeeder extends Seeder
                     'hint' => 'giây'
                 ]),
                 'value' => 5,
+                'active'      => 1,
+            ],
+        ];
+
+        $scripts = [
+            [
+                'key'         => 'site.scripts.facebook.sdk',
+                'description' => 'site.scripts.facebook.sdk',
+                'name'        => 'Facebook JS SDK script tag',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'summernote',
+                ]),
+                'active'      => 1,
+            ],
+            [
+                'key'         => 'site.scripts.google.analytics',
+                'description' => 'site.scripts.google.analytics',
+                'name'        => 'Google analytics script tag',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'summernote',
+                ]),
                 'active'      => 1,
             ],
         ];

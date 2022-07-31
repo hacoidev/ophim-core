@@ -9,13 +9,16 @@ use Hacoidev\CachingModel\Contracts\Cacheable;
 use Hacoidev\CachingModel\HasCache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Ophim\Core\Traits\HasFactory;
+use Ophim\Core\Traits\HasTitle;
 
 class Episode extends Model implements Cacheable, HasUrlInterface
 {
     use CrudTrait;
     use HasFactory;
     use HasCache;
+    use HasTitle;
 
     /*
     |--------------------------------------------------------------------------
@@ -51,14 +54,9 @@ class Episode extends Model implements Cacheable, HasUrlInterface
         return '<a class="btn btn-sm btn-link" target="_blank" href="' . $this->getUrl() . '" data-toggle="tooltip" title="Just a demo custom button."><i class="fa fa-search"></i> Open it</a>';
     }
 
-    public function getTitle()
+    protected function titlePattern(): string
     {
-        $pattern = Setting::get('site.episode.watch.title', '');
-
-        $pattern = str_replace('{movie.name}', $this->movie->name, $pattern);
-        $pattern = str_replace('{name}', $this->name, $pattern);
-
-        return $pattern;
+        return Setting::get('site.episode.watch.title', '');
     }
 
     /*

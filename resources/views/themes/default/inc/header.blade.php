@@ -1,16 +1,16 @@
 @php
 use Backpack\Settings\app\Models\Setting;
 $logo = Setting::get('site.logo') ?: '';
-$brand = Setting::get('site.brand') ?: '<b style="color:red">O</b>phimTV';
+$brand = Setting::get('site.brand') ?: '';
 $title = isset($title) ? $title : Setting::get('site.homepage.title') ?: '';
 @endphp
 
 <nav class="w-full fixed top-0 py-2 bg-[#151111] border-gray-200 z-30">
-    <div class="container mx-auto px-8 xl:px-40 flex flex-wrap justify-between items-center">
-        <div class="w-2/5 md:w-1/5 py-2"><a
-                class="text-gray-100 text-base xl:text-xl no-underline hover:no-underline font-bold" href="/">
+    <div class="container mx-auto px-4 md:px-8 xl:px-40 flex flex-wrap justify-between items-center">
+        <div class="w-2/5 md:w-1/5 py-2">
+            <a class="text-gray-100 text-base xl:text-xl no-underline hover:no-underline font-bold" href="/">
                 @if ($logo)
-                    <img src="{{ $logo }}" alt="Logo">
+                    {!! $logo !!}
                 @endif
                 {!! $brand !!}
             </a>
@@ -68,12 +68,6 @@ $title = isset($title) ? $title : Setting::get('site.homepage.title') ?: '';
                                                 class="block py-2 hover:bg-slate-800">{{ $children['name'] }}</a>
                                         </li>
                                     @endforeach
-                                </ul>
-                            </div>
-                            <div
-                                class="dropdown-menu hidden md:block absolute w-full lg:w-max shadow-2xl bg-[#212020] z-20 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                                <ul class="grid lg:grid-flow-row lg:grid-cols-3 sm:grid-cols-1 text-gray-100">
-
                                 </ul>
                             </div>
                         @else

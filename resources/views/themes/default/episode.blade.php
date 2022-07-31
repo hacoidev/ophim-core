@@ -118,8 +118,8 @@
         </div>
     @endforeach
 
-    <div class="fb-comments w-full rounded-lg" data-href="{{ $episode->getUrl() }}" data-width="100%"
-        data-numposts="5">
+    <div class="fb-comments w-full rounded-lg bg-white" data-href="{{ $episode->getUrl() }}" data-width="100%"
+        data-numposts="5" data-colorscheme="dark" data-lazy="true">
     </div>
 
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.20.0/dist/full.css" rel="stylesheet" type="text/css" />

@@ -39,7 +39,7 @@ class CrawlerSettingController extends CrudController
 
         foreach (config('ophim.updaters', []) as $crawler) {
             Setting::firstOrCreate([
-                'key' => 'crawlers.' . strtolower($crawler['name']) . '.options',
+                'key' => 'addons.' . strtolower($crawler['name']) . '.options',
             ], [
                 'name' => $crawler['name'],
                 'field' => json_encode(['name' => 'value', 'type', 'hidden']),
@@ -92,7 +92,7 @@ class CrawlerSettingController extends CrudController
         $crawlers = collect(config('ophim.updaters', []));
 
         $crawler = $crawlers->filter(function ($v, $k) {
-            return 'crawlers.' . strtolower($v['name']) . '.options' === $this->data['entry']->key;
+            return 'addons.' . strtolower($v['name']) . '.options' === $this->data['entry']->key;
         })->first();
 
         if (isset($crawler['options']) && is_array($crawler['options'])) {

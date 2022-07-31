@@ -50,19 +50,19 @@ class CrawlSchedule extends Model
     {
         return $query->where(function ($q) {
             $q->where('at_month', '*')
-                ->orWhere('at_month', now()->format('m'));
+                ->orWhere('at_month', (int) now()->format('m'));
         })->where(function ($q) {
             $q->where('at_week', '*')
-                ->orWhere('at_week', now()->weekOfMonth);
+                ->orWhere('at_week', (int) now()->weekOfMonth);
         })->where(function ($q) {
             $q->where('at_day', '*')
-                ->orWhere('at_day', now()->format('d'));
+                ->orWhere('at_day', (int) now()->format('d'));
         })->where(function ($q) {
             $q->where('at_hour', '*')
-                ->orWhere('at_hour', now()->format('H'));
+                ->orWhere('at_hour',(int) now()->format('H'));
         })->where(function ($q) {
             $q->where('at_minute', '*')
-                ->orWhere('at_minute', now()->format('i'));
+                ->orWhere('at_minute', (int) now()->format('i'));
         });
     }
 

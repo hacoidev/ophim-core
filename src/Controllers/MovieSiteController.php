@@ -133,6 +133,7 @@ class MovieSiteController
         return $theme->render('catalog', [
             'data' => $movies,
             'category' => $category,
+            'title' => $category->seo_title ?: $category->getTitle()
         ]);
     }
 
@@ -146,7 +147,8 @@ class MovieSiteController
 
         return $theme->render('catalog', [
             'data' => $movies,
-            'region' => $region
+            'region' => $region,
+            'title' => $region->seo_title ?: $region->getTitle()
         ]);
     }
 
@@ -160,7 +162,8 @@ class MovieSiteController
 
         return $theme->render('catalog', [
             'data' => $movies,
-            'person' => $actor
+            'person' => $actor,
+            'title' => $actor->getTitle()
         ]);
     }
 
@@ -174,7 +177,8 @@ class MovieSiteController
 
         return $theme->render('catalog', [
             'data' => $movies,
-            'person' => $director
+            'person' => $director,
+            'title' => $director->getTitle()
         ]);
     }
 
@@ -188,7 +192,8 @@ class MovieSiteController
 
         return $theme->render('catalog', [
             'data' => $movies,
-            'tag' => $tag
+            'tag' => $tag,
+            'title' => $tag->getTitle()
         ]);
     }
 

@@ -38,10 +38,20 @@
     <li class="nav-item"><a class="nav-link" href="{{ backpack_url('crawl-schedule') }}"><i
                 class="nav-icon la la-calendar-check-o"></i> Tự động cập nhật</a></li>
 
-    <li class="nav-item nav-dropdown"><a class="nav-link nav-dropdown-toggle" href="#"><i
-                class="nav-icon la la-lg la-hand-pointer-o"></i> Crawler</a>
+    <li class="nav-item nav-dropdown">
+        <a class="nav-link nav-dropdown-toggle" href="#">
+            <i class="nav-icon la la-lg la-hand-pointer-o"></i>
+            Crawler
+        </a>
         <ul class="nav-dropdown-items">
-            @include('ophim::base.inc.crawlers')
+            @foreach (config('ophim.updaters', []) as $crawler)
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ $crawler['index'] }}">
+                        <i class="nav-icon la la-lg la-cursor"></i>
+                        {{ $crawler['name'] }}
+                    </a>
+                </li>
+            @endforeach
         </ul>
     </li>
     <li class="nav-item"><a class="nav-link" href="{{ backpack_url('crawler-settings') }}"><i
