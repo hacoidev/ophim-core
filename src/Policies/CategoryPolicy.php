@@ -17,22 +17,22 @@ class CategoryPolicy
 
     public function browse($user)
     {
-        return $user->hasPermission('Browse category');
+        return $user->hasPermissionTo('Browse category');
     }
 
     public function create($user)
     {
-        return $user->hasPermission('Create category');
+        return $user->hasPermissionTo('Create category');
     }
 
     public function update($user, $entry)
     {
-        return $user->hasPermission('Update category');
+        return $user->hasPermissionTo('Update category');
     }
 
     public function delete($user, $entry)
     {
-        return $user->hasPermission('Delete category');
+        return $user->hasPermissionTo('Delete category');
     }
 
 }

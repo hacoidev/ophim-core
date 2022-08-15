@@ -17,22 +17,22 @@ class MenuPolicy
 
     public function browse($user)
     {
-        return $user->hasPermission('Browse menu');
+        return $user->hasPermissionTo('Browse menu');
     }
 
     public function create($user)
     {
-        return $user->hasPermission('Create menu');
+        return $user->hasPermissionTo('Create menu');
     }
 
     public function update($user, $entry)
     {
-        return $user->hasPermission('Update menu');
+        return $user->hasPermissionTo('Update menu');
     }
 
     public function delete($user, $entry)
     {
-        return $user->hasPermission('Delete menu');
+        return $user->hasPermissionTo('Delete menu');
     }
 
 }

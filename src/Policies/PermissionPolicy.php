@@ -18,22 +18,22 @@ class PermissionPolicy
 
     public function browse($user)
     {
-        return $user->hasPermission('Browse permission');
+        return $user->hasPermissionTo('Browse permission');
     }
 
     public function create($user)
     {
-        return $user->hasPermission('Create permission');
+        return $user->hasPermissionTo('Create permission');
     }
 
     public function update($user, $entry)
     {
-        return $user->hasPermission('Update permission');
+        return $user->hasPermissionTo('Update permission');
     }
 
     public function delete($user, $entry)
     {
-        return $user->hasPermission('Delete permission');
+        return $user->hasPermissionTo('Delete permission');
     }
 
 }

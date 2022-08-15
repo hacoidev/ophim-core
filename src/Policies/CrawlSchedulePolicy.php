@@ -17,22 +17,22 @@ class CrawlSchedulePolicy
 
     public function browse($user)
     {
-        return $user->hasPermission('Browse crawl schedule');
+        return $user->hasPermissionTo('Browse crawl schedule');
     }
 
     public function create($user)
     {
-        return $user->hasPermission('Create crawl schedule');
+        return $user->hasPermissionTo('Create crawl schedule');
     }
 
     public function update($user, $entry)
     {
-        return $user->hasPermission('Update crawl schedule');
+        return $user->hasPermissionTo('Update crawl schedule');
     }
 
     public function delete($user, $entry)
     {
-        return $user->hasPermission('Delete crawl schedule');
+        return $user->hasPermissionTo('Delete crawl schedule');
     }
 
 }

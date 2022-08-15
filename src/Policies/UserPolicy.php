@@ -17,22 +17,22 @@ class UserPolicy
 
     public function browse($user)
     {
-        return $user->hasPermission('Browse user');
+        return $user->hasPermissionTo('Browse user');
     }
 
     public function create($user)
     {
-        return $user->hasPermission('Create user');
+        return $user->hasPermissionTo('Create user');
     }
 
     public function update($user, $entry)
     {
-        return $user->hasPermission('Update user');
+        return $user->hasPermissionTo('Update user');
     }
 
     public function delete($user, $entry)
     {
-        return $user->hasPermission('Delete user');
+        return $user->hasPermissionTo('Delete user');
     }
 
 }

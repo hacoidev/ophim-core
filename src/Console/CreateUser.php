@@ -42,14 +42,14 @@ class CreateUser extends Command
             $email = $this->ask('Email');
         }
 
+        if (!$password = $this->option('password')) {
+            $password = $this->secret('Password');
+        }
+
         if (!$this->confirm('Is administrator? [y|N]', $isAdmin = false)) {
             $isAdmin = false;
         } else {
             $isAdmin = true;
-        }
-
-        if (!$password = $this->option('password')) {
-            $password = $this->secret('Password');
         }
 
         if ($this->option('encrypt')) {

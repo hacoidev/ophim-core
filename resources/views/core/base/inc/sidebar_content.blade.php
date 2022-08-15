@@ -58,18 +58,27 @@
                 class="nav-icon la la-cogs"></i>Cấu hình</a></li>
 @endif
 
-<li class="nav-title">Giao diện</li>
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url('customizer') }}"><i class="nav-icon la la-css3"></i>Tuỳ
-        chỉnh giao diện</a>
-</li>
-<li class='nav-item'><a class='nav-link' href='{{ backpack_url('menu') }}'><i class='nav-icon la la-list'></i>
-        Menu</a>
+<li class="nav-item nav-dropdown"><a class="nav-link nav-dropdown-toggle" href="#"><i
+            class="nav-icon la la-css3"></i> Giao diện</a>
+    <ul class="nav-dropdown-items">
+        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('setting/key/site.theme/edit') }}"><i
+                    class="nav-icon la la-css3"></i>Chủ đề</a>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="{{ backpack_url('customizer') }}"><i
+                    class="nav-icon la la-css3"></i>Tuỳ
+                chỉnh giao diện</a>
+        </li>
+        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('menu') }}'><i class='nav-icon la la-list'></i>
+                Menu</a>
+        </li>
+    </ul>
 </li>
 
 @if (backpack_user()->hasRole('Admin'))
     <li class="nav-title">{{ trans('backpack::base.administration') }}</li>
     <li class="nav-item nav-dropdown">
-        <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-users"></i> Authentication</a>
+        <a class="nav-link nav-dropdown-toggle" href="#"><i class="nav-icon la la-users"></i>
+            Authentication</a>
         <ul class="nav-dropdown-items">
             <li class="nav-item"><a class="nav-link" href="{{ backpack_url('user') }}"><i
                         class="nav-icon la la-user"></i>

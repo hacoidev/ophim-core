@@ -17,21 +17,21 @@ class EpisodePolicy
 
     public function browse($user)
     {
-        return $user->hasPermission('Browse episode');
+        return $user->hasPermissionTo('Browse episode');
     }
 
     public function create($user)
     {
-        return $user->hasPermission('Create episode');
+        return $user->hasPermissionTo('Create episode');
     }
 
     public function update($user, $entry)
     {
-        return $user->hasPermission('Update episode');
+        return $user->hasPermissionTo('Update episode');
     }
 
     public function delete($user, $entry)
     {
-        return $user->hasPermission('Delete episode');
+        return $user->hasPermissionTo('Delete episode');
     }
 }

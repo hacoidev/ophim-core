@@ -17,22 +17,22 @@ class TagPolicy
 
     public function browse($user)
     {
-        return $user->hasPermission('Browse tag');
+        return $user->hasPermissionTo('Browse tag');
     }
 
     public function create($user)
     {
-        return $user->hasPermission('Create tag');
+        return $user->hasPermissionTo('Create tag');
     }
 
     public function update($user, $entry)
     {
-        return $user->hasPermission('Update tag');
+        return $user->hasPermissionTo('Update tag');
     }
 
     public function delete($user, $entry)
     {
-        return $user->hasPermission('Delete tag');
+        return $user->hasPermissionTo('Delete tag');
     }
 
 }

@@ -17,22 +17,22 @@ class DirectorPolicy
 
     public function browse($user)
     {
-        return $user->hasPermission('Browse director');
+        return $user->hasPermissionTo('Browse director');
     }
 
     public function create($user)
     {
-        return $user->hasPermission('Create director');
+        return $user->hasPermissionTo('Create director');
     }
 
     public function update($user, $entry)
     {
-        return $user->hasPermission('Update director');
+        return $user->hasPermissionTo('Update director');
     }
 
     public function delete($user, $entry)
     {
-        return $user->hasPermission('Delete director');
+        return $user->hasPermissionTo('Delete director');
     }
 
 }

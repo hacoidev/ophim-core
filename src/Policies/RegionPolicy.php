@@ -17,22 +17,22 @@ class RegionPolicy
 
     public function browse($user)
     {
-        return $user->hasPermission('Browse region');
+        return $user->hasPermissionTo('Browse region');
     }
 
     public function create($user)
     {
-        return $user->hasPermission('Create region');
+        return $user->hasPermissionTo('Create region');
     }
 
     public function update($user, $entry)
     {
-        return $user->hasPermission('Update region');
+        return $user->hasPermissionTo('Update region');
     }
 
     public function delete($user, $entry)
     {
-        return $user->hasPermission('Delete region');
+        return $user->hasPermissionTo('Delete region');
     }
 
 }

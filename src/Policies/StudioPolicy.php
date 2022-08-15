@@ -17,22 +17,22 @@ class StudioPolicy
 
     public function browse($user)
     {
-        return $user->hasPermission('Browse studio');
+        return $user->hasPermissionTo('Browse studio');
     }
 
     public function create($user)
     {
-        return $user->hasPermission('Create studio');
+        return $user->hasPermissionTo('Create studio');
     }
 
     public function update($user, $entry)
     {
-        return $user->hasPermission('Update studio');
+        return $user->hasPermissionTo('Update studio');
     }
 
     public function delete($user, $entry)
     {
-        return $user->hasPermission('Delete studio');
+        return $user->hasPermissionTo('Delete studio');
     }
 
 }

@@ -17,22 +17,22 @@ class RolePolicy
 
     public function browse($user)
     {
-        return $user->hasPermission('Browse role');
+        return $user->hasPermissionTo('Browse role');
     }
 
     public function create($user)
     {
-        return $user->hasPermission('Create role');
+        return $user->hasPermissionTo('Create role');
     }
 
     public function update($user, $entry)
     {
-        return $user->hasPermission('Update role');
+        return $user->hasPermissionTo('Update role');
     }
 
     public function delete($user, $entry)
     {
-        return $user->hasPermission('Delete role');
+        return $user->hasPermissionTo('Delete role');
     }
 
 }

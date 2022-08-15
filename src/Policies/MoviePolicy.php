@@ -17,22 +17,22 @@ class MoviePolicy
 
     public function browse($user)
     {
-        return $user->hasPermission('Browse movie');
+        return $user->hasPermissionTo('Browse movie');
     }
 
     public function create($user)
     {
-        return $user->hasPermission('Create movie');
+        return $user->hasPermissionTo('Create movie');
     }
 
     public function update($user, $entry)
     {
-        return $user->hasPermission('Update movie');
+        return $user->hasPermissionTo('Update movie');
     }
 
     public function delete($user, $entry)
     {
-        return $user->hasPermission('Delete movie');
+        return $user->hasPermissionTo('Delete movie');
     }
 
 }
