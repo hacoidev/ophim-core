@@ -118,14 +118,15 @@ class CrawlScheduleCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
-        $this->authorize('update', $this->crud->model);
+        $this->authorize('update', $this->crud->getEntryWithLocale($this->crud->getCurrentEntryId()));
+
 
         $this->setupCreateOperation();
     }
 
     protected function setupDeleteOperation()
     {
-        $this->authorize('delete', $this->crud->model);
+        $this->authorize('delete', $this->crud->getEntryWithLocale($this->crud->getCurrentEntryId()));
     }
 
     protected function movieUpdateOptions(): array

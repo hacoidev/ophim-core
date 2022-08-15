@@ -88,7 +88,8 @@ class EpisodeCrudController extends CrudController
      */
     protected function setupUpdateOperation()
     {
-        $this->authorize('update', $this->crud->model);
+        $this->authorize('update', $this->crud->getEntryWithLocale($this->crud->getCurrentEntryId()));
+
 
         CRUD::addField(['name' => 'type', 'label' => 'Type', 'type' => 'select_from_array', 'options' => config('ophim.episodes.types')]);
         CRUD::addField(['name' => 'link', 'label' => 'Nguồn phát', 'type' => 'url']);
