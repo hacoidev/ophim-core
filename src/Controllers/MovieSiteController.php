@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Ophim\Core\Models\Actor;
 use Ophim\Core\Models\Category;
 use Ophim\Core\Models\Director;
+use Ophim\Core\Models\Episode;
 use Ophim\Core\Models\Movie;
 use Ophim\Core\Models\Region;
 use Ophim\Core\Models\Tag;
@@ -61,9 +62,12 @@ class MovieSiteController
 
     public function getMovieOverview(Request $request, Theme $theme, $movie)
     {
+        /** @var Movie */
         $movie = Movie::fromCache()->find($movie);
 
         if (is_null($movie)) abort(404);
+
+        $movie->generateSeoTags();
 
         return $theme->render('single', [
             'movie' => $movie,
@@ -77,11 +81,14 @@ class MovieSiteController
 
         if (is_null($movie)) abort(404);
 
+        /** @var Episode */
         $episode = $movie->episodes->when(request('id'), function ($collection) {
             return $collection->where('id', request('id'));
         })->firstWhere('slug', $slug);
 
         if (is_null($episode)) abort(404);
+
+        $episode->generateSeoTags();
 
         $movie->increment('view_total', 1);
         $movie->increment('view_day', 1);
@@ -124,9 +131,12 @@ class MovieSiteController
 
     public function getMovieOfCategory(Request $request, Theme $theme, $slug)
     {
+        /** @var Category */
         $category = Category::fromCache()->find($slug);
 
         if (is_null($category)) abort(404);
+
+        $category->generateSeoTags();
 
         $movies = $category->movies()->paginate(20);
 
@@ -139,9 +149,12 @@ class MovieSiteController
 
     public function getMovieOfRegion(Request $request, Theme $theme, $slug)
     {
+        /** @var Region */
         $region = Region::fromCache()->find($slug);
 
         if (is_null($region)) abort(404);
+
+        $region->generateSeoTags();
 
         $movies = $region->movies()->paginate(20);
 
@@ -154,9 +167,12 @@ class MovieSiteController
 
     public function getMovieOfActor(Request $request, Theme $theme, $slug)
     {
+        /** @var Actor */
         $actor = Actor::fromCache()->find($slug);
 
         if (is_null($actor)) abort(404);
+
+        $actor->generateSeoTags();
 
         $movies = $actor->movies()->paginate(20);
 
@@ -169,9 +185,12 @@ class MovieSiteController
 
     public function getMovieOfDirector(Request $request, Theme $theme, $slug)
     {
+        /** @var Director */
         $director = Director::fromCache()->find($slug);
 
         if (is_null($director)) abort(404);
+
+        $director->generateSeoTags();
 
         $movies = $director->movies()->paginate(20);
 
@@ -184,9 +203,12 @@ class MovieSiteController
 
     public function getMovieOfTag(Request $request, Theme $theme, $slug)
     {
+        /** @var Tag */
         $tag = Tag::fromCache()->find($slug);
 
         if (is_null($tag)) abort(404);
+
+        $tag->generateSeoTags();
 
         $movies = $tag->movies()->paginate(20);
 

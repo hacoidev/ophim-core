@@ -9,11 +9,16 @@ use Hacoidev\CachingModel\Contracts\Cacheable;
 use Hacoidev\CachingModel\HasCache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
+use Ophim\Core\Contracts\SeoInterface;
 use Ophim\Core\Traits\HasFactory;
 use Ophim\Core\Traits\HasTitle;
+use Illuminate\Support\Str;
+use Artesaos\SEOTools\Facades\JsonLdMulti;
+use Artesaos\SEOTools\Facades\OpenGraph;
+use Artesaos\SEOTools\Facades\SEOMeta;
+use Artesaos\SEOTools\Facades\TwitterCard;
 
-class Episode extends Model implements Cacheable, HasUrlInterface
+class Episode extends Model implements Cacheable, HasUrlInterface, SeoInterface
 {
     use CrudTrait;
     use HasFactory;
@@ -57,6 +62,41 @@ class Episode extends Model implements Cacheable, HasUrlInterface
     protected function titlePattern(): string
     {
         return Setting::get('site.episode.watch.title', '');
+    }
+
+    public function generateSeoTags()
+    {
+        SEOMeta::setTitle($this->getTitle())
+            ->setDescription(Str::limit($this->movie->content, 150, '...'))
+            ->addKeyword($this->movie->tags()->pluck('name')->toArray())
+            ->setCanonical($this->getUrl())
+            ->setPrev(request()->root())
+            ->setPrev(request()->root());
+        // ->addMeta($meta, $value, 'property');
+
+        OpenGraph::setSiteName(setting('site.meta.siteName'))
+            ->setTitle($this->getTitle())
+            ->addProperty('type', 'episode')
+            ->addProperty('locale', 'vi-VN')
+            ->setUrl($this->getUrl())
+            ->setDescription(Str::limit($this->movie->content, 150, '...'))
+            ->addImages([$this->thumb_url, $this->poster_url]);
+
+        TwitterCard::setSite(setting('site.meta.siteName'))
+            ->setTitle($this->getTitle())
+            ->setType('episode')
+            ->setImages([$this->movie->thumb_url, $this->movie->poster_url])
+            ->setDescription(Str::limit($this->movie->content, 150, '...'))
+            ->setUrl($this->getUrl());
+        // ->addValue($key, $value);
+
+        JsonLdMulti::newJsonLd()
+            ->setSite(setting('site.meta.siteName'))
+            ->setTitle($this->getTitle())
+            ->setType('episode')
+            ->setDescription(Str::limit($this->movie->content, 150, '...'))
+            ->setUrl($this->getUrl());
+        // ->addValue($key, $value);
     }
 
     /*
