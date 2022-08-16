@@ -57,6 +57,7 @@ class SettingsTableSeeder extends Seeder
                 'field'       => json_encode([
                     'name' => 'value',
                     'type' => 'text',
+                    'tab' => 'Title'
                 ]),
                 'active'      => 0,
             ],
@@ -67,6 +68,7 @@ class SettingsTableSeeder extends Seeder
                 'field'       => json_encode([
                     'name' => 'value',
                     'type' => 'text',
+                    'tab' => 'Title'
                 ]),
                 'value' => 'Phim {name} | OphimTV_com',
                 'active'      => 0,
@@ -78,6 +80,7 @@ class SettingsTableSeeder extends Seeder
                 'field'       => json_encode([
                     'name' => 'value',
                     'type' => 'text',
+                    'tab' => 'Title'
                 ]),
                 'value' => 'Danh sách phim {name} - tổng hợp phim {name} | OphimTV_com',
                 'active'      => 0,
@@ -89,6 +92,7 @@ class SettingsTableSeeder extends Seeder
                 'field'       => json_encode([
                     'name' => 'value',
                     'type' => 'text',
+                    'tab' => 'Title'
                 ]),
                 'value' => 'Danh sách phim khu vực {name} - tổng hợp phim {name} | OphimTV_com',
                 'active'      => 0,
@@ -100,6 +104,7 @@ class SettingsTableSeeder extends Seeder
                 'field'       => json_encode([
                     'name' => 'value',
                     'type' => 'text',
+                    'tab' => 'Title'
                 ]),
                 'value' => '{name} - tổng hợp phim {name} | OphimTV_com',
                 'active'      => 0,
@@ -111,6 +116,7 @@ class SettingsTableSeeder extends Seeder
                 'field'       => json_encode([
                     'name' => 'value',
                     'type' => 'text',
+                    'tab' => 'Title'
                 ]),
                 'value' => '{name} - tổng hợp phim {name} | OphimTV_com',
                 'active'      => 0,
@@ -122,6 +128,7 @@ class SettingsTableSeeder extends Seeder
                 'field'       => json_encode([
                     'name' => 'value',
                     'type' => 'text',
+                    'tab' => 'Title'
                 ]),
                 'value' => '{name} - tổng hợp phim {name} | OphimTV_com',
                 'active'      => 0,
@@ -133,6 +140,7 @@ class SettingsTableSeeder extends Seeder
                 'field'       => json_encode([
                     'name' => 'value',
                     'type' => 'text',
+                    'tab' => 'Title'
                 ]),
                 'value' => '{name} - tổng hợp phim {name} | OphimTV_com',
                 'active'      => 0,
@@ -144,6 +152,7 @@ class SettingsTableSeeder extends Seeder
                 'field'       => json_encode([
                     'name' => 'value',
                     'type' => 'text',
+                    'tab' => 'Title'
                 ]),
                 'value' => 'Xem phim {movie_name} - tập {name} | OphimTV_com',
                 'active'      => 0,
@@ -155,6 +164,7 @@ class SettingsTableSeeder extends Seeder
                 'field'       => json_encode([
                     'name' => 'value',
                     'type' => 'text',
+                    'tab' => 'General'
                 ]),
                 'value' => 'Ophim_TV',
                 'active'      => 0,
@@ -166,6 +176,7 @@ class SettingsTableSeeder extends Seeder
                 'field'       => json_encode([
                     'name' => 'value',
                     'type' => 'ckfinder',
+                    'tab' => 'General'
                 ]),
                 'active'      => 0,
             ],
@@ -176,6 +187,7 @@ class SettingsTableSeeder extends Seeder
                 'field'       => json_encode([
                     'name' => 'value',
                     'type' => 'textarea',
+                    'tab' => 'General'
                 ]),
                 'value' => 'Ophim_TV',
                 'active'      => 0,
@@ -187,6 +199,7 @@ class SettingsTableSeeder extends Seeder
                 'field'       => json_encode([
                     'name' => 'value',
                     'type' => 'textarea',
+                    'tab' => 'General'
                 ]),
                 'value' => 'Ophim_TV',
                 'active'      => 0,
@@ -198,19 +211,8 @@ class SettingsTableSeeder extends Seeder
                 'field'       => json_encode([
                     'name' => 'value',
                     'type' => 'ckfinder',
+                    'tab' => 'General'
                 ]),
-                'active'      => 0,
-            ],
-            [
-                'key'         => 'site_episode_meta_image',
-                'description' => 'site_episode_meta_image',
-                'name'        => 'Episode meta image',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'ckfinder',
-                    'hint' => 'field ảnh của phim: poster_url, thumb_url hoặc link ảnh',
-                ]),
-                'value' => '{poster_url}',
                 'active'      => 0,
             ],
         ];
@@ -313,14 +315,14 @@ class SettingsTableSeeder extends Seeder
             ],
         ];
 
-        $scripts = [
+        $others = [
             [
                 'key'         => 'site_scripts_facebook_sdk',
                 'description' => 'site_scripts_facebook_sdk',
                 'name'        => 'Facebook JS SDK script tag',
                 'field'       => json_encode([
                     'name' => 'value',
-                    'type' => 'summernote',
+                    'type' => 'code',
                 ]),
                 'active'      => 0,
             ],
@@ -330,7 +332,7 @@ class SettingsTableSeeder extends Seeder
                 'name'        => 'Google analytics script tag',
                 'field'       => json_encode([
                     'name' => 'value',
-                    'type' => 'summernote',
+                    'type' => 'code',
                 ]),
                 'active'      => 0,
             ],
@@ -369,6 +371,16 @@ class SettingsTableSeeder extends Seeder
 
         foreach ($players as $index => $setting) {
             $result = Setting::updateOrCreate(collect($setting)->only('key')->toArray(), collect($setting)->merge(['group' => 'jwplayer'])->except('key')->toArray());
+
+            if (!$result) {
+                $this->command->info("Insert failed at record $index");
+
+                return;
+            }
+        }
+
+        foreach ($others as $index => $setting) {
+            $result = Setting::updateOrCreate(collect($setting)->only('key')->toArray(), collect($setting)->merge(['group' => 'others'])->except('key')->toArray());
 
             if (!$result) {
                 $this->command->info("Insert failed at record $index");
