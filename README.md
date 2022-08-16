@@ -26,6 +26,8 @@ Route::get('/', function () {
 ```
 6. Run `php artisan optimize:clear`
 
+7. Run `php artisan storage:link`
+
 ## Run auto update: 
 1. Add `movie:update` command to app\Console\Kernel.php
 ```php
