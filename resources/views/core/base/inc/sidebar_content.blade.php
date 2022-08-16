@@ -86,6 +86,9 @@
     <li class='nav-item'><a class='nav-link' href='{{ backpack_url('setting/group/jwplayer/edit') }}'><i
                 class='nav-icon la la-play'></i>
             <span>Jwplayer</span></a></li>
+    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('setting/group/others/edit') }}'><i
+                class='nav-icon la la-slack'></i>
+            <span>Khác</span></a></li>
 </ul>
 </li>
 @if (backpack_user()->hasRole('Admin'))
