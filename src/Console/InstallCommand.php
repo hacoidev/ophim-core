@@ -161,7 +161,7 @@ class InstallCommand extends Command
             'active' => false
         ]);
 
-        $fields = collect(config('customizers.default', []));
+        $fields = collect(config('themes.default.options', []));
 
         $setting->update([
             'value' => $fields->pluck('value', 'name')->toArray()

@@ -25,7 +25,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'select_theme',
                 ]),
                 'value' => 'default',
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'site.cache.ttl',
@@ -37,7 +37,7 @@ class SettingsTableSeeder extends Seeder
                     'hint' => 'giây (s)',
                 ]),
                 'value' => 60,
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'site.brand',
@@ -47,7 +47,7 @@ class SettingsTableSeeder extends Seeder
                     'name' => 'value',
                     'type' => 'textarea',
                 ]),
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'site.logo',
@@ -57,7 +57,7 @@ class SettingsTableSeeder extends Seeder
                     'name' => 'value',
                     'type' => 'textarea',
                 ]),
-                'active'      => 1,
+                'active'      => 0,
             ],
         ];
 
@@ -70,7 +70,7 @@ class SettingsTableSeeder extends Seeder
                     'name' => 'value',
                     'type' => 'text',
                 ]),
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'site.movie.title',
@@ -81,7 +81,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                 ]),
                 'value' => 'Phim {name} | OphimTV.com',
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'site.category.title',
@@ -92,7 +92,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                 ]),
                 'value' => 'Danh sách phim {name} - tổng hợp phim {name} | OphimTV.com',
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'site.region.title',
@@ -103,7 +103,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                 ]),
                 'value' => 'Danh sách phim khu vực {name} - tổng hợp phim {name} | OphimTV.com',
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'site.actor.title',
@@ -114,7 +114,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                 ]),
                 'value' => '{name} - tổng hợp phim {name} | OphimTV.com',
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'site.director.title',
@@ -125,7 +125,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                 ]),
                 'value' => '{name} - tổng hợp phim {name} | OphimTV.com',
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'site.tag.title',
@@ -136,7 +136,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                 ]),
                 'value' => '{name} - tổng hợp phim {name} | OphimTV.com',
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'site.studio.title',
@@ -147,7 +147,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                 ]),
                 'value' => '{name} - tổng hợp phim {name} | OphimTV.com',
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'site.episode.watch.title',
@@ -158,7 +158,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                 ]),
                 'value' => 'Xem phim {movie.name} - tập {name} | OphimTV.com',
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'site.meta.siteName',
@@ -169,7 +169,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                 ]),
                 'value' => 'Ophim.TV',
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'site.meta.shortcut.icon',
@@ -179,7 +179,7 @@ class SettingsTableSeeder extends Seeder
                     'name' => 'value',
                     'type' => 'ckfinder',
                 ]),
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'site.meta.keywords',
@@ -190,7 +190,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'textarea',
                 ]),
                 'value' => 'Ophim.TV',
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'site.meta.description',
@@ -201,7 +201,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'textarea',
                 ]),
                 'value' => 'Ophim.TV',
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'site.meta.image',
@@ -211,7 +211,7 @@ class SettingsTableSeeder extends Seeder
                     'name' => 'value',
                     'type' => 'ckfinder',
                 ]),
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'site.episode.meta.image',
@@ -223,7 +223,7 @@ class SettingsTableSeeder extends Seeder
                     'hint' => 'field ảnh của phim: poster_url, thumb_url hoặc link ảnh',
                 ]),
                 'value' => '{poster_url}',
-                'active'      => 1,
+                'active'      => 0,
             ],
         ];
 
@@ -237,7 +237,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                 ]),
                 'value' => 'ITWMv7t88JGzI0xPwW8I0+LveiXX9SWbfdmt0ArUSyc=',
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'jwplayer.logo.file',
@@ -247,7 +247,7 @@ class SettingsTableSeeder extends Seeder
                     'name' => 'value',
                     'type' => 'ckfinder',
                 ]),
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'jwplayer.logo.link',
@@ -257,7 +257,7 @@ class SettingsTableSeeder extends Seeder
                     'name' => 'value',
                     'type' => 'text',
                 ]),
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'jwplayer.logo.position',
@@ -274,7 +274,7 @@ class SettingsTableSeeder extends Seeder
                         'control-bar' => 'Control bar',
                     ]
                 ]),
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'jwplayer.advertising.file',
@@ -284,7 +284,7 @@ class SettingsTableSeeder extends Seeder
                     'name' => 'value',
                     'type' => 'ckfinder',
                 ]),
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'jwplayer.advertising.file',
@@ -294,7 +294,7 @@ class SettingsTableSeeder extends Seeder
                     'name' => 'value',
                     'type' => 'ckfinder',
                 ]),
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'jwplayer.advertising.skipoffset',
@@ -306,7 +306,7 @@ class SettingsTableSeeder extends Seeder
                     'hint' => 'giây'
                 ]),
                 'value' => 5,
-                'active'      => 1,
+                'active'      => 0,
             ],
         ];
 
@@ -319,7 +319,7 @@ class SettingsTableSeeder extends Seeder
                     'name' => 'value',
                     'type' => 'summernote',
                 ]),
-                'active'      => 1,
+                'active'      => 0,
             ],
             [
                 'key'         => 'site.scripts.google.analytics',
@@ -329,7 +329,7 @@ class SettingsTableSeeder extends Seeder
                     'name' => 'value',
                     'type' => 'summernote',
                 ]),
-                'active'      => 1,
+                'active'      => 0,
             ],
         ];
 
