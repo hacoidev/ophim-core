@@ -1,5 +1,6 @@
 # OPHIM CORE
 ## Server Requirements:
+- Laravel Framework 8x
 - PHP 7.3 or higher.
 - MySQL 5.7 or higher.
 
