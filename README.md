@@ -1,4 +1,7 @@
 # OPHIM CORE
+## Server Requirements:
+- PHP 7.3 or higher.
+- MySQL 5.7 or higher.
 
 ## Installation:
 1. CD to project root and run: `composer require hacoidev/ophim-core`
