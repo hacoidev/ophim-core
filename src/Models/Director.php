@@ -60,7 +60,7 @@ class Director extends Model implements TaxonomyInterface, Cacheable, SeoInterfa
 
     protected function titlePattern(): string
     {
-        return Setting::get('site.director.title', '');
+        return Setting::get('site_director_title', '');
     }
 
     public function generateSeoTags()
@@ -73,7 +73,7 @@ class Director extends Model implements TaxonomyInterface, Cacheable, SeoInterfa
             ->setPrev(request()->root());
         // ->addMeta($meta, $value, 'property');
 
-        OpenGraph::setSiteName(setting('site.meta.siteName'))
+        OpenGraph::setSiteName(setting('site_meta_siteName'))
             ->setTitle($this->getTitle())
             ->addProperty('type', 'movie')
             ->addProperty('locale', 'vi-VN')
@@ -81,7 +81,7 @@ class Director extends Model implements TaxonomyInterface, Cacheable, SeoInterfa
             ->setDescription(Str::limit($this->content, 150, '...'))
             ->addImages([$this->thumb_url, $this->poster_url]);
 
-        TwitterCard::setSite(setting('site.meta.siteName'))
+        TwitterCard::setSite(setting('site_meta_siteName'))
             ->setTitle($this->getTitle())
             ->setType('movie')
             ->setImage($this->thumb_url)
@@ -90,7 +90,7 @@ class Director extends Model implements TaxonomyInterface, Cacheable, SeoInterfa
         // ->addValue($key, $value);
 
         JsonLdMulti::newJsonLd()
-        ->setSite(setting('site.meta.siteName'))
+        ->setSite(setting('site_meta_siteName'))
         ->setTitle($this->getTitle())
         ->setType('movie')
         ->setDescription(Str::limit($this->content, 150, '...'))

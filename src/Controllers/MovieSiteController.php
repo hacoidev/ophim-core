@@ -56,7 +56,7 @@ class MovieSiteController
             ]);
         }
         return $theme->render('index', [
-            'title' => Setting::get('site.homepage.title')
+            'title' => Setting::get('site_homepage_title')
         ])->render();
     }
 

@@ -1,7 +1,7 @@
 @php
 use Backpack\Settings\app\Models\Setting;
 
-$metaShortcutIcon = Setting::get('site.meta.shortcut.icon') ?: '';
+$metaShortcutIcon = Setting::get('site_meta_shortcut_icon') ?: '';
 @endphp
 
 <meta charSet="utf-8" />

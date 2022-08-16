@@ -61,7 +61,7 @@ class Episode extends Model implements Cacheable, HasUrlInterface, SeoInterface
 
     protected function titlePattern(): string
     {
-        return Setting::get('site.episode.watch.title', '');
+        return Setting::get('site_episode_watch_title', '');
     }
 
     public function generateSeoTags()
@@ -74,7 +74,7 @@ class Episode extends Model implements Cacheable, HasUrlInterface, SeoInterface
             ->setPrev(request()->root());
         // ->addMeta($meta, $value, 'property');
 
-        OpenGraph::setSiteName(setting('site.meta.siteName'))
+        OpenGraph::setSiteName(setting('site_meta_siteName'))
             ->setTitle($this->getTitle())
             ->addProperty('type', 'episode')
             ->addProperty('locale', 'vi-VN')
@@ -82,7 +82,7 @@ class Episode extends Model implements Cacheable, HasUrlInterface, SeoInterface
             ->setDescription(Str::limit($this->movie->content, 150, '...'))
             ->addImages([$this->thumb_url, $this->poster_url]);
 
-        TwitterCard::setSite(setting('site.meta.siteName'))
+        TwitterCard::setSite(setting('site_meta_siteName'))
             ->setTitle($this->getTitle())
             ->setType('episode')
             ->setImages([$this->movie->thumb_url, $this->movie->poster_url])
@@ -91,7 +91,7 @@ class Episode extends Model implements Cacheable, HasUrlInterface, SeoInterface
         // ->addValue($key, $value);
 
         JsonLdMulti::newJsonLd()
-            ->setSite(setting('site.meta.siteName'))
+            ->setSite(setting('site_meta_siteName'))
             ->setTitle($this->getTitle())
             ->setType('episode')
             ->setDescription(Str::limit($this->movie->content, 150, '...'))

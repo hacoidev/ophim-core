@@ -51,113 +51,6 @@ class SettingsTableSeeder extends Seeder
 
         $metas = [
             [
-                'key'         => 'site_homepage_title',
-                'description' => 'site_homepage_title',
-                'name'        => 'Tiêu đề trang chủ',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                    'tab' => 'Title'
-                ]),
-                'active'      => 0,
-            ],
-            [
-                'key'         => 'site_movie_title',
-                'description' => 'site_movie_title',
-                'name'        => 'Mẫu tiêu đề trang thông tin phim',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                    'tab' => 'Title'
-                ]),
-                'value' => 'Phim {name} | OphimTV_com',
-                'active'      => 0,
-            ],
-            [
-                'key'         => 'site_category_title',
-                'description' => 'site_category_title',
-                'name'        => 'Mẫu tiêu đề theo thể loại',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                    'tab' => 'Title'
-                ]),
-                'value' => 'Danh sách phim {name} - tổng hợp phim {name} | OphimTV_com',
-                'active'      => 0,
-            ],
-            [
-                'key'         => 'site_region_title',
-                'description' => 'site_region_title',
-                'name'        => 'Mẫu tiêu đề quốc gia',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                    'tab' => 'Title'
-                ]),
-                'value' => 'Danh sách phim khu vực {name} - tổng hợp phim {name} | OphimTV_com',
-                'active'      => 0,
-            ],
-            [
-                'key'         => 'site_actor_title',
-                'description' => 'site_actor_title',
-                'name'        => 'Mẫu tiêu đề diễn viên',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                    'tab' => 'Title'
-                ]),
-                'value' => '{name} - tổng hợp phim {name} | OphimTV_com',
-                'active'      => 0,
-            ],
-            [
-                'key'         => 'site_director_title',
-                'description' => 'site_director_title',
-                'name'        => 'Mẫu tiêu đề đạo diễn',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                    'tab' => 'Title'
-                ]),
-                'value' => '{name} - tổng hợp phim {name} | OphimTV_com',
-                'active'      => 0,
-            ],
-            [
-                'key'         => 'site_tag_title',
-                'description' => 'site_tag_title',
-                'name'        => 'Mẫu tiêu đề từ tag',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                    'tab' => 'Title'
-                ]),
-                'value' => '{name} - tổng hợp phim {name} | OphimTV_com',
-                'active'      => 0,
-            ],
-            [
-                'key'         => 'site_studio_title',
-                'description' => 'site_studio_title',
-                'name'        => 'Mẫu tiêu đề nhà làm phim',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                    'tab' => 'Title'
-                ]),
-                'value' => '{name} - tổng hợp phim {name} | OphimTV_com',
-                'active'      => 0,
-            ],
-            [
-                'key'         => 'site_episode_watch_title',
-                'description' => 'site_episode_watch_title',
-                'name'        => 'Mẫu tiêu đề trang xem phim',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                    'tab' => 'Title'
-                ]),
-                'value' => 'Xem phim {movie_name} - tập {name} | OphimTV_com',
-                'active'      => 0,
-            ],
-            [
                 'key'         => 'site_meta_siteName',
                 'description' => 'site_meta_siteName',
                 'name'        => 'Meta site name',
@@ -215,6 +108,115 @@ class SettingsTableSeeder extends Seeder
                 ]),
                 'active'      => 0,
             ],
+            [
+                'key'         => 'site_homepage_title',
+                'description' => 'site_homepage_title',
+                'name'        => 'Tiêu đề mặc định',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                    'tab' => 'Title'
+                ]),
+                'value' => 'Phim hay mới cập nhật | Ophim.TV',
+                'active'      => 0,
+            ],
+            [
+                'key'         => 'site_movie_title',
+                'description' => 'site_movie_title',
+                'name'        => 'Mẫu tiêu đề trang thông tin phim',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                    'tab' => 'Title'
+                ]),
+                'value' => 'Phim {name} | Ophim.TV',
+                'active'      => 0,
+            ],
+            [
+                'key'         => 'site_category_title',
+                'description' => 'site_category_title',
+                'name'        => 'Mẫu tiêu đề theo thể loại',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                    'tab' => 'Title'
+                ]),
+                'value' => 'Danh sách phim {name} - tổng hợp phim {name} | Ophim.TV',
+                'active'      => 0,
+            ],
+            [
+                'key'         => 'site_region_title',
+                'description' => 'site_region_title',
+                'name'        => 'Mẫu tiêu đề quốc gia',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                    'tab' => 'Title'
+                ]),
+                'value' => 'Danh sách phim khu vực {name} - tổng hợp phim {name} | Ophim.TV',
+                'active'      => 0,
+            ],
+            [
+                'key'         => 'site_actor_title',
+                'description' => 'site_actor_title',
+                'name'        => 'Mẫu tiêu đề diễn viên',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                    'tab' => 'Title'
+                ]),
+                'value' => '{name} - tổng hợp phim {name} | Ophim.TV',
+                'active'      => 0,
+            ],
+            [
+                'key'         => 'site_director_title',
+                'description' => 'site_director_title',
+                'name'        => 'Mẫu tiêu đề đạo diễn',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                    'tab' => 'Title'
+                ]),
+                'value' => '{name} - tổng hợp phim {name} | Ophim.TV',
+                'active'      => 0,
+            ],
+            [
+                'key'         => 'site_tag_title',
+                'description' => 'site_tag_title',
+                'name'        => 'Mẫu tiêu đề từ tag',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                    'tab' => 'Title'
+                ]),
+                'value' => '{name} - tổng hợp phim {name} | Ophim.TV',
+                'active'      => 0,
+            ],
+            [
+                'key'         => 'site_studio_title',
+                'description' => 'site_studio_title',
+                'name'        => 'Mẫu tiêu đề nhà làm phim',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                    'tab' => 'Title'
+                ]),
+                'value' => '{name} - tổng hợp phim {name} | Ophim.TV',
+                'active'      => 0,
+            ],
+            [
+                'key'         => 'site_episode_watch_title',
+                'description' => 'site_episode_watch_title',
+                'name'        => 'Mẫu tiêu đề trang xem phim',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                    'tab' => 'Title'
+                ]),
+                'value' => 'Xem phim {movie_name} - tập {name} | Ophim.TV',
+                'active'      => 0,
+            ],
+
         ];
 
         $players = [
@@ -263,16 +265,6 @@ class SettingsTableSeeder extends Seeder
                         'bottom-left' => 'Bottom left',
                         'control-bar' => 'Control bar',
                     ]
-                ]),
-                'active'      => 0,
-            ],
-            [
-                'key'         => 'jwplayer_advertising_file',
-                'description' => 'jwplayer_advertising_file',
-                'name'        => 'Jwplayer advertising vast file',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'ckfinder',
                 ]),
                 'active'      => 0,
             ],

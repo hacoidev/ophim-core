@@ -5,7 +5,7 @@ use Backpack\Settings\app\Models\Setting;
 if (!function_exists('get_theme_option')) {
     function get_theme_option($key, $fallback = null)
     {
-        $theme = Setting::get('site.theme') ?? config('ophim.theme', 'default');
+        $theme = Setting::get('site_theme') ?? config('ophim.theme', 'default');
 
         $setting = Setting::get('themes.' . $theme . '.customize');
 

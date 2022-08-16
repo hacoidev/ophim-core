@@ -1,8 +1,8 @@
 @php
 use Backpack\Settings\app\Models\Setting;
-$logo = Setting::get('site.logo') ?: '';
-$brand = Setting::get('site.brand') ?: '';
-$title = isset($title) ? $title : Setting::get('site.homepage.title', '');
+$logo = Setting::get('site_logo') ?: '';
+$brand = Setting::get('site_brand') ?: '';
+$title = isset($title) ? $title : Setting::get('site_homepage_title', '');
 @endphp
 
 <nav class="w-full fixed top-0 py-2 bg-[#151111] border-gray-200 z-30">

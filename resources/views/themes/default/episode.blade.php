@@ -165,7 +165,7 @@
                 wrapper.innerHTML = `<div id="jwplayer"></div>`;
                 const player = jwplayer("jwplayer");
                 const objSetup = {
-                    key: "{{ Setting::get('jwplayer.license') }}",
+                    key: "{{ Setting::get('jwplayer_license') }}",
                     aspectratio: "16:9",
                     width: "100%",
                     file: link,
@@ -184,15 +184,15 @@
                     volume: 100,
                     mute: false,
                     logo: {
-                        file: "{{ Setting::get('jwplayer.logo.file') }}",
-                        link: "{{ Setting::get('jwplayer.logo.link') }}",
-                        position: "{{ Setting::get('jwplayer.logo.position') }}",
+                        file: "{{ Setting::get('jwplayer_logo_file') }}",
+                        link: "{{ Setting::get('jwplayer_logo_link') }}",
+                        position: "{{ Setting::get('jwplayer_logo_position') }}",
                     },
                     advertising: {
-                        tag: "{{ Setting::get('jwplayer.advertising.file') }}",
+                        tag: "{{ Setting::get('jwplayer_advertising_file') }}",
                         client: "vast",
                         vpaidmode: "insecure",
-                        skipoffset: {{ (int) Setting::get('jwplayer.advertising.skipoffset') ?: 5 }}, // Bỏ qua quảng cáo trong vòng 5 giây
+                        skipoffset: {{ (int) Setting::get('jwplayer_advertising_skipoffset') ?: 5 }}, // Bỏ qua quảng cáo trong vòng 5 giây
                         skipmessage: "Bỏ qua sau xx giây",
                         skiptext: "Bỏ qua"
                     }

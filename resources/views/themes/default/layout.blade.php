@@ -1,6 +1,6 @@
 @php
 $menu = \Ophim\Core\Models\Menu::getTree();
-$tops = Cache::remember('site.movies.tops', \Backpack\Settings\app\Models\Setting::get('site.cache.ttl', 5 * 60), function () {
+$tops = Cache::remember('site.movies.tops', \Backpack\Settings\app\Models\Setting::get('site_cache_ttl', 5 * 60), function () {
     $lists = preg_split('/[\n\r]+/', get_theme_option('hotest'));
     $data = [];
     foreach ($lists as $list) {
@@ -115,8 +115,8 @@ $tops = Cache::remember('site.movies.tops', \Backpack\Settings\app\Models\Settin
         </div>
     </div>
     <div id="fb-root"></div>
-    {!! \Backpack\Settings\app\Models\Setting::get('site.scripts.facebook.sdk') !!}
-    {!! \Backpack\Settings\app\Models\Setting::get('site.scripts.google.analytics') !!}
+    {!! \Backpack\Settings\app\Models\Setting::get('site_scripts_facebook_sdk') !!}
+    {!! \Backpack\Settings\app\Models\Setting::get('site_scripts_google_analytics') !!}
     @stack('scripts')
 </body>
 

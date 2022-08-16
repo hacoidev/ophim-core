@@ -17,7 +17,7 @@ class Theme
     {
         $this->payload = $payload;
 
-        $this->name  = Setting::get('site.theme') ?? config('ophim.theme', 'default');
+        $this->name  = Setting::get('site_theme') ?? config('ophim.theme', 'default');
         $this->themePath = $this->namespace . '::' . $this->name;
     }
 

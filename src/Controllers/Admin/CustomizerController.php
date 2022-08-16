@@ -64,7 +64,7 @@ class CustomizerController extends CrudController
             abort(403);
         }
 
-        $theme = Setting::get('site.theme') ?? config('ophim.theme', 'default');
+        $theme = Setting::get('site_theme') ?? config('ophim.theme', 'default');
 
         $id = Setting::firstOrCreate([
             'key' => 'themes.' . strtolower($theme) . '.customize',
@@ -125,7 +125,7 @@ class CustomizerController extends CrudController
      */
     protected function setupUpdateOperation()
     {
-        $theme = Setting::get('site.theme') ?? config('ophim.theme', 'default');
+        $theme = Setting::get('site_theme') ?? config('ophim.theme', 'default');
 
         $fields = config('themes.' . $theme . '.options', []);
 
@@ -174,7 +174,7 @@ class CustomizerController extends CrudController
             return redirect(backpack_url('customizer'));
         }
 
-        $theme = Setting::get('site.theme') ?? config('ophim.theme', 'default');
+        $theme = Setting::get('site_theme') ?? config('ophim.theme', 'default');
 
         $fields = collect(config('themes.' . $theme . '.options', []));
 

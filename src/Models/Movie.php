@@ -68,7 +68,7 @@ class Movie extends Model implements TaxonomyInterface, Cacheable, SeoInterface
             ->setPrev(request()->root());
         // ->addMeta($meta, $value, 'property');
 
-        OpenGraph::setSiteName(setting('site.meta.siteName'))
+        OpenGraph::setSiteName(setting('site_meta_siteName'))
             ->setTitle($this->getTitle())
             ->addProperty('type', 'movie')
             ->addProperty('locale', 'vi-VN')
@@ -76,7 +76,7 @@ class Movie extends Model implements TaxonomyInterface, Cacheable, SeoInterface
             ->setDescription(Str::limit($this->content, 150, '...'))
             ->addImages([$this->thumb_url, $this->poster_url]);
 
-        TwitterCard::setSite(setting('site.meta.siteName'))
+        TwitterCard::setSite(setting('site_meta_siteName'))
             ->setTitle($this->getTitle())
             ->setType('movie')
             ->setImage($this->thumb_url)
@@ -85,7 +85,7 @@ class Movie extends Model implements TaxonomyInterface, Cacheable, SeoInterface
         // ->addValue($key, $value);
 
         JsonLdMulti::newJsonLd()
-            ->setSite(setting('site.meta.siteName'))
+            ->setSite(setting('site_meta_siteName'))
             ->setTitle($this->getTitle())
             ->setType('movie')
             ->setDescription(Str::limit($this->content, 150, '...'))
@@ -158,7 +158,7 @@ class Movie extends Model implements TaxonomyInterface, Cacheable, SeoInterface
 
     protected function titlePattern(): string
     {
-        return Setting::get('site.movie.title', '');
+        return Setting::get('site_movie_title', '');
     }
 
 
