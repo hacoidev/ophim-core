@@ -85,7 +85,6 @@ class OphimServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/../resources/views/core/', 'ophim');
 
         $this->loadViewsFrom(__DIR__ . '/../resources/views/themes', 'themes');
-        $this->loadViewsFrom(__DIR__ . '/../resources/views/crud', 'crud');
 
         $this->publishFiles();
 

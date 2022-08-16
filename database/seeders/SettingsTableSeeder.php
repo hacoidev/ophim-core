@@ -22,7 +22,8 @@ class SettingsTableSeeder extends Seeder
                 'description' => 'site.theme',
                 'field'       => json_encode([
                     'name' => 'value',
-                    'type' => 'select_theme',
+                    'type' => 'view',
+                    'view' => 'themes::selector'
                 ]),
                 'value' => 'default',
                 'active'      => 0,

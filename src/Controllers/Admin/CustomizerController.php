@@ -127,7 +127,7 @@ class CustomizerController extends CrudController
     {
         $theme = Setting::get('site.theme') ?? config('ophim.theme', 'default');
 
-        $fields = config('customizers.' . $theme, []);
+        $fields = config('themes.' . $theme . '.options', []);
 
         CRUD::addField(['name' => 'fields', 'type' => 'hidden', 'value' => collect($fields)->implode('name', ',')]);
 
@@ -176,7 +176,7 @@ class CustomizerController extends CrudController
 
         $theme = Setting::get('site.theme') ?? config('ophim.theme', 'default');
 
-        $fields = collect(config('customizers.' . $theme, []));
+        $fields = collect(config('themes.' . $theme . '.options', []));
 
         $setting->update([
             'value' => $fields->pluck('value', 'name')->toArray()

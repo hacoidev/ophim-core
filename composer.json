@@ -11,6 +11,7 @@
     "require": {
         "laravel/framework": "^6|^7|^8",
         "ckfinder/ckfinder-laravel-package": "v3.5.2.1",
+        "artesaos/seotools": "^v0.22.1",
         "hacoidev/crud": "dev-main",
         "hacoidev/settings": "dev-main",
         "hacoidev/logmanager": "dev-main",

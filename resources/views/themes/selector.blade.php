@@ -15,9 +15,9 @@ $options = config('themes', []);
     @if (count($options))
         @foreach ($options as $key => $value)
             @if ($key == $field['value'] || (is_array($field['value']) && in_array($key, $field['value'])))
-                <option value="{{ $key }}" selected>{{ $value }}</option>
+                <option value="{{ $key }}" selected>{{ $value['name'] ?? '' }}</option>
             @else
-                <option value="{{ $key }}">{{ $value }}</option>
+                <option value="{{ $key }}">{{ $value['name'] ?? '' }}</option>
             @endif
         @endforeach
     @endif
