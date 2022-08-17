@@ -187,10 +187,10 @@ class OphimServiceProvider extends ServiceProvider
                         'tab' => 'Custom CSS'
                     ],
                     [
-                        'name' => 'bg_class_color',
-                        'label' => 'Body class',
+                        'name' => 'body_attributes',
+                        'label' => 'Body attributes',
                         'type' => 'text',
-                        'value' => "bg-slate-800",
+                        'value' => "class='bg-slate-800'",
                         'tab' => 'Custom CSS'
                     ],
                     [

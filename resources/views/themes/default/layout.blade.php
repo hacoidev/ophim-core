@@ -1,6 +1,7 @@
+@extends('themes::template.layout')
 @php
 $menu = \Ophim\Core\Models\Menu::getTree();
-$tops = Cache::remember('site.movies.tops', \Backpack\Settings\app\Models\Setting::get('site_cache_ttl', 5 * 60), function () {
+$tops = Cache::remember('site.movies.tops', setting('site_cache_ttl', 5 * 60), function () {
     $lists = preg_split('/[\n\r]+/', get_theme_option('hotest'));
     $data = [];
     foreach ($lists as $list) {
@@ -22,7 +23,7 @@ $tops = Cache::remember('site.movies.tops', \Backpack\Settings\app\Models\Settin
                         ->limit($limit)
                         ->get(),
                 ];
-            } catch (\Exception $th) {
+            } catch (\Exception $e) {
                 # code
             }
         }
@@ -32,11 +33,7 @@ $tops = Cache::remember('site.movies.tops', \Backpack\Settings\app\Models\Settin
 });
 @endphp
 
-<!DOCTYPE html>
-<html lang="vi">
-
-<head>
-    @include('themes::default.inc.meta')
+@push('header')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
         integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -45,12 +42,11 @@ $tops = Cache::remember('site.movies.tops', \Backpack\Settings\app\Models\Settin
     <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@2.20.0/dist/full.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
-</head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+@endpush
 
-<body class="{{ get_theme_option('bg_class_color', 'bg-slate-800') }} font-sans leading-normal tracking-normal">
-    @include('themes::default.inc.header')
+@section('body')
+    @include('themes::default.inc.nav')
     <div class="w-full pt-14">
         <div class="container mx-auto px-4 md:px-8 xl:px-40 md:mt-8 mb-16 text-gray-800 leading-normal">
             <div class="flex flex-row flex-wrap flex-grow mt-2">
@@ -108,16 +104,17 @@ $tops = Cache::remember('site.movies.tops', \Backpack\Settings\app\Models\Settin
             </div>
         </div>
     </div>
-    @include('themes::default.inc.footer')
+@endsection
+
+@section('footer')
+    <footer class="w-full bg-[#151111] border-t border-[#2b2821] shadow">
+        <div class="container mx-auto py-8 px-8 xl:px-40">
+            {!! get_theme_option('footer') !!}
+        </div>
+    </footer>
     <div class="relative">
         <div class="container mx-auto px-4 md:px-8 xl:px-40 fixed bottom-0 right-0 left-0 z-40">
             {!! get_theme_option('ads_catfish') !!}
         </div>
     </div>
-    <div id="fb-root"></div>
-    {!! \Backpack\Settings\app\Models\Setting::get('site_scripts_facebook_sdk') !!}
-    {!! \Backpack\Settings\app\Models\Setting::get('site_scripts_google_analytics') !!}
-    @stack('scripts')
-</body>
-
-</html>
+@endsection

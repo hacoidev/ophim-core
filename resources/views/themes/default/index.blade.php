@@ -2,11 +2,10 @@
 
 @php
 use Ophim\Core\Models\Movie;
-use Backpack\Settings\app\Models\Setting;
 
-$recommendations = Cache::remember('site.movies.recommendations', Setting::get('site_cache_ttl', 5 * 60), function () {
+$recommendations = Cache::remember('site.movies.recommendations', setting('site_cache_ttl', 5 * 60), function () {
     return Movie::where('is_recommended', true)
-        ->limit(Setting::get('site.movies.recommendations.limit', 5))
+        ->limit(setting('site.movies.recommendations.limit', 5))
         ->get()
         ->sortBy([
             function ($a, $b) {
@@ -15,7 +14,7 @@ $recommendations = Cache::remember('site.movies.recommendations', Setting::get('
         ]);
 });
 
-$data = Cache::remember('site.movies.latest', Setting::get('site_cache_ttl', 5 * 60), function () {
+$data = Cache::remember('site.movies.latest', setting('site_cache_ttl', 5 * 60), function () {
     $lists = preg_split('/[\n\r]+/', get_theme_option('latest'));
     $data = [];
     foreach ($lists as $list) {
@@ -38,7 +37,7 @@ $data = Cache::remember('site.movies.latest', Setting::get('site_cache_ttl', 5 *
                         ->get(),
                     'link' => $link ?: '#',
                 ];
-            } catch (\Throwable $th) {
+            } catch (\Exception $e) {
             }
         }
     }

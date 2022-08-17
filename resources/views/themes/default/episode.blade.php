@@ -1,7 +1,4 @@
 @extends('themes::default.layout')
-@php
-    use Backpack\Settings\app\Models\Setting;
-@endphp
 
 @section('content')
     <div class="breadcrumb w-full py-[5px] px-[10px] mb-2 list-none bg-[#151111] rounded" itemscope=""

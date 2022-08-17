@@ -1,4 +1,5 @@
 @extends('themes::default.layout')
+
 @php
 $years = Cache::remember('all_years', \Backpack\Settings\app\Models\Setting::get('site_cache_ttl', 5 * 60), function () {
     return \Ophim\Core\Models\Movie::select('publish_year')
