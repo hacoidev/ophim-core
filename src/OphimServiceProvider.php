@@ -190,7 +190,7 @@ class OphimServiceProvider extends ServiceProvider
                         'name' => 'body_attributes',
                         'label' => 'Body attributes',
                         'type' => 'text',
-                        'value' => "class='bg-slate-800'",
+                        'value' => "class='bg-slate-800 font-sans leading-normal tracking-normal'",
                         'tab' => 'Custom CSS'
                     ],
                     [
