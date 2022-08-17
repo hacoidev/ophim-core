@@ -126,10 +126,6 @@ class InstallCommand extends Command
         $this->progressBar->advance();
         $this->newLine(1);
 
-        $this->installDefaultTheme();
-        $this->newLine(1);
-        $this->info('Installed default theme');
-
         $this->progressBar->finish();
         $this->newLine(1);
         $this->info('Ophim installation finished.');
@@ -151,22 +147,5 @@ class InstallCommand extends Command
         ]);
 
         $this->call('storage:link');
-    }
-
-    protected function installDefaultTheme()
-    {
-        $setting = Setting::firstOrCreate([
-            'key' => 'themes.default.customize',
-        ], [
-            'name' => "Default theme customizer",
-            'field' => json_encode(['name' => 'value', 'type', 'hidden']),
-            'active' => false
-        ]);
-
-        $fields = collect(config('themes.default.options', []));
-
-        $setting->update([
-            'value' => $fields->pluck('value', 'name')->toArray()
-        ]);
     }
 }

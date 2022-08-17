@@ -8,6 +8,7 @@ use Ophim\Core\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Ophim\Core\Console\CreateUser;
 use Ophim\Core\Console\InstallCommand;
+use Ophim\Core\Console\InstallThemeCommand;
 use Ophim\Core\Console\MovieUpdateCommand;
 use Ophim\Core\Middleware\CKFinderAuth;
 use Ophim\Core\Models\Actor;
@@ -90,6 +91,7 @@ class OphimServiceProvider extends ServiceProvider
 
         $this->commands([
             InstallCommand::class,
+            InstallThemeCommand::class,
             CreateUser::class,
             MovieUpdateCommand::class
         ]);
