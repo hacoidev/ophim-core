@@ -15,8 +15,7 @@ $options = config('themes', []);
 @foreach ($options as $key => $value)
     <div class="col-12 col-md-6 col-lg-4 bordered">
         <div class="thumbnail">
-            <div class="img-thumbnail-wrap"
-                style="background-image: url('https://cms.botble.com/themes/ripple/screenshot.png')"></div>
+            <div class="img-thumbnail-wrap" style="background-image: url('{{ $value['preview_image'] ?? '' }}')"></div>
             <div class="caption">
                 <div class="col-12" style="background: #eee; padding: 15px;">
                     <div style="word-break: break-all">

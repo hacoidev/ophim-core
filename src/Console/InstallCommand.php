@@ -149,6 +149,8 @@ class InstallCommand extends Command
         $this->call('vendor:publish', [
             '--tag' => 'ckfinder-config',
         ]);
+
+        $this->call('storage:link');
     }
 
     protected function installDefaultTheme()

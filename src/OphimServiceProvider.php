@@ -155,7 +155,10 @@ class OphimServiceProvider extends ServiceProvider
         config(['themes' => array_merge(config('themes', []), [
             'default' => [
                 'name' => 'Mặc định',
-                'version' => '0.0.1',
+                'author' => 'hacoi.dev@gmail.com',
+                'description' => 'Chủ đề mặc định',
+                'version' => \PackageVersions\Versions::getVersion('hacoidev/ophim-core'),
+                'preview_image' => '',
                 'options' => [
                     [
                         'name' => 'latest',
