@@ -97,6 +97,8 @@ class OphimServiceProvider extends ServiceProvider
         $this->app->bind(Theme::class, function ($app) {
             return new Theme();
         });
+
+        $this->bootSeoDefaults();
     }
 
     protected function publishFiles()
@@ -266,5 +268,33 @@ class OphimServiceProvider extends ServiceProvider
         config(['backpack.permissionmanager.policies.permission' => PermissionPolicy::class]);
         config(['backpack.permissionmanager.policies.role' => RolePolicy::class]);
         config(['backpack.permissionmanager.policies.user' => UserPolicy::class]);
+    }
+
+    protected function bootSeoDefaults()
+    {
+        config([
+            'seotools.meta.defaults.title' => setting('site_homepage_title'),
+            'seotools.meta.defaults.description' => setting('site_meta_description'),
+            'seotools.meta.defaults.keywords' => [setting('site_meta_keywords')],
+            'seotools.meta.defaults.canonical' => 'current'
+        ]);
+
+        config([
+            'seotools.opengraph.defaults.title' => setting('site_homepage_title'),
+            'seotools.opengraph.defaults.description' => setting('site_meta_description'),
+            'seotools.opengraph.defaults.url' => 'current',
+            'seotools.opengraph.defaults.site_name' => setting('site_meta_siteName'),
+            'seotools.opengraph.defaults.images' => [setting('site_meta_image')],
+        ]);
+
+        config([
+            'seotools.twitter.defaults.site' => setting('site_meta_siteName')
+        ]);
+
+        config([
+            'seotools.json-ld.defaults.title' => setting('site_homepage_title'),
+            'seotools.json-ld.defaults.description' => setting('site_meta_description'),
+            'seotools.json-ld.defaults.images' => [setting('site_meta_image')],
+        ]);
     }
 }

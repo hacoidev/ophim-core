@@ -59,7 +59,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                     'tab' => 'General'
                 ]),
-                'value' => 'Ophim_TV',
+                'value' => 'Ophim.TV',
                 'active'      => 0,
             ],
             [
@@ -82,7 +82,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'textarea',
                     'tab' => 'General'
                 ]),
-                'value' => 'Ophim_TV',
+                'value' => 'Ophim.TV',
                 'active'      => 0,
             ],
             [
@@ -94,7 +94,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'textarea',
                     'tab' => 'General'
                 ]),
-                'value' => 'Ophim_TV',
+                'value' => 'Ophim.TV',
                 'active'      => 0,
             ],
             [
@@ -308,6 +308,16 @@ class SettingsTableSeeder extends Seeder
         ];
 
         $others = [
+            [
+                'key'         => 'social_facebook_app_id',
+                'description' => 'social_facebook_app_id',
+                'name'        => 'Facebook App ID',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                ]),
+                'active'      => 0,
+            ],
             [
                 'key'         => 'site_scripts_facebook_sdk',
                 'description' => 'site_scripts_facebook_sdk',
