@@ -121,6 +121,10 @@ class OphimServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/config.php' => config_path('ophim.php')
         ], 'config');
+
+        $this->publishes([
+            __DIR__ . '/../resources/views/themes/default' => resource_path('views/vendor/themes/default')
+        ], 'ophim-default-theme');
     }
 
     protected function mergeBackpackConfigs()
