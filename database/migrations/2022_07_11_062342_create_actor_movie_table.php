@@ -15,7 +15,10 @@ class CreateActorMovieTable extends Migration
     {
         Schema::create('actor_movie', function (Blueprint $table) {
             $table->unsignedBigInteger('movie_id')->index();
+            $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade');
+
             $table->unsignedBigInteger('actor_id')->index();
+            $table->foreign('actor_id')->references('id')->on('actors')->onDelete('cascade');
         });
     }
 

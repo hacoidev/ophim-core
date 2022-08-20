@@ -15,7 +15,10 @@ class CreateCategoryMovieTable extends Migration
     {
         Schema::create('category_movie', function (Blueprint $table) {
             $table->unsignedBigInteger('movie_id')->index();
+            $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade');
+            
             $table->unsignedBigInteger('category_id')->index();
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
         });
     }
 

@@ -15,7 +15,10 @@ class CreateEpisodesTable extends Migration
     {
         Schema::create('episodes', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('movie_id');
+
+            $table->unsignedBigInteger('movie_id')->index();
+            $table->foreign('movie_id')->references('id')->on('movies')->onDelete('cascade');
+
             $table->string('server');
             $table->string('name');
             $table->string('slug');
@@ -24,6 +27,7 @@ class CreateEpisodesTable extends Migration
             $table->boolean('has_report')->default(false);
             $table->string('report_message', 512)->nullable();
             $table->timestamps();
+
 
             $table->index(['movie_id', 'slug']);
         });
