@@ -7,10 +7,12 @@ use Backpack\Settings\app\Models\Setting;
 use Illuminate\Support\Facades\Route;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Http\Request;
+use Ophim\Core\Models\Theme;
 use Prologue\Alerts\Facades\Alert;
 
-class CustomizerController extends CrudController
+class ThemeManagementController extends CrudController
 {
+    use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
 
     /**
@@ -20,9 +22,10 @@ class CustomizerController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(Setting::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/customizer');
-        CRUD::setEntityNameStrings('theme customizer', 'theme customizer');
+        CRUD::setModel(Theme::class);
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/theme');
+        CRUD::setEntityNameStrings('theme', 'themes');
+        $this->crud->denyAccess('update');
     }
 
     /**
@@ -32,17 +35,11 @@ class CustomizerController extends CrudController
      * @param  string  $routeName  Prefix of the route name.
      * @param  string  $controller  Name of the current CrudController.
      */
-    protected function setupUpdateRoutes($segment, $routeName, $controller)
+    protected function setupManagementRoutes($segment, $routeName, $controller)
     {
-        Route::get($segment . '/', [
-            'as'        => $routeName . '.edit',
-            'uses'      => $controller . '@edit',
-            'operation' => 'update',
-        ]);
-
-        Route::put($segment . '/{id}', [
-            'as'        => $routeName . '.update',
-            'uses'      => $controller . '@update',
+        Route::post($segment . '/{id}/active', [
+            'as'        => $routeName . '.active',
+            'uses'      => $controller . '@active',
             'operation' => 'update',
         ]);
 
@@ -54,25 +51,60 @@ class CustomizerController extends CrudController
     }
 
     /**
+     * Define what happens when the List operation is loaded.
+     *
+     * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
+     * @return void
+     */
+    protected function setupListOperation()
+    {
+        /**
+         * Columns can be defined using the fluent syntax or array syntax:
+         * - CRUD::column('price')->type('number');
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
+         */
+
+        CRUD::addColumn(['name' => 'name', 'type' => 'text']);
+        CRUD::addColumn(['name' => 'version', 'type' => 'text']);
+        $this->crud->addButtonFromModelFunction('line', 'editBtn', 'editBtn', 'beginning');
+        $this->crud->addButtonFromModelFunction('line', 'resetBtn', 'resetBtn', 'beginning');
+        $this->crud->addButtonFromModelFunction('line', 'activeBtn', 'activeBtn', 'beginning');
+    }
+
+    /**
+     * Define what happens when the Update operation is loaded.
+     *
+     * @see https://backpackforlaravel.com/docs/crud-operation-update
+     * @return void
+     */
+    protected function setupUpdateOperation()
+    {
+        $theme = $this->crud->getEntryWithLocale($this->crud->getCurrentEntryId());
+
+        $fields = $theme->options;
+
+        CRUD::addField(['name' => 'fields', 'type' => 'hidden', 'value' => collect($fields)->implode('name', ',')]);
+
+        foreach ($fields as $field) {
+            CRUD::addField($field);
+        }
+    }
+
+
+
+    /**
      * Show the form for editing the specified resource.
      *
+     * @param  int  $id
      * @return \Illuminate\Contracts\View\View
      */
-    public function edit()
+    public function edit($id)
     {
         if (!backpack_user()->hasPermissionTo('Customize theme')) {
             abort(403);
         }
 
-        $theme = Setting::get('site_theme') ?? config('ophim.theme', 'default');
-
-        $id = Setting::firstOrCreate([
-            'key' => 'themes.' . strtolower($theme) . '.customize',
-        ], [
-            'name' => "{$theme}\'s customizer",
-            'field' => json_encode(['name' => 'value', 'type', 'hidden']),
-            'active' => false
-        ])->id;
+        $id = $this->crud->getCurrentEntryId() ?? $id;
 
         $this->data['entry'] = $this->crud->getEntryWithLocale($id);
         $this->crud->setOperationSetting('fields', $this->getUpdateFields());
@@ -82,7 +114,8 @@ class CustomizerController extends CrudController
         $this->data['title'] = $this->crud->getTitle() ?? trans('backpack::crud.edit') . ' ' . $this->crud->entity_name;
         $this->data['id'] = $id;
 
-        return view('ophim::customizer', $this->data);
+        // load the view from /resources/views/vendor/backpack/crud/ if it exists, otherwise load the one in the package
+        return view($this->crud->getEditView(), $this->data);
     }
 
     /**
@@ -114,28 +147,7 @@ class CustomizerController extends CrudController
 
         Alert::success(trans('backpack::crud.update_success'))->flash();
 
-        return redirect(backpack_url('customizer'));
-    }
-
-    /**
-     * Define what happens when the Update operation is loaded.
-     *
-     * @see https://backpackforlaravel.com/docs/crud-operation-update
-     * @return void
-     */
-    protected function setupUpdateOperation()
-    {
-        $theme = Setting::get('site_theme') ?? config('ophim.theme', 'default');
-
-        $fields = config('themes.' . $theme . '.options', []);
-
-        CRUD::addField(['name' => 'fields', 'type' => 'hidden', 'value' => collect($fields)->implode('name', ',')]);
-
-        foreach ($fields as $field) {
-            CRUD::addField($field);
-        }
-
-        $this->data['reset_form'] = $this->getResetFormHTML($theme);
+        return redirect(backpack_url('theme'));
     }
 
     /**
@@ -148,7 +160,7 @@ class CustomizerController extends CrudController
     {
         $fields = $this->crud->fields();
         $entry = ($id != false) ? $this->getEntry($id) : $this->crud->getCurrentEntry();
-        $options = json_decode($entry->value, true) ?? [];
+        $options = $entry->value ?? [];
 
         foreach ($options as $k => $v) {
             $fields[$k]['value'] = $v;
@@ -167,46 +179,41 @@ class CustomizerController extends CrudController
 
     public function reset(Request $request, $id)
     {
-        $setting = Setting::fromCache()->findByKey('id', $id);
+        $theme = Theme::fromCache()->find($id);
 
-        if (is_null($setting)) {
+        if (is_null($theme)) {
             Alert::warning("Không tìm thấy dữ liệu giao diện")->flash();
-            return redirect(backpack_url('customizer'));
+            return redirect(backpack_url('theme'));
         }
 
-        $theme = Setting::get('site_theme') ?? config('ophim.theme', 'default');
+        $fields = collect($theme->options);
 
-        $fields = collect(config('themes.' . $theme . '.options', []));
-
-        $setting->update([
+        $theme->update([
             'value' => $fields->pluck('value', 'name')->toArray()
         ]);
 
         Alert::success(trans('backpack::crud.update_success'))->flash();
 
-        return redirect(backpack_url('customizer'));
+        return redirect(backpack_url('theme'));
     }
 
-    protected function getResetFormHTML($theme)
+    public function active($id)
     {
-        $setting = Setting::fromCache()->find('themes.' . strtolower($theme) . '.customize');
+        $theme = Theme::fromCache()->find($id);
 
-        if (is_null($setting)) {
-            return;
+        if (is_null($theme)) {
+            Alert::warning("Không tìm thấy dữ liệu giao diện")->flash();
+            return redirect(backpack_url('theme'));
         }
 
-        $template = <<<EOT
-        <form action="{actionRoute}" method="post" onsubmit="return confirm('Chắc chắn muốn đặt về mặc định?');">
-            {csrfField}
-            <button class="btn btn-secondary" type="submit">{name}</button>
-        </form>
-        EOT;
+        $res = $theme->active();
 
+        if ($res) {
+            Alert::success(trans('backpack::crud.update_success'))->flash();
+        } else {
+            Alert::error(trans('backpack::crud.update_failed'))->flash();
+        }
 
-        $html = str_replace("{actionRoute}", route('customizer.reset', $setting->id), $template);
-        $html = str_replace("{csrfField}", csrf_field(), $html);
-        $html = str_replace("{name}", 'Reset to default', $html);
-
-        return $html;
+        return redirect(backpack_url('theme'));
     }
 }

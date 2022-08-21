@@ -11,6 +11,7 @@ use Ophim\Core\Database\Seeders\PermissionsSeeder;
 use Ophim\Core\Database\Seeders\RegionsTableSeeder;
 use Ophim\Core\Database\Seeders\SettingsTableSeeder;
 use Ophim\Core\Database\Seeders\ThemesTableSeeder;
+use Ophim\Core\Models\Theme;
 
 class InstallThemeCommand extends Command
 {
@@ -58,25 +59,16 @@ class InstallThemeCommand extends Command
         foreach (config('themes', []) as $key => $theme) {
             $this->progressBar->advance();
 
-            $setting = Setting::where('key', "themes.{$key}.customize")->first();
-
-            if (!is_null($setting)) {
-                continue;
-            }
-
-            $setting = Setting::firstOrCreate([
-                'key' => "themes.{$key}.customize",
-            ], [
+            Theme::firstOrCreate([
                 'name' => $theme['name'],
-                'field' => json_encode(['name' => 'value', 'type', 'hidden']),
-                'active' => false
+            ], [
+                'display_name' => $theme['display_name'] ??  $theme['name'],
+                'preview_image' => $theme['preview_image'] ?: '',
+                'author' => $theme['author'] ?: '',
+                'package_name' => $theme['package_name'],
+                'options' => $theme['options'],
             ]);
 
-            $fields = collect($theme['options']);
-
-            $setting->update([
-                'value' => $fields->pluck('value', 'name')->toArray()
-            ]);
             $this->info("Installed {$theme['name']} theme");
         }
 

@@ -3,9 +3,9 @@
 namespace Ophim\Core\Controllers\Admin;
 
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use Backpack\Settings\app\Models\Setting;
 use Illuminate\Support\Facades\Route;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Ophim\Core\Models\Plugin;
 use Prologue\Alerts\Facades\Alert;
 
 class PluginController extends CrudController
@@ -20,9 +20,10 @@ class PluginController extends CrudController
      */
     public function setup()
     {
-        CRUD::setModel(Setting::class);
+        CRUD::setModel(Plugin::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/plugin');
         CRUD::setEntityNameStrings('plugin', 'plugins');
+        $this->crud->denyAccess('update');
     }
 
     /**
@@ -37,21 +38,9 @@ class PluginController extends CrudController
             abort(403);
         }
 
-        foreach (config('plugins', []) as $plugin) {
-            Setting::firstOrCreate([
-                'key' => 'plugins.' . strtolower($plugin['name']) . '.options',
-            ], [
-                'name' => $plugin['name'],
-                'field' => json_encode(['name' => 'value', 'type', 'hidden']),
-                'group' => 'plugin',
-                'active' => false
-            ]);
-        }
-
-        $this->crud->addClause('where', 'group', 'plugin');
-        $this->crud->addClause('where', 'active', false);
-
         CRUD::column('name')->label('Plugin')->type('text');
+        CRUD::column('version')->label('Version')->type('text');
+        $this->crud->addButtonFromModelFunction('line', 'editBtn', 'editBtn', 'beginning');
     }
 
     /**

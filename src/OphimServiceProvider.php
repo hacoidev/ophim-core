@@ -8,6 +8,7 @@ use Ophim\Core\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Ophim\Core\Console\CreateUser;
 use Ophim\Core\Console\InstallCommand;
+use Ophim\Core\Console\InstallPluginCommand;
 use Ophim\Core\Console\InstallThemeCommand;
 use Ophim\Core\Console\MovieUpdateCommand;
 use Ophim\Core\Middleware\CKFinderAuth;
@@ -92,6 +93,7 @@ class OphimServiceProvider extends ServiceProvider
         $this->commands([
             InstallCommand::class,
             InstallThemeCommand::class,
+            InstallPluginCommand::class,
             CreateUser::class,
             MovieUpdateCommand::class
         ]);
@@ -162,8 +164,7 @@ class OphimServiceProvider extends ServiceProvider
             'default' => [
                 'name' => 'Mặc định',
                 'author' => 'hacoi.dev@gmail.com',
-                'description' => 'Chủ đề mặc định',
-                'version' => \PackageVersions\Versions::getVersion('hacoidev/ophim-core'),
+                'package_name' => 'hacoidev/ophim-core',
                 'preview_image' => '',
                 'options' => [
                     [

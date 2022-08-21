@@ -17,8 +17,8 @@ if (!function_exists('get_theme_option')) {
     }
 }
 
-if (!function_exists('get_addon_option')) {
-    function get_addon_option($name, $key, $fallback = null)
+if (!function_exists('get_plugin_option')) {
+    function get_plugin_option($name, $key, $fallback = null)
     {
         $setting = Setting::get('plugins.' . strtolower($name) . '.options');
 

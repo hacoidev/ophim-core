@@ -4,6 +4,7 @@ namespace Ophim\Core;
 
 use Backpack\Settings\app\Models\Setting;
 use Exception;
+use Ophim\Core\Models\Theme as ThemeModel;
 
 class Theme
 {
@@ -17,7 +18,12 @@ class Theme
     {
         $this->payload = $payload;
 
-        $this->name  = Setting::get('site_theme') ?? config('ophim.theme', 'default');
+        $this->name  = ThemeModel::getActive()->name;
+
+        if (is_null($this->name)) {
+            throw new \Exception("Not found any theme. Please install and active one.");;
+        }
+
         $this->themePath = $this->namespace . '::' . $this->name;
     }
 
