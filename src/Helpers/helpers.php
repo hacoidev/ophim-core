@@ -20,7 +20,7 @@ if (!function_exists('get_theme_option')) {
 if (!function_exists('get_addon_option')) {
     function get_addon_option($name, $key, $fallback = null)
     {
-        $setting = Setting::get('addons.' . strtolower($name) . '.options');
+        $setting = Setting::get('plugins.' . strtolower($name) . '.options');
 
         if (is_null($setting)) return $fallback;
 

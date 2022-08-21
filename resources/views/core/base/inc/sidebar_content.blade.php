@@ -6,6 +6,11 @@
 <a class='nav-link' href='{{ backpack_url('movie') }}'><i class='nav-icon la la-play-circle'></i>
     Danh sách phim</a>
 </li>
+<li class="nav-item">
+<a class="nav-link" href="{{ backpack_url('crawl-schedule') }}">
+    <i class="nav-icon la la-calendar-check-o"></i> Tự động cập nhật
+</a>
+</li>
 
 <li class="nav-item nav-dropdown"><a class="nav-link nav-dropdown-toggle" href="#"><i
         class="nav-icon la la-list"></i> Phân loại</a>
@@ -32,31 +37,6 @@
 <a class='nav-link' href='{{ backpack_url('episode') }}'><i class='nav-icon la la-info-circle'></i>
     Phim lỗi</a>
 </li>
-
-@if (!empty(config('ophim.updaters', [])))
-<li class="nav-title">Trình cập nhật</li>
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url('crawl-schedule') }}"><i
-            class="nav-icon la la-calendar-check-o"></i> Tự động cập nhật</a></li>
-
-<li class="nav-item nav-dropdown">
-    <a class="nav-link nav-dropdown-toggle" href="#">
-        <i class="nav-icon la la-lg la-hand-pointer-o"></i>
-        Crawler
-    </a>
-    <ul class="nav-dropdown-items">
-        @foreach (config('ophim.updaters', []) as $crawler)
-            <li class="nav-item">
-                <a class="nav-link" href="{{ $crawler['index'] }}">
-                    <i class="nav-icon la la-lg la-cursor"></i>
-                    {{ $crawler['name'] }}
-                </a>
-            </li>
-        @endforeach
-    </ul>
-</li>
-<li class="nav-item"><a class="nav-link" href="{{ backpack_url('crawler-settings') }}"><i
-            class="nav-icon la la-cogs"></i>Cấu hình</a></li>
-@endif
 
 <li class="nav-title">Tuỳ chỉnh</li>
 <li class="nav-item nav-dropdown"><a class="nav-link nav-dropdown-toggle" href="#"><i
@@ -91,6 +71,14 @@
             <span>Khác</span></a></li>
 </ul>
 </li>
+
+<li class="nav-title">Mở rộng</li>
+<li class="nav-item">
+<a class="nav-link" href="{{ backpack_url('plugin') }}">
+    <i class="nav-icon la la-plug"></i> Tiện ích
+</a>
+</li>
+
 @if (backpack_user()->hasRole('Admin'))
 <li class="nav-title">{{ trans('backpack::base.administration') }}</li>
 <li class="nav-item nav-dropdown">

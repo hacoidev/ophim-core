@@ -70,7 +70,8 @@ class PermissionsSeeder extends Seeder
             'Update menu',
             'Delete menu',
             'Delete menu item',
-            'Config crawler',
+            'Browse plugin',
+            'Update plugin',
             'Customize theme',
         ];
 

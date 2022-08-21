@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Prologue\Alerts\Facades\Alert;
 
-class CrawlerSettingController extends CrudController
+class PluginController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
@@ -21,8 +21,8 @@ class CrawlerSettingController extends CrudController
     public function setup()
     {
         CRUD::setModel(Setting::class);
-        CRUD::setRoute(config('backpack.base.route_prefix') . '/crawler-settings');
-        CRUD::setEntityNameStrings('crawler setting', 'crawler setting');
+        CRUD::setRoute(config('backpack.base.route_prefix') . '/plugin');
+        CRUD::setEntityNameStrings('plugin', 'plugins');
     }
 
     /**
@@ -33,25 +33,25 @@ class CrawlerSettingController extends CrudController
      */
     protected function setupListOperation()
     {
-        if (!backpack_user()->hasPermissionTo('Config crawler')) {
+        if (!backpack_user()->hasPermissionTo('Browse plugin')) {
             abort(403);
         }
 
-        foreach (config('ophim.updaters', []) as $crawler) {
+        foreach (config('plugins', []) as $plugin) {
             Setting::firstOrCreate([
-                'key' => 'addons.' . strtolower($crawler['name']) . '.options',
+                'key' => 'plugins.' . strtolower($plugin['name']) . '.options',
             ], [
-                'name' => $crawler['name'],
+                'name' => $plugin['name'],
                 'field' => json_encode(['name' => 'value', 'type', 'hidden']),
-                'group' => 'crawler',
+                'group' => 'plugin',
                 'active' => false
             ]);
         }
 
-        $this->crud->addClause('where', 'group', 'crawler');
+        $this->crud->addClause('where', 'group', 'plugin');
         $this->crud->addClause('where', 'active', false);
 
-        CRUD::column('name')->label('Crawler')->type('text');
+        CRUD::column('name')->label('Plugin')->type('text');
     }
 
     /**
@@ -83,22 +83,22 @@ class CrawlerSettingController extends CrudController
      */
     public function edit($id)
     {
-        if (!backpack_user()->hasPermissionTo('Config crawler')) {
+        if (!backpack_user()->hasPermissionTo('Update plugin')) {
             abort(403);
         }
 
         $this->data['entry'] = $this->crud->getEntryWithLocale($id);
 
-        $crawlers = collect(config('ophim.updaters', []));
+        $plugins = collect(config('plugins', []));
 
-        $crawler = $crawlers->filter(function ($v, $k) {
-            return 'addons.' . strtolower($v['name']) . '.options' === $this->data['entry']->key;
+        $plugin = $plugins->filter(function ($v, $k) {
+            return 'plugins.' . strtolower($v['name']) . '.options' === $this->data['entry']->key;
         })->first();
 
-        if (isset($crawler['options']) && is_array($crawler['options'])) {
-            CRUD::addField(['name' => 'fields', 'type' => 'hidden', 'value' => collect($crawler['options'])->implode('name', ',')]);
+        if (isset($plugin['options']) && is_array($plugin['options'])) {
+            CRUD::addField(['name' => 'fields', 'type' => 'hidden', 'value' => collect($plugin['options'])->implode('name', ',')]);
 
-            foreach ($crawler['options'] as $field) {
+            foreach ($plugin['options'] as $field) {
                 CRUD::addField($field);
             }
         }
@@ -119,9 +119,9 @@ class CrawlerSettingController extends CrudController
      *
      * @return array|\Illuminate\Http\RedirectResponse
      */
-    public function update($crawler)
+    public function update($plugin)
     {
-        if (!backpack_user()->hasPermissionTo('Config crawler')) {
+        if (!backpack_user()->hasPermissionTo('Update plugin')) {
             abort(403);
         }
 
@@ -143,7 +143,7 @@ class CrawlerSettingController extends CrudController
         // show a success message
         Alert::success(trans('backpack::crud.update_success'))->flash();
 
-        return redirect(backpack_url('crawler-settings'));
+        return redirect(backpack_url('plugin'));
     }
 
     /**
