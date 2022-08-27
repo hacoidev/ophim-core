@@ -29,6 +29,7 @@ Route::group([
     Route::crud('episode', 'EpisodeCrudController');
     Route::crud('theme', 'ThemeManagementController');
     Route::crud('plugin', 'PluginController');
+    Route::crud('site-map', 'SiteMapController');
 });
 
 Route::group([
