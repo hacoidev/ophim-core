@@ -16,7 +16,8 @@
         "hacoidev/settings": "dev-main",
         "hacoidev/logmanager": "dev-main",
         "hacoidev/permissionmanager": "dev-main",
-        "hacoidev/laravel-caching-model": "dev-main"
+        "hacoidev/laravel-caching-model": "dev-main",
+        "spatie/laravel-sitemap": "^5.8"
     },
     "license": "MIT",
     "autoload": {
