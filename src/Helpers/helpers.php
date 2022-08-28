@@ -1,31 +1,30 @@
 <?php
 
-use Backpack\Settings\app\Models\Setting;
+use Ophim\Core\Models\Plugin;
+use Ophim\Core\Models\Theme;
 
 if (!function_exists('get_theme_option')) {
     function get_theme_option($key, $fallback = null)
     {
-        $theme = Setting::get('site_theme') ?? config('ophim.theme', 'default');
+        $theme = Theme::getActivatedTheme();
 
-        $setting = Setting::get('themes.' . $theme . '.customize');
+        if (is_null($theme)) return $fallback;
 
-        if (is_null($setting)) return $fallback;
+        $props = collect(array_merge($theme->options ?? [], $theme->value ?? []));
 
-        $props = json_decode($setting, true);
-
-        return isset($props[$key]) ? $props[$key] : $fallback;
+        return $props->firstWhere('name', $key)['value'] ?? $fallback;
     }
 }
 
 if (!function_exists('get_plugin_option')) {
     function get_plugin_option($name, $key, $fallback = null)
     {
-        $setting = Setting::get('plugins.' . strtolower($name) . '.options');
+        $plugin = Plugin::where('name', $name)->first();
 
-        if (is_null($setting)) return $fallback;
+        if (is_null($plugin)) return $fallback;
 
-        $props = json_decode($setting, true);
+        $props = collect(array_merge($plugin->options ?? [], $plugin->value ?? []));
 
-        return isset($props[$key]) ? $props[$key] : $fallback;
+        return $props->firstWhere('name', $key)['value'] ?? $fallback;
     }
 }

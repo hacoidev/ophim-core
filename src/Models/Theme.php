@@ -43,7 +43,7 @@ class Theme extends Model implements Cacheable
         'value' => 'array',
     ];
 
-    public static function getActive(): self
+    public static function getActivatedTheme(): ?self
     {
         return Theme::where('active', true)->first() ?: Theme::first();
     }
@@ -102,6 +102,6 @@ class Theme extends Model implements Cacheable
     {
         static::where('active', true)->update(['active' => false]);
 
-        return $this->update(['active', true]);
+        return $this->update(['active' => true]);
     }
 }

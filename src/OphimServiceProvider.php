@@ -21,6 +21,7 @@ use Ophim\Core\Models\Movie;
 use Ophim\Core\Models\Region;
 use Ophim\Core\Models\Studio;
 use Ophim\Core\Models\Tag;
+use Ophim\Core\Models\Theme;
 use Ophim\Core\Policies\ActorPolicy;
 use Ophim\Core\Policies\CategoryPolicy;
 use Ophim\Core\Policies\CrawlSchedulePolicy;
@@ -59,8 +60,6 @@ class OphimServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'ophim');
 
-        $this->setupDefaultThemeCustomizer();
-
         $this->mergeBackpackConfigs();
 
         $this->mergeCkfinderConfigs();
@@ -72,15 +71,26 @@ class OphimServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        foreach (glob(__DIR__ . '/Helpers/*.php') as $filename) {
-            require_once $filename;
+        try {
+            foreach (glob(__DIR__ . '/Helpers/*.php') as $filename) {
+                require_once $filename;
+            }
+        } catch (\Exception $e) {
+            //throw $e;
         }
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/admin.php');
 
-        if (config('ophim.loadRoutes')) {
-            $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
-        }
+        $this->app->booted(function () {
+            try {
+                $activatedTheme = Theme::getActivatedTheme();
+                if ($activatedTheme && file_exists($routeFile = base_path('vendor/' . $activatedTheme->package_name . '/routes/web.php'))) {
+                    $this->loadRoutesFrom($routeFile);
+                }
+            } catch (\Exception $e) {
+                // Log
+            }
+        });
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
@@ -97,10 +107,6 @@ class OphimServiceProvider extends ServiceProvider
             CreateUser::class,
             MovieUpdateCommand::class
         ]);
-
-        $this->app->bind(Theme::class, function ($app) {
-            return new Theme();
-        });
 
         $this->bootSeoDefaults();
     }
@@ -156,121 +162,6 @@ class OphimServiceProvider extends ServiceProvider
     {
         config(['ckfinder.authentication' => CKFinderAuth::class]);
         config(['ckfinder.backends.default' => config('ophim.ckfinder.backends')]);
-    }
-
-    protected function setupDefaultThemeCustomizer()
-    {
-        config(['themes' => array_merge(config('themes', []), [
-            'default' => [
-                'name' => 'Mặc định',
-                'author' => 'hacoi.dev@gmail.com',
-                'package_name' => 'hacoidev/ophim-core',
-                'preview_image' => '',
-                'options' => [
-                    [
-                        'name' => 'latest',
-                        'label' => 'Danh sách mới cập nhật',
-                        'type' => 'code',
-                        'hint' => 'display_label|relation|find_by_field|value|limit|show_more_url',
-                        'value' => 'Phim bộ mới||type|series|8|/danh-sach/phim-bo',
-                        'attributes' => [
-                            'rows' => 5
-                        ],
-                        'tab' => 'List'
-                    ],
-                    [
-                        'name' => 'hotest',
-                        'label' => 'Danh sách hot',
-                        'type' => 'code',
-                        'hint' => 'Label|relation|find_by_field|value|sort_by_field|sort_algo|limit',
-                        'value' => 'Top phim bộ||type|series|view_total|desc|4',
-                        'attributes' => [
-                            'rows' => 5
-                        ],
-                        'tab' => 'List'
-                    ],
-                    [
-                        'name' => 'additional_css',
-                        'label' => 'Additional CSS',
-                        'type' => 'code',
-                        'value' => "",
-                        'tab' => 'Custom CSS'
-                    ],
-                    [
-                        'name' => 'body_attributes',
-                        'label' => 'Body attributes',
-                        'type' => 'text',
-                        'value' => "class='bg-slate-800 font-sans leading-normal tracking-normal'",
-                        'tab' => 'Custom CSS'
-                    ],
-                    [
-                        'name' => 'additional_header_js',
-                        'label' => 'Header JS',
-                        'type' => 'code',
-                        'value' => "",
-                        'tab' => 'Custom JS'
-                    ],
-                    [
-                        'name' => 'additional_body_js',
-                        'label' => 'Body JS',
-                        'type' => 'code',
-                        'value' => "",
-                        'tab' => 'Custom JS'
-                    ],
-                    [
-                        'name' => 'additional_footer_js',
-                        'label' => 'Footer JS',
-                        'type' => 'code',
-                        'value' => "",
-                        'tab' => 'Custom JS'
-                    ],
-                    [
-                        'name' => 'footer',
-                        'label' => 'Footer',
-                        'type' => 'code',
-                        'value' => <<<EOT
-                        <div class="w-full mx-auto flex flex-wrap">
-                            <div class="flex w-full">
-                                <div class="px-2"><span class="font-bold text-gray-100">Giới Thiệu...</span>
-                                    <p class="text-gray-300 text-sm">Xem phim online chất lượng cao miễn phí với phụ đề tiếng
-                                        việt - thuyết minh - lồng tiếng, có nhiều thể loại phim phong phú, đặc sắc,
-                                        nhiều bộ phim hay nhất - mới nhất.</p>
-                                    <p class="text-gray-300 text-sm">Website với giao diện trực quan, thuận tiện,
-                                        tốc độ tải nhanh, ít quảng cáo hứa hẹn sẽ đem lại những trải nghiệm tốt cho người dùng.
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="flex">
-                                <div class="px-2 space-x-2"><a class="text-gray-500">Liên Hệ</a>
-                                    <a class="text-[#44e2ff] hover:text-yellow-300" href="/ban-quyen">Khiếu nại bản
-                                        quyền</a>
-                                </div>
-                            </div>
-                        </div>
-                        EOT,
-                        'tab' => 'Custom HTML'
-                    ],
-                    [
-                        'name' => 'ads_header',
-                        'label' => 'Ads header',
-                        'type' => 'code',
-                        'value' => <<<EOT
-                        <img src="" alt="">
-                        EOT,
-                        'tab' => 'Ads'
-                    ],
-                    [
-                        'name' => 'ads_catfish',
-                        'label' => 'Ads catfish',
-                        'type' => 'code',
-                        'value' => <<<EOT
-                        <img src="" alt="">
-                        EOT,
-                        'tab' => 'Ads'
-                    ]
-                ],
-            ]
-        ])]);
     }
 
     protected function mergePolicies()

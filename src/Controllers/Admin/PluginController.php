@@ -5,6 +5,7 @@ namespace Ophim\Core\Controllers\Admin;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Illuminate\Support\Facades\Route;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Facades\Artisan;
 use Ophim\Core\Models\Plugin;
 use Prologue\Alerts\Facades\Alert;
 
@@ -41,28 +42,34 @@ class PluginController extends CrudController
         CRUD::column('name')->label('Plugin')->type('text');
         CRUD::column('version')->label('Version')->type('text');
         $this->crud->addButtonFromModelFunction('line', 'editBtn', 'editBtn', 'beginning');
+        $this->crud->addButtonFromModelFunction('line', 'openBtn', 'openBtn', 'beginning');
     }
 
     /**
-     * Define which routes are needed for this operation.
+     * Define what happens when the Update operation is loaded.
      *
-     * @param  string  $name  Name of the current entity (singular). Used as first URL segment.
-     * @param  string  $routeName  Prefix of the route name.
-     * @param  string  $controller  Name of the current CrudController.
+     * @see https://backpackforlaravel.com/docs/crud-operation-update
+     * @return void
      */
-    protected function setupUpdateRoutes($segment, $routeName, $controller)
+    protected function setupUpdateOperation()
     {
-        Route::get($segment . '/{id}/edit', [
-            'as'        => $routeName . '.edit',
-            'uses'      => $controller . '@edit',
-            'operation' => 'update',
-        ]);
+        $plugin = $this->crud->getEntryWithLocale($this->crud->getCurrentEntryId());
 
-        Route::put($segment . '/{id}', [
-            'as'        => $routeName . '.update',
-            'uses'      => $controller . '@update',
-            'operation' => 'update',
-        ]);
+        $fields = $plugin->options;
+
+        CRUD::addField(['name' => 'fields', 'type' => 'hidden', 'value' => collect($fields)->implode('name', ',')]);
+
+        foreach ($fields as $field) {
+            CRUD::addField($field);
+        }
+    }
+
+    public function show($id)
+    {
+        /** @var Plugin */
+        $plugin = Plugin::findOrFail($id);
+
+        return $plugin->open();
     }
 
     /**
@@ -75,23 +82,9 @@ class PluginController extends CrudController
         if (!backpack_user()->hasPermissionTo('Update plugin')) {
             abort(403);
         }
+        $id = $this->crud->getCurrentEntryId() ?? $id;
 
         $this->data['entry'] = $this->crud->getEntryWithLocale($id);
-
-        $plugins = collect(config('plugins', []));
-
-        $plugin = $plugins->filter(function ($v, $k) {
-            return 'plugins.' . strtolower($v['name']) . '.options' === $this->data['entry']->key;
-        })->first();
-
-        if (isset($plugin['options']) && is_array($plugin['options'])) {
-            CRUD::addField(['name' => 'fields', 'type' => 'hidden', 'value' => collect($plugin['options'])->implode('name', ',')]);
-
-            foreach ($plugin['options'] as $field) {
-                CRUD::addField($field);
-            }
-        }
-
         $this->crud->setOperationSetting('fields', $this->getUpdateFields());
 
         $this->data['crud'] = $this->crud;
@@ -99,7 +92,7 @@ class PluginController extends CrudController
         $this->data['title'] = $this->crud->getTitle() ?? trans('backpack::crud.edit') . ' ' . $this->crud->entity_name;
         $this->data['id'] = $id;
 
-        // load the view from /resources/views/vendor/hacoidev/crud/ if it exists, otherwise load the one in the package
+        // load the view from /resources/views/vendor/backpack/crud/ if it exists, otherwise load the one in the package
         return view($this->crud->getEditView(), $this->data);
     }
 
@@ -124,7 +117,7 @@ class PluginController extends CrudController
         $item = $this->crud->update(
             $request->get($this->crud->model->getKeyName()),
             [
-                'value' => json_encode(request()->only(explode(',', request('fields'))))
+                'value' => request()->only(explode(',', request('fields')))
             ]
         );
         $this->data['entry'] = $this->crud->entry = $item;
@@ -145,7 +138,7 @@ class PluginController extends CrudController
     {
         $fields = $this->crud->fields();
         $entry = ($id != false) ? $this->getEntry($id) : $this->crud->getCurrentEntry();
-        $options = json_decode($entry->value, true) ?? [];
+        $options = $entry->value ?? [];
 
         foreach ($options as $k => $v) {
             $fields[$k]['value'] = $v;

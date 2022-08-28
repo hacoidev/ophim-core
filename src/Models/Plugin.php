@@ -38,7 +38,11 @@ class Plugin extends Model implements Cacheable
     // protected $fillable = [];
     // protected $hidden = [];
     // protected $dates = [];
-
+    protected $casts = [
+        'options' => 'array',
+        'value' => 'array'
+    ];
+ 
     public function getVersionAttribute()
     {
         if (!\Composer\InstalledVersions::isInstalled($this->package_name)) {
@@ -50,6 +54,11 @@ class Plugin extends Model implements Cacheable
 
     public function editBtn($crud = false)
     {
-        return '<a href="' . backpack_url("plugin/{$this->id}/edit") . '" class="btn btn-primary">Edit</a>';
+        return '<a href="' . backpack_url("plugin/{$this->id}/edit") . '" class="btn btn-primary"><i class="la la-cog"></i></a>';
+    }
+
+    public function openBtn($crud = false)
+    {
+        return '<a href="' . $this->entry_point ?? '#' . '" class="btn btn-info"><i class="la la-arrows-alt"></i></a>';
     }
 }

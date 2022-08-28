@@ -57,7 +57,7 @@ class InstallPluginCommand extends Command
                 'display_name' => $plugin['display_name'] ??  $plugin['name'],
                 'author' => $plugin['author'] ?? '',
                 'package_name' => $plugin['package_name'],
-                'handler' => $plugin['handler'],
+                'entry_point' => $plugin['entry_point'] ?? '/',
                 'options' => $plugin['options'],
             ]);
 

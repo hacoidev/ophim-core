@@ -19,7 +19,7 @@ class CreatePluginsTable extends Migration
             $table->string('display_name');
             $table->string('author');
             $table->string('package_name');
-            $table->string('handler', 2048);
+            $table->string('entry_point', 2048);
             $table->text('options')->nullable();
             $table->text('value')->nullable();
             $table->boolean('active')->default(true);
