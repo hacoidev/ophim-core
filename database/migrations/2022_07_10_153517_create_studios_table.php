@@ -19,6 +19,9 @@ class CreateStudiosTable extends Migration
             $table->string('name_md5')->unique();
             $table->string('slug')->index();
             $table->string('thumb_url', 2048)->nullable();
+            $table->string('seo_title')->nullable();
+            $table->string('seo_des')->nullable();
+            $table->string('seo_key')->nullable();
             $table->timestamps();
         });
     }

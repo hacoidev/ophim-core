@@ -22,7 +22,7 @@ class CreateThemesTable extends Migration
             $table->string('package_name');
             $table->text('options')->nullable();
             $table->text('value')->nullable();
-            $table->boolean('active')->default(true);
+            $table->boolean('active')->default(false);
             $table->timestamps();
         });
     }

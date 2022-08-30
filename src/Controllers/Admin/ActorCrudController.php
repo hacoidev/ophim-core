@@ -42,11 +42,6 @@ class ActorCrudController extends CrudController
     {
         $this->authorize('browse', Actor::class);
 
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
         CRUD::addColumn(['name' => 'name', 'label' => 'Tên', 'type' => 'text']);
         CRUD::addColumn(['name' => 'slug', 'label' => 'Đường dẫn tĩnh', 'type' => 'text']);
         CRUD::addColumn(['name' => 'gender', 'label' => 'Giới tính', 'type' => 'text']);
@@ -64,12 +59,6 @@ class ActorCrudController extends CrudController
         $this->authorize('create', Actor::class);
 
         CRUD::setValidation(ActorRequest::class);
-
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number']);
-         */
 
         CRUD::addField(['name' => 'name', 'label' => 'Tên', 'type' => 'text']);
         CRUD::addField(['name' => 'slug', 'label' => 'Đường dẫn tĩnh', 'type' => 'text']);
@@ -93,7 +82,6 @@ class ActorCrudController extends CrudController
     protected function setupUpdateOperation()
     {
         $this->authorize('update', $this->crud->getEntryWithLocale($this->crud->getCurrentEntryId()));
-
 
         $this->setupCreateOperation();
     }

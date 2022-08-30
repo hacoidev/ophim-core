@@ -94,6 +94,7 @@ class InstallCommand extends Command
 
         $this->call('vendor:publish', [
             '--tag' => 'cms_menu_content',
+            '--force' => true
         ]);
         $this->progressBar->advance();
         $this->newLine(1);

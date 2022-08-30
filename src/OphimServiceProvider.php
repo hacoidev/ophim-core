@@ -8,9 +8,7 @@ use Ophim\Core\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Ophim\Core\Console\CreateUser;
 use Ophim\Core\Console\InstallCommand;
-use Ophim\Core\Console\InstallPluginCommand;
 use Ophim\Core\Console\InstallThemeCommand;
-use Ophim\Core\Console\MovieUpdateCommand;
 use Ophim\Core\Middleware\CKFinderAuth;
 use Ophim\Core\Models\Actor;
 use Ophim\Core\Models\Category;
@@ -103,9 +101,7 @@ class OphimServiceProvider extends ServiceProvider
         $this->commands([
             InstallCommand::class,
             InstallThemeCommand::class,
-            InstallPluginCommand::class,
             CreateUser::class,
-            MovieUpdateCommand::class
         ]);
 
         $this->bootSeoDefaults();
@@ -129,10 +125,6 @@ class OphimServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../config/config.php' => config_path('ophim.php')
         ], 'config');
-
-        $this->publishes([
-            __DIR__ . '/../resources/views/themes/default' => resource_path('views/vendor/themes/default')
-        ], 'ophim-default-theme');
     }
 
     protected function mergeBackpackConfigs()

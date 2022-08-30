@@ -67,7 +67,7 @@ class Episode extends Model implements Cacheable, HasUrlInterface, SeoInterface
     public function generateSeoTags()
     {
         SEOMeta::setTitle($this->getTitle())
-            ->setDescription(Str::limit($this->movie->content, 150, '...'))
+            ->setDescription(Str::limit(strip_tags($this->movie->content), 150, '...'))
             ->addKeyword($this->movie->tags()->pluck('name')->toArray())
             ->setCanonical($this->getUrl())
             ->setPrev(request()->root())
@@ -79,14 +79,14 @@ class Episode extends Model implements Cacheable, HasUrlInterface, SeoInterface
             ->addProperty('type', 'episode')
             ->addProperty('locale', 'vi-VN')
             ->setUrl($this->getUrl())
-            ->setDescription(Str::limit($this->movie->content, 150, '...'))
+            ->setDescription(Str::limit(strip_tags($this->movie->content), 150, '...'))
             ->addImages([$this->thumb_url, $this->poster_url]);
 
         TwitterCard::setSite(setting('site_meta_siteName'))
             ->setTitle($this->getTitle())
             ->setType('episode')
             ->setImages([$this->movie->thumb_url, $this->movie->poster_url])
-            ->setDescription(Str::limit($this->movie->content, 150, '...'))
+            ->setDescription(Str::limit(strip_tags($this->movie->content), 150, '...'))
             ->setUrl($this->getUrl());
         // ->addValue($key, $value);
 
@@ -94,7 +94,8 @@ class Episode extends Model implements Cacheable, HasUrlInterface, SeoInterface
             ->setSite(setting('site_meta_siteName'))
             ->setTitle($this->getTitle())
             ->setType('episode')
-            ->setDescription(Str::limit($this->movie->content, 150, '...'))
+            ->setImages([$this->movie->thumb_url, $this->movie->poster_url])
+            ->setDescription(Str::limit(strip_tags($this->movie->content), 150, '...'))
             ->setUrl($this->getUrl());
         // ->addValue($key, $value);
     }

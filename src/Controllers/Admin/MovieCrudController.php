@@ -6,7 +6,6 @@ use Ophim\Core\Requests\MovieRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use Ophim\Core\Models\Actor;
 use Ophim\Core\Models\Director;
 use Ophim\Core\Models\Movie;

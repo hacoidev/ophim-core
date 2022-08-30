@@ -28,7 +28,6 @@ class CreateEpisodesTable extends Migration
             $table->string('report_message', 512)->nullable();
             $table->timestamps();
 
-
             $table->index(['movie_id', 'slug']);
         });
     }

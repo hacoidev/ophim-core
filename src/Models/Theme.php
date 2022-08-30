@@ -3,21 +3,11 @@
 namespace Ophim\Core\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Backpack\Settings\app\Models\Setting;
-use Ophim\Core\Contracts\TaxonomyInterface;
 use Hacoidev\CachingModel\Contracts\Cacheable;
 use Hacoidev\CachingModel\HasCache;
 use Illuminate\Database\Eloquent\Model;
-use Ophim\Core\Contracts\SeoInterface;
+use Illuminate\Support\Facades\Artisan;
 use Ophim\Core\Traits\HasFactory;
-use Ophim\Core\Traits\HasTitle;
-use Ophim\Core\Traits\HasUniqueName;
-use Ophim\Core\Traits\Sluggable;
-use Illuminate\Support\Str;
-use Artesaos\SEOTools\Facades\JsonLdMulti;
-use Artesaos\SEOTools\Facades\OpenGraph;
-use Artesaos\SEOTools\Facades\SEOMeta;
-use Artesaos\SEOTools\Facades\TwitterCard;
 
 class Theme extends Model implements Cacheable
 {
@@ -67,7 +57,7 @@ class Theme extends Model implements Cacheable
         if ($this->active) return '<button class="btn btn-secondary">Activated</button>';
 
         $template = <<<EOT
-        <form action="{actionRoute}" method="post" onsubmit="return confirm('Chắc chắn muốn đặt về mặc định?');" style="display: inline">
+        <form action="{actionRoute}" method="post" onsubmit="return confirm('Chắc chắn muốn kích hoạt giao diện {display_name}?');" style="display: inline">
             {csrfField}
             <button class="btn {btnType}" type="submit">{name}</button>
         </form>
@@ -76,6 +66,7 @@ class Theme extends Model implements Cacheable
         $html = str_replace("{actionRoute}", backpack_url("theme/{$this->id}/active"), $template);
         $html = str_replace("{csrfField}", csrf_field(), $html);
         $html = str_replace("{btnType}", 'btn-primary', $html);
+        $html = str_replace("{display_name}", $this->display_name, $html);
         $html = str_replace("{name}", 'Active', $html);
 
         return $html;
@@ -101,6 +92,15 @@ class Theme extends Model implements Cacheable
     public function active()
     {
         static::where('active', true)->update(['active' => false]);
+
+        $publishTags = config('themes', [])[$this->name]['publishes'] ?? [];
+
+        foreach ($publishTags as $tag) {
+            Artisan::call('vendor:publish', [
+                '--tag' => $tag,
+                '--force' => true
+            ]);
+        }
 
         return $this->update(['active' => true]);
     }

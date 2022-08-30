@@ -1,7 +1,6 @@
 <?php
 
 return [
-    'loadRoutes' => env('OPHIM_LOAD_ROUTES', true),
     'episodes' => [
         'types' => [
             'embed' => 'Nhúng',

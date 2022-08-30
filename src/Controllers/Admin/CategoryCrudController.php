@@ -42,11 +42,6 @@ class CategoryCrudController extends CrudController
     {
         $this->authorize('browse', Category::class);
 
-        /**
-         * Columns can be defined using the fluent syntax or array syntax:
-         * - CRUD::column('price')->label('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
-         */
         CRUD::column('name')->label('Tên')->type('text');
         CRUD::column('slug')->label('Đường dẫn tĩnh')->type('text');
         CRUD::column('seo_title')->label('SEO Title')->type('text');
@@ -66,11 +61,6 @@ class CategoryCrudController extends CrudController
 
         CRUD::setValidation(CategoryRequest::class);
 
-        /**
-         * Fields can be defined using the fluent syntax or array syntax:
-         * - CRUD::field('price')->label('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
-         */
         CRUD::field('name')->label('Tên')->type('text');
         CRUD::field('slug')->label('Đường dẫn tĩnh')->type('text');
         CRUD::field('seo_title')->label('SEO Title')->type('text');

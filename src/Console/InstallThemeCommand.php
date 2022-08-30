@@ -2,15 +2,7 @@
 
 namespace Ophim\Core\Console;
 
-use Backpack\Settings\app\Models\Setting;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
-use Ophim\Core\Database\Seeders\CategoriesTableSeeder;
-use Ophim\Core\Database\Seeders\MenusTableSeeder;
-use Ophim\Core\Database\Seeders\PermissionsSeeder;
-use Ophim\Core\Database\Seeders\RegionsTableSeeder;
-use Ophim\Core\Database\Seeders\SettingsTableSeeder;
-use Ophim\Core\Database\Seeders\ThemesTableSeeder;
 use Ophim\Core\Models\Theme;
 
 class InstallThemeCommand extends Command
@@ -60,7 +52,7 @@ class InstallThemeCommand extends Command
             $this->progressBar->advance();
 
             Theme::firstOrCreate([
-                'name' => $theme['name'],
+                'name' => $key,
             ], [
                 'display_name' => $theme['display_name'] ??  $theme['name'],
                 'preview_image' => $theme['preview_image'] ?: '',

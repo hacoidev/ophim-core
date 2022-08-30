@@ -6,11 +6,6 @@
     <a class='nav-link' href='{{ backpack_url('movie') }}'><i class='nav-icon la la-play-circle'></i>
         Danh sách phim</a>
 </li>
-<li class="nav-item">
-    <a class="nav-link" href="{{ backpack_url('crawl-schedule') }}">
-        <i class="nav-icon la la-calendar-check-o"></i> Tự động cập nhật
-    </a>
-</li>
 
 <li class="nav-item nav-dropdown"><a class="nav-link nav-dropdown-toggle" href="#"><i
             class="nav-icon la la-list"></i> Phân loại</a>
@@ -69,11 +64,18 @@
 </li>
 
 <li class="nav-title">Mở rộng</li>
-<li class="nav-item">
-    <a class="nav-link" href="{{ backpack_url('plugin') }}">
-        <i class="nav-icon la la-plug"></i> Tiện ích
-    </a>
-</li>
+@foreach (config('plugins', []) as $plugin)
+    <li class="nav-item nav-dropdown"><a class="nav-link nav-dropdown-toggle" href="#">
+            <i class="nav-icon {{ $plugin['icon'] ?? '' }}"></i> {{ $plugin['name'] ?? '' }}</a>
+        <ul class="nav-dropdown-items">
+            @foreach ($plugin['entries'] ?? [] as $entry)
+                <li class='nav-item'><a class='nav-link' href='{{ $entry['url'] ?? '#' }}'>
+                        <i class='nav-icon {{ $entry['icon'] ?? '' }}'></i>
+                        <span>{{ $entry['name'] ?? '' }}</span></a></li>
+            @endforeach
+        </ul>
+    </li>
+@endforeach
 
 @if (backpack_user()->hasRole('Admin'))
     <li class="nav-title">{{ trans('backpack::base.administration') }}</li>
@@ -88,8 +90,4 @@
                         class="nav-icon la la-id-badge"></i> <span>Roles</span></a></li>
         </ul>
     </li>
-
-    <li class='nav-item'><a class='nav-link' href='{{ backpack_url('log') }}'><i
-                class='nav-icon la la-terminal'></i>
-            Logs</a></li>
 @endif

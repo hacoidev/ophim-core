@@ -1,6 +1,6 @@
 <?php
 
-use Ophim\Core\Models\Plugin;
+use Backpack\Settings\app\Models\Setting;
 use Ophim\Core\Models\Theme;
 
 if (!function_exists('get_theme_option')) {
@@ -10,7 +10,7 @@ if (!function_exists('get_theme_option')) {
 
         if (is_null($theme)) return $fallback;
 
-        $props = collect(array_merge($theme->options ?? [], $theme->value ?? []));
+        $props = collect(array_merge($theme->options ?? [], is_array($theme->value) ? $theme->value : []));
 
         return $props->firstWhere('name', $key)['value'] ?? $fallback;
     }
@@ -19,12 +19,10 @@ if (!function_exists('get_theme_option')) {
 if (!function_exists('get_plugin_option')) {
     function get_plugin_option($name, $key, $fallback = null)
     {
-        $plugin = Plugin::where('name', $name)->first();
+        $setting = Setting::where('key', 'plugin_option_' . $name)->first();
 
-        if (is_null($plugin)) return $fallback;
+        if (is_null($setting)) return $fallback;
 
-        $props = collect(array_merge($plugin->options ?? [], $plugin->value ?? []));
-
-        return $props->firstWhere('name', $key)['value'] ?? $fallback;
+        return $setting->value[$key] ?? $fallback;
     }
 }

@@ -15,8 +15,8 @@ class CreateMoviesTable extends Migration
     {
         Schema::create('movies', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('origin_name');
+            $table->string('name', 1024);
+            $table->string('origin_name', 1024);
             $table->string('slug')->unique();
             $table->text('content')->nullable();
             $table->string('thumb_url', 2048)->nullable();
@@ -28,7 +28,7 @@ class CreateMoviesTable extends Migration
             $table->string('episode_current')->nullable();
             $table->string('episode_total')->nullable();
             $table->string('quality')->nullable()->default('HD');
-            $table->string('language')->nullable()->default('Tiếng Việt');
+            $table->string('language')->nullable()->default('Vietsub');
             $table->string('notify', 512)->nullable();
             $table->string('showtimes', 512)->nullable();
             $table->integer('publish_year')->index()->nullable();
@@ -49,7 +49,7 @@ class CreateMoviesTable extends Migration
 
             $table->string('update_handler', 1024)->nullable();
             $table->string('update_url', 2048)->nullable();
-            
+
             $table->unsignedBigInteger('user_id')->nullable()->index();
             $table->string('user_name')->nullable();
             $table->timestamps();

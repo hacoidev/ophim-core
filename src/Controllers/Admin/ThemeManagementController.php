@@ -3,7 +3,6 @@
 namespace Ophim\Core\Controllers\Admin;
 
 use Backpack\CRUD\app\Http\Controllers\CrudController;
-use Backpack\Settings\app\Models\Setting;
 use Illuminate\Support\Facades\Route;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Http\Request;
@@ -64,7 +63,8 @@ class ThemeManagementController extends CrudController
          * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
 
-        CRUD::addColumn(['name' => 'name', 'type' => 'text']);
+        CRUD::addColumn(['name' => 'display_name', 'type' => 'text']);
+        CRUD::addColumn(['name' => 'preview_image', 'type' => 'image']);
         CRUD::addColumn(['name' => 'version', 'type' => 'text']);
         $this->crud->addButtonFromModelFunction('line', 'editBtn', 'editBtn', 'beginning');
         $this->crud->addButtonFromModelFunction('line', 'resetBtn', 'resetBtn', 'beginning');
@@ -139,7 +139,7 @@ class ThemeManagementController extends CrudController
         $item = $this->crud->update(
             $request->get($this->crud->model->getKeyName()),
             [
-                'value' => json_encode(request()->only(explode(',', request('fields'))))
+                'value' => request()->only(explode(',', request('fields')))
             ]
         );
 

@@ -21,6 +21,9 @@ class CreateActorsTable extends Migration
             $table->enum('gender', ['male', 'female', 'other'])->nullable();
             $table->string('bio')->nullable();
             $table->string('thumb_url', 2048)->nullable();
+            $table->string('seo_title')->nullable();
+            $table->string('seo_des')->nullable();
+            $table->string('seo_key')->nullable();
             $table->timestamps();
         });
     }

@@ -61,7 +61,7 @@ class Movie extends Model implements TaxonomyInterface, Cacheable, SeoInterface
     public function generateSeoTags()
     {
         SEOMeta::setTitle($this->getTitle())
-            ->setDescription(Str::limit($this->content, 150, '...'))
+            ->setDescription(Str::limit(strip_tags($this->content), 150, '...'))
             ->addKeyword($this->tags()->pluck('name')->toArray())
             ->setCanonical($this->getUrl())
             ->setPrev(request()->root())
@@ -73,14 +73,14 @@ class Movie extends Model implements TaxonomyInterface, Cacheable, SeoInterface
             ->addProperty('type', 'movie')
             ->addProperty('locale', 'vi-VN')
             ->setUrl($this->getUrl())
-            ->setDescription(Str::limit($this->content, 150, '...'))
+            ->setDescription(Str::limit(strip_tags($this->content), 150, '...'))
             ->addImages([$this->thumb_url, $this->poster_url]);
 
         TwitterCard::setSite(setting('site_meta_siteName'))
             ->setTitle($this->getTitle())
             ->setType('movie')
             ->setImage($this->thumb_url)
-            ->setDescription(Str::limit($this->content, 150, '...'))
+            ->setDescription(Str::limit(strip_tags($this->content), 150, '...'))
             ->setUrl($this->getUrl());
         // ->addValue($key, $value);
 
@@ -88,7 +88,8 @@ class Movie extends Model implements TaxonomyInterface, Cacheable, SeoInterface
             ->setSite(setting('site_meta_siteName'))
             ->setTitle($this->getTitle())
             ->setType('movie')
-            ->setDescription(Str::limit($this->content, 150, '...'))
+            ->setDescription(Str::limit(strip_tags($this->content), 150, '...'))
+            ->setImages([$this->thumb_url, $this->poster_url])
             ->setUrl($this->getUrl());
         // ->addValue($key, $value);
     }
