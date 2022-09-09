@@ -10,9 +10,12 @@ if (!function_exists('get_theme_option')) {
 
         if (is_null($theme)) return $fallback;
 
-        $props = collect(array_merge($theme->options ?? [], is_array($theme->value) ? $theme->value : []));
+        $props = collect(array_merge(
+            array_column($theme->options, 'value', 'name') ?? [],
+            is_array($theme->value) ? $theme->value : []
+        ));
 
-        return $props->firstWhere('name', $key)['value'] ?? $fallback;
+        return $props[$key] ?? $fallback;
     }
 }
 
