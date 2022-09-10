@@ -160,7 +160,7 @@ class MovieCrudController extends CrudController
             'tab' => 'Danh sách tập phim'
         ],);
 
-        CRUD::addField(['name' => 'update_handler', 'label' => 'Trình cập nhật', 'type' => 'select_from_array', 'options' => collect(config('ophim.updaters', []))->pluck('name','handler')->toArray(), 'tab' => 'Cập nhật']);
+        CRUD::addField(['name' => 'update_handler', 'label' => 'Trình cập nhật', 'type' => 'select_from_array', 'options' => collect(config('ophim.updaters', []))->pluck('name', 'handler')->toArray(), 'tab' => 'Cập nhật']);
         CRUD::addField(['name' => 'update_url', 'label' => 'Cập nhật theo URL', 'type' => 'text', 'tab' => 'Cập nhật']);
 
         CRUD::addField(['name' => 'is_shown_in_theater', 'label' => 'Phim chiếu rạp', 'type' => 'boolean', 'tab' => 'Khác']);
@@ -179,8 +179,8 @@ class MovieCrudController extends CrudController
     {
         $this->authorize('update', $this->crud->getEntryWithLocale($this->crud->getCurrentEntryId()));
 
-
         $this->setupCreateOperation();
+        CRUD::addField(['name' => 'timestamps', 'label' => 'Cập nhật thời gian', 'type' => 'checkbox', 'tab' => 'Cập nhật']);
     }
 
     public function store(Request $request)

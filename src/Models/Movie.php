@@ -48,6 +48,15 @@ class Movie extends Model implements TaxonomyInterface, Cacheable, SeoInterface
     |--------------------------------------------------------------------------
     */
 
+    public static function boot()
+    {
+        parent::boot();
+
+        static::updating(function ($instance) {
+            $instance->timestamps = request('timestamps') ?: false;
+        });
+    }
+
     public static function primaryCacheKey(): string
     {
         return 'slug';

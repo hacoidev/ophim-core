@@ -37,16 +37,7 @@ $episodes = collect(old('episodes', isset($entry) ? $entry->episodes : []));
                 @foreach ($episodes->groupBy('server') as $server => $data)
                     <div class="tab-pane @if ($loop->first) active @endif"
                         id="episode-server-{{ $loop->index }}" role="tabpanel">
-                        <div class="form-inline justify-content-left mb-3 px-0">
-                            <button type="button" class="btn btn-warning add-episode-btn" data-server="0"
-                                data-server-name="Vietsub #1">
-                                Thêm tập mới
-                            </button>
-                            <button type="button" class="btn btn-danger ml-2 float-right delete-server">
-                                Xóa server
-                            </button>
-                        </div>
-                        <div class="table-responsive">
+                        <div class="table-responsive mb-3">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -100,6 +91,15 @@ $episodes = collect(old('episodes', isset($entry) ? $entry->episodes : []));
                                     @endforeach
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="form-inline justify-content-left mb-3 px-0">
+                            <button type="button" class="btn btn-warning add-episode-btn" data-server="0"
+                                data-server-name="Vietsub #1">
+                                Thêm tập mới
+                            </button>
+                            <button type="button" class="btn btn-danger ml-2 float-right delete-server">
+                                Xóa server
+                            </button>
                         </div>
                     </div>
                 @endforeach
@@ -172,15 +172,7 @@ $episodes = collect(old('episodes', isset($entry) ? $entry->episodes : []));
         }
         const templateData = (i, name) => {
             return `<div class="tab-pane" id="episode-server-${i}" role="tabpanel">
-                        <div class="form-inline justify-content-left mb-3 px-0">
-                            <button type="button" class="btn btn-warning mr-2 add-episode-btn" data-server="${i}" data-server-name="${name}">
-                                Thêm tập mới
-                            </button>
-                            <button type="button" class="btn btn-danger float-right delete-server">
-                                Xóa server
-                            </button>
-                        </div>
-                        <div class="table-responsive" style="max-height: 400px; overflow:auto;">
+                        <div class="table-responsive mb-3" style="max-height: 400px; overflow:auto;">
                             <table class="table table-bordered mb-4">
                                 <thead>
                                     <tr>
@@ -195,6 +187,14 @@ $episodes = collect(old('episodes', isset($entry) ? $entry->episodes : []));
 
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="form-inline justify-content-left mb-3 px-0">
+                            <button type="button" class="btn btn-warning mr-2 add-episode-btn" data-server="${i}" data-server-name="${name}">
+                                Thêm tập mới
+                            </button>
+                            <button type="button" class="btn btn-danger float-right delete-server">
+                                Xóa server
+                            </button>
                         </div>
                     </div>`;
         }
