@@ -65,16 +65,24 @@
 
 <li class="nav-title">Mở rộng</li>
 @foreach (config('plugins', []) as $plugin)
-    <li class="nav-item nav-dropdown"><a class="nav-link nav-dropdown-toggle" href="#">
-            <i class="nav-icon {{ $plugin['icon'] ?? '' }}"></i> {{ $plugin['name'] ?? '' }}</a>
-        <ul class="nav-dropdown-items">
-            @foreach ($plugin['entries'] ?? [] as $entry)
-                <li class='nav-item'><a class='nav-link' href='{{ $entry['url'] ?? '#' }}'>
-                        <i class='nav-icon {{ $entry['icon'] ?? '' }}'></i>
-                        <span>{{ $entry['name'] ?? '' }}</span></a></li>
-            @endforeach
-        </ul>
-    </li>
+    @if (count($plugin['entries'] ?? []) > 1)
+        <li class="nav-item nav-dropdown"><a class="nav-link nav-dropdown-toggle" href="#">
+                <i class="nav-icon {{ $plugin['icon'] ?? '' }}"></i> {{ $plugin['name'] ?? '' }}</a>
+            <ul class="nav-dropdown-items">
+                @foreach ($plugin['entries'] ?? [] as $entry)
+                    <li class='nav-item'><a class='nav-link' href='{{ $entry['url'] ?? '#' }}'>
+                            <i class='nav-icon {{ $entry['icon'] ?? '' }}'></i>
+                            <span>{{ $entry['name'] ?? '' }}</span></a></li>
+                @endforeach
+            </ul>
+        </li>
+    @else
+        @foreach ($plugin['entries'] ?? [] as $entry)
+            <li class='nav-item'><a class='nav-link' href='{{ $entry['url'] ?? '#' }}'>
+                    <i class='nav-icon {{ $entry['icon'] ?? '' }}'></i>
+                    <span>{{ $plugin['name'] ?? '' }}</span></a></li>
+        @endforeach
+    @endif
 @endforeach
 
 @if (backpack_user()->hasRole('Admin'))

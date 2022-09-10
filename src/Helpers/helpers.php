@@ -18,14 +18,3 @@ if (!function_exists('get_theme_option')) {
         return $props[$key] ?? $fallback;
     }
 }
-
-if (!function_exists('get_plugin_option')) {
-    function get_plugin_option($name, $key, $fallback = null)
-    {
-        $setting = Setting::where('key', 'plugin_option_' . $name)->first();
-
-        if (is_null($setting)) return $fallback;
-
-        return $setting->value[$key] ?? $fallback;
-    }
-}
