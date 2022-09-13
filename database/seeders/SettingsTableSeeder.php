@@ -213,7 +213,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                     'tab' => 'Title'
                 ]),
-                'value' => 'Xem phim {movie_name} - tập {name} | Ophim.TV',
+                'value' => 'Xem phim {movie.name} - tập {name} | Ophim.TV',
                 'active'      => 0,
             ],
 
