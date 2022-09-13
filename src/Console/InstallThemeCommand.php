@@ -50,6 +50,7 @@ class InstallThemeCommand extends Command
 
         foreach (config('themes', []) as $key => $theme) {
             $this->progressBar->advance();
+            $this->newLine(1);
 
             Theme::firstOrCreate([
                 'name' => $key,

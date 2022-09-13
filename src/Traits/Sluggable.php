@@ -15,17 +15,19 @@ trait Sluggable
     {
         static::creating(function ($instance) {
             if (empty($instance->slug)) {
-                $instance->slug = static::where('slug', Str::slug($instance->name))->exists()
-                    ? sprintf("%s-%s%s", Str::slug($instance->name), floor(microtime(true) * 1000), rand(1, 100))
-                    : Str::slug($instance->name);
+                $slug = Str::slug($instance->name) ?: $instance->name;
+                $instance->slug = static::where('slug', $slug)->exists()
+                    ? sprintf("%s-%s%s", $slug, floor(microtime(true) * 1000), rand(1, 100))
+                    : $slug;
             }
         });
 
         static::updating(function ($instance) {
             if (empty($instance->slug)) {
-                $instance->slug = static::where('slug', Str::slug($instance->name))->exists()
-                    ? sprintf("%s-%s%s", Str::slug($instance->name), floor(microtime(true) * 1000), rand(1, 100))
-                    : Str::slug($instance->name);
+                $slug = Str::slug($instance->name) ?: $instance->name;
+                $instance->slug = static::where('slug', $slug)->exists()
+                    ? sprintf("%s-%s%s", $slug, floor(microtime(true) * 1000), rand(1, 100))
+                    : $slug;
             }
         });
     }
