@@ -117,7 +117,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                     'tab' => 'Title'
                 ]),
-                'value' => 'Phim hay mới cập nhật | Ophim.TV',
+                'value' => 'Phim hay mới cập nhật',
                 'active'      => 0,
             ],
             [
@@ -129,7 +129,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                     'tab' => 'Title'
                 ]),
-                'value' => 'Phim {name} | Ophim.TV',
+                'value' => 'Phim {name}',
                 'active'      => 0,
             ],
             [
@@ -141,7 +141,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                     'tab' => 'Title'
                 ]),
-                'value' => 'Danh sách phim {name} - tổng hợp phim {name} | Ophim.TV',
+                'value' => 'Danh sách phim {name} - tổng hợp phim {name}',
                 'active'      => 0,
             ],
             [
@@ -153,7 +153,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                     'tab' => 'Title'
                 ]),
-                'value' => 'Danh sách phim khu vực {name} - tổng hợp phim {name} | Ophim.TV',
+                'value' => 'Danh sách phim khu vực {name} - tổng hợp phim {name}',
                 'active'      => 0,
             ],
             [
@@ -165,7 +165,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                     'tab' => 'Title'
                 ]),
-                'value' => '{name} - tổng hợp phim {name} | Ophim.TV',
+                'value' => '{name} - tổng hợp phim {name}',
                 'active'      => 0,
             ],
             [
@@ -177,7 +177,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                     'tab' => 'Title'
                 ]),
-                'value' => '{name} - tổng hợp phim {name} | Ophim.TV',
+                'value' => '{name} - tổng hợp phim {name}',
                 'active'      => 0,
             ],
             [
@@ -189,7 +189,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                     'tab' => 'Title'
                 ]),
-                'value' => '{name} - tổng hợp phim {name} | Ophim.TV',
+                'value' => '{name} - tổng hợp phim {name}',
                 'active'      => 0,
             ],
             [
@@ -201,7 +201,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                     'tab' => 'Title'
                 ]),
-                'value' => '{name} - tổng hợp phim {name} | Ophim.TV',
+                'value' => '{name} - tổng hợp phim {name}',
                 'active'      => 0,
             ],
             [
@@ -213,7 +213,7 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'text',
                     'tab' => 'Title'
                 ]),
-                'value' => 'Xem phim {movie.name} - tập {name} | Ophim.TV',
+                'value' => 'Xem phim {movie.name} - tập {name}',
                 'active'      => 0,
             ],
 
