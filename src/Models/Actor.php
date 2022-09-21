@@ -65,7 +65,7 @@ class Actor extends Model implements TaxonomyInterface, Cacheable, SeoInterface
 
     public function generateSeoTags()
     {
-        SEOMeta::setTitle($this->getTitle())
+        SEOMeta::setTitle($this->getTitle(), false)
             ->setDescription(Str::limit($this->content, 150, '...'))
             ->addKeyword(['$keyword'])
             ->setCanonical($this->getUrl())
@@ -74,7 +74,7 @@ class Actor extends Model implements TaxonomyInterface, Cacheable, SeoInterface
         // ->addMeta($meta, $value, 'property');
 
         OpenGraph::setSiteName(setting('site_meta_siteName'))
-            ->setTitle($this->getTitle())
+            ->setTitle($this->getTitle(), false)
             ->addProperty('type', 'movie')
             ->addProperty('locale', 'vi-VN')
             ->setUrl($this->getUrl())
@@ -82,7 +82,7 @@ class Actor extends Model implements TaxonomyInterface, Cacheable, SeoInterface
             ->addImages([$this->thumb_url, $this->poster_url]);
 
         TwitterCard::setSite(setting('site_meta_siteName'))
-            ->setTitle($this->getTitle())
+            ->setTitle($this->getTitle(), false)
             ->setType('movie')
             ->setImage($this->thumb_url)
             ->setDescription(Str::limit($this->content, 150, '...'))
@@ -91,7 +91,7 @@ class Actor extends Model implements TaxonomyInterface, Cacheable, SeoInterface
 
         JsonLdMulti::newJsonLd()
             ->setSite(setting('site_meta_siteName'))
-            ->setTitle($this->getTitle())
+            ->setTitle($this->getTitle(), false)
             ->setType('movie')
             ->setDescription(Str::limit($this->content, 150, '...'))
             ->setUrl($this->getUrl());

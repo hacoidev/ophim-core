@@ -65,35 +65,35 @@ class Region extends Model implements TaxonomyInterface, Cacheable, SeoInterface
 
     public function generateSeoTags()
     {
-        SEOMeta::setTitle($this->getTitle())
-            ->setDescription(Str::limit($this->content, 150, '...'))
-            ->addKeyword(['$keyword'])
+        SEOMeta::setTitle($this->seo_title ?: $this->getTitle(), false)
+            ->setDescription(Str::limit($this->seo_des, 150, '...'))
+            ->addKeyword([$this->seo_key])
             ->setCanonical($this->getUrl())
             ->setPrev(request()->root())
             ->setPrev(request()->root());
         // ->addMeta($meta, $value, 'property');
 
         OpenGraph::setSiteName(setting('site_meta_siteName'))
-            ->setTitle($this->getTitle())
+            ->setTitle($this->seo_title ?: $this->getTitle(), false)
             ->addProperty('type', 'movie')
             ->addProperty('locale', 'vi-VN')
             ->setUrl($this->getUrl())
-            ->setDescription(Str::limit($this->content, 150, '...'))
+            ->setDescription(Str::limit($this->seo_des, 150, '...'))
             ->addImages([$this->thumb_url, $this->poster_url]);
 
         TwitterCard::setSite(setting('site_meta_siteName'))
-            ->setTitle($this->getTitle())
+            ->setTitle($this->seo_title ?: $this->getTitle(), false)
             ->setType('movie')
             ->setImage($this->thumb_url)
-            ->setDescription(Str::limit($this->content, 150, '...'))
+            ->setDescription(Str::limit($this->seo_des, 150, '...'))
             ->setUrl($this->getUrl());
         // ->addValue($key, $value);
 
         JsonLdMulti::newJsonLd()
         ->setSite(setting('site_meta_siteName'))
-        ->setTitle($this->getTitle())
+        ->setTitle($this->seo_title ?: $this->getTitle(), false)
         ->setType('movie')
-        ->setDescription(Str::limit($this->content, 150, '...'))
+        ->setDescription(Str::limit($this->seo_des, 150, '...'))
         ->setUrl($this->getUrl());
     // ->addValue($key, $value);
     }
