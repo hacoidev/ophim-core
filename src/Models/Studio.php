@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 use Ophim\Core\Contracts\SeoInterface;
 use Ophim\Core\Traits\HasFactory;
 use Ophim\Core\Traits\HasTitle;
+use Ophim\Core\Traits\HasDescription;
+use Ophim\Core\Traits\HasKeywords;
 use Ophim\Core\Traits\HasUniqueName;
 use Ophim\Core\Traits\Sluggable;
 use Illuminate\Support\Str;
@@ -27,6 +29,8 @@ class Studio extends Model implements TaxonomyInterface, Cacheable, SeoInterface
     use HasFactory;
     use HasCache;
     use HasTitle;
+    use HasDescription;
+    use HasKeywords;
 
     /*
     |--------------------------------------------------------------------------
@@ -63,37 +67,51 @@ class Studio extends Model implements TaxonomyInterface, Cacheable, SeoInterface
         return Setting::get('site_studio_title', '');
     }
 
+    protected function descriptionPattern(): string
+    {
+        return Setting::get('site_region_des', '');
+    }
+
+    protected function keywordsPattern(): string
+    {
+        return Setting::get('site_region_key', '');
+    }
+
     public function generateSeoTags()
     {
-        SEOMeta::setTitle($this->getTitle(), false)
-            ->setDescription(Str::limit($this->content, 150, '...'))
-            ->addKeyword(['$keyword'])
+        $seo_title = $this->getTitle();
+        $seo_des = Str::limit($this->getDescription(), 150, '...');
+        $seo_key = $this->getKeywords();
+
+        SEOMeta::setTitle($seo_title, false)
+            ->setDescription($seo_des)
+            ->addKeyword([$seo_key])
             ->setCanonical($this->getUrl())
             ->setPrev(request()->root())
             ->setPrev(request()->root());
         // ->addMeta($meta, $value, 'property');
 
         OpenGraph::setSiteName(setting('site_meta_siteName'))
-            ->setTitle($this->getTitle(), false)
+            ->setTitle($seo_title, false)
             ->addProperty('type', 'movie')
             ->addProperty('locale', 'vi-VN')
             ->setUrl($this->getUrl())
-            ->setDescription(Str::limit($this->content, 150, '...'))
+            ->setDescription($seo_des)
             ->addImages([$this->thumb_url, $this->poster_url]);
 
         TwitterCard::setSite(setting('site_meta_siteName'))
-            ->setTitle($this->getTitle(), false)
+            ->setTitle($seo_title, false)
             ->setType('movie')
             ->setImage($this->thumb_url)
-            ->setDescription(Str::limit($this->content, 150, '...'))
+            ->setDescription($seo_des)
             ->setUrl($this->getUrl());
         // ->addValue($key, $value);
 
         JsonLdMulti::newJsonLd()
         ->setSite(setting('site_meta_siteName'))
-        ->setTitle($this->getTitle(), false)
+        ->setTitle($seo_title, false)
         ->setType('movie')
-        ->setDescription(Str::limit($this->content, 150, '...'))
+        ->setDescription($seo_des)
         ->setUrl($this->getUrl());
     // ->addValue($key, $value);
     }
