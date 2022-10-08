@@ -20,7 +20,6 @@ class CreateThemesTable extends Migration
             $table->string('preview_image')->nullable();
             $table->string('author');
             $table->string('package_name');
-            $table->text('options')->nullable();
             $table->text('value')->nullable();
             $table->boolean('active')->default(false);
             $table->timestamps();

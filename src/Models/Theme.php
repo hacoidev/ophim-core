@@ -29,7 +29,6 @@ class Theme extends Model implements Cacheable
     // protected $hidden = [];
     // protected $dates = [];
     protected $casts = [
-        'options' => 'array',
         'value' => 'array',
     ];
 
@@ -47,6 +46,17 @@ class Theme extends Model implements Cacheable
         return  \PackageVersions\Versions::getVersion($this->package_name);
     }
 
+    public function getOptionsAttribute()
+    {
+        $allThemes = config('themes', []);
+
+        if (!isset($allThemes[strtolower($this->name)]['options'])) {
+            return [];
+        }
+
+        return $allThemes[strtolower($this->name)]['options'];
+    }
+
     public function editBtn($crud = false)
     {
         return '<a href="' . backpack_url("theme/{$this->id}/edit") . '" class="btn btn-primary">Edit</a>';
@@ -54,8 +64,6 @@ class Theme extends Model implements Cacheable
 
     public function activeBtn($crud = false)
     {
-        if ($this->active) return '<button class="btn btn-secondary">Activated</button>';
-
         $template = <<<EOT
         <form action="{actionRoute}" method="post" onsubmit="return confirm('Chắc chắn muốn kích hoạt giao diện {display_name}?');" style="display: inline">
             {csrfField}
@@ -65,9 +73,16 @@ class Theme extends Model implements Cacheable
 
         $html = str_replace("{actionRoute}", backpack_url("theme/{$this->id}/active"), $template);
         $html = str_replace("{csrfField}", csrf_field(), $html);
-        $html = str_replace("{btnType}", 'btn-primary', $html);
         $html = str_replace("{display_name}", $this->display_name, $html);
-        $html = str_replace("{name}", 'Active', $html);
+
+        if ($this->active) {
+            $html = str_replace("{name}", 'Re-Activate', $html);
+            $html = str_replace("{btnType}", 'btn-secondary', $html);
+        } else {
+            $html = str_replace("{name}", 'Activate', $html);
+            $html = str_replace("{btnType}", 'btn-primary', $html);
+        }
+
 
         return $html;
     }

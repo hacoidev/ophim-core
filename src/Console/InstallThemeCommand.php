@@ -59,7 +59,6 @@ class InstallThemeCommand extends Command
                 'preview_image' => $theme['preview_image'] ?: '',
                 'author' => $theme['author'] ?: '',
                 'package_name' => $theme['package_name'],
-                'options' => $theme['options'],
             ]);
 
             $this->info("Installed {$theme['name']} theme");
