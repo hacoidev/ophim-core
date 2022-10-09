@@ -11,10 +11,10 @@
     "require": {
         "laravel/framework": "^6|^7|^8",
         "ckfinder/ckfinder-laravel-package": "v3.5.2.1",
-        "hacoidev/laravel-caching-model": "dev-main",
-        "hacoidev/crud": "dev-main",
-        "hacoidev/settings": "dev-main",
-        "hacoidev/permissionmanager": "dev-main",
+        "hacoidev/laravel-caching-model": "^1.0.0",
+        "hacoidev/crud": "^1.0.0",
+        "hacoidev/settings": "^1.0.0",
+        "hacoidev/permissionmanager": "^1.0.0",
         "spatie/laravel-sitemap": "^5.8",
         "artesaos/seotools": "^v0.22.1"
     },
