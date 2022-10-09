@@ -63,6 +63,17 @@ class ThemeManagementController extends CrudController
          * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
 
+        foreach (config('themes', []) as $key => $theme) {
+            Theme::updateOrCreate([
+                'name' => $key,
+            ], [
+                'display_name' => $theme['display_name'] ??  $theme['name'],
+                'preview_image' => $theme['preview_image'] ?: '',
+                'author' => $theme['author'] ?: '',
+                'package_name' => $theme['package_name'],
+            ]);
+        }
+
         CRUD::addColumn(['name' => 'display_name', 'type' => 'text']);
         CRUD::addColumn(['name' => 'preview_image', 'type' => 'image']);
         CRUD::addColumn(['name' => 'version', 'type' => 'text']);

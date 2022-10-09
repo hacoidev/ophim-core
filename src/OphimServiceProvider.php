@@ -2,13 +2,15 @@
 
 namespace Ophim\Core;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Ophim\Core\Policies\PermissionPolicy;
 use Ophim\Core\Policies\RolePolicy;
 use Ophim\Core\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\DB;
 use Ophim\Core\Console\CreateUser;
 use Ophim\Core\Console\InstallCommand;
-use Ophim\Core\Console\InstallThemeCommand;
+use Ophim\Core\Console\GenerateMenuCommand;
 use Ophim\Core\Middleware\CKFinderAuth;
 use Ophim\Core\Models\Actor;
 use Ophim\Core\Models\Category;
@@ -80,14 +82,8 @@ class OphimServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__ . '/../routes/admin.php');
 
         $this->app->booted(function () {
-            try {
-                $activatedTheme = Theme::getActivatedTheme();
-                if ($activatedTheme && file_exists($routeFile = base_path('vendor/' . $activatedTheme->package_name . '/routes/web.php'))) {
-                    $this->loadRoutesFrom($routeFile);
-                }
-            } catch (\Exception $e) {
-                // Log
-            }
+            $this->loadThemeRoutes();
+            $this->loadScheduler();
         });
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
@@ -100,8 +96,8 @@ class OphimServiceProvider extends ServiceProvider
 
         $this->commands([
             InstallCommand::class,
-            InstallThemeCommand::class,
             CreateUser::class,
+            GenerateMenuCommand::class,
         ]);
 
         $this->bootSeoDefaults();
@@ -189,5 +185,32 @@ class OphimServiceProvider extends ServiceProvider
             'seotools.json-ld.defaults.description' => setting('site_meta_description'),
             'seotools.json-ld.defaults.images' => [setting('site_meta_image')],
         ]);
+    }
+
+    protected function loadThemeRoutes()
+    {
+        try {
+            $activatedTheme = Theme::getActivatedTheme();
+            if ($activatedTheme && file_exists($routeFile = base_path('vendor/' . $activatedTheme->package_name . '/routes/web.php'))) {
+                $this->loadRoutesFrom($routeFile);
+            }
+        } catch (\Exception $e) {
+            // Log
+        }
+    }
+
+    protected function loadScheduler()
+    {
+        $schedule = $this->app->make(Schedule::class);
+
+        $schedule->call(function () {
+            DB::table('movies')->update(['view_day' => 0]);
+        })->daily();
+        $schedule->call(function () {
+            DB::table('movies')->update(['view_week' => 0]);
+        })->weekly();
+        $schedule->call(function () {
+            DB::table('movies')->update(['view_month' => 0]);
+        })->monthly();
     }
 }
