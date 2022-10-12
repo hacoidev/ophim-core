@@ -62,6 +62,10 @@
                 <span>Khác</span></a></li>
     </ul>
 </li>
+<li class='nav-item'>
+    <a class='nav-link' href='{{ backpack_url('sitemap/create') }}'><i class='nav-icon la la-map'></i>
+        Sitemap</a>
+</li>
 
 <li class="nav-title">Mở rộng</li>
 @foreach (config('plugins', []) as $plugin)

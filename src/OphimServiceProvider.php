@@ -107,6 +107,7 @@ class OphimServiceProvider extends ServiceProvider
     {
         $backpack_menu_contents_view = [
             __DIR__ . '/../resources/views/core/base/inc/sidebar_content.blade.php'      => resource_path('views/vendor/hacoidev/base/inc/sidebar_content.blade.php'),
+            __DIR__ . '/../resources/views/core/base/inc/topbar_right_content.blade.php'      => resource_path('views/vendor/hacoidev/base/inc/topbar_right_content.blade.php'),
         ];
 
         $players = [

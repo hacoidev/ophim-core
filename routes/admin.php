@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use CKSource\CKFinderBridge\Controller\CKFinderController;
 
+use Ophim\Core\Controllers\Admin\QuickActionController;
+
 // --------------------------
 // Custom Backpack Routes
 // --------------------------
@@ -27,7 +29,8 @@ Route::group([
     Route::crud('menu', 'MenuCrudController');
     Route::crud('episode', 'EpisodeCrudController');
     Route::crud('theme', 'ThemeManagementController');
-    Route::crud('site-map', 'SiteMapController');
+    Route::crud('sitemap', 'SiteMapController');
+    Route::get('quick-action/delete-cache', 'QuickActionController@delete_cache');
 });
 
 Route::group([
