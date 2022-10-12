@@ -3,8 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use CKSource\CKFinderBridge\Controller\CKFinderController;
 
-use Ophim\Core\Controllers\Admin\QuickActionController;
-
 // --------------------------
 // Custom Backpack Routes
 // --------------------------
