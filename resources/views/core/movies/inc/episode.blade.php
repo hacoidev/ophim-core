@@ -53,7 +53,7 @@ $episodes = collect(old('episodes', isset($entry) ? $entry->episodes : []));
                                     @foreach ($sortedEpisodes as $episode)
                                     <tr class="episode">
                                         <input type="hidden" name="episodes[{{ $index }}][id]"
-                                            value="{{ $episode['id'] ?? $episode->id ?? '' }}">
+                                            value="{{ $episode['id'] ?? $episode->id ?? '' }}" data-attr-name="id">
                                         <input type="hidden" class="episode-server"
                                             name="episodes[{{ $index }}][server]" value="{{ $server }}"
                                             data-attr-name="server">
