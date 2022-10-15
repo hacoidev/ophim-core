@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 use Ophim\Core\Models\Actor;
 use Ophim\Core\Models\Director;
 use Ophim\Core\Models\Movie;
+use Ophim\Core\Models\Region;
 use Ophim\Core\Models\Studio;
+use Ophim\Core\Models\Category;
 use Ophim\Core\Models\Tag;
 
 /**
@@ -59,10 +61,61 @@ class MovieCrudController extends CrudController
          * - CRUD::addColumn(['name' => 'price', 'type' => 'number','tab'=>'Thông tin phim']);
          */
 
+        $this->crud->addFilter([
+            'name'  => 'status',
+            'type'  => 'select',
+            'label' => 'Tình trạng'
+        ], function () {
+            return [
+                'trailer' => 'Trailer',
+                'ongoing' => 'Đang chiếu',
+                'completed' => 'Hoàn thành'
+            ];
+        }, function ($val) {
+            $this->crud->addClause('where', 'status', $val);
+        });
+
+        $this->crud->addFilter([
+            'name'  => 'type',
+            'type'  => 'select',
+            'label' => 'Định dạng'
+        ], function () {
+            return [
+                'single' => 'Phim Lẻ',
+                'series' => 'Phim bộ'
+            ];
+        }, function ($val) {
+            $this->crud->addClause('where', 'type', $val);
+        });
+
+        $this->crud->addFilter([
+            'name'  => 'category_id',
+            'type'  => 'select',
+            'label' => 'Thể loại'
+        ], function () {
+            return Category::all()->pluck('name', 'id')->toArray();
+        }, function ($value) { // if the filter is active
+            $this->crud->query = $this->crud->query->whereHas('categories', function ($query) use ($value) {
+                $query->where('id', $value);
+            });
+        });
+
+        $this->crud->addFilter([
+            'name'  => 'region_id',
+            'type'  => 'select',
+            'label' => 'Quốc gia'
+        ], function () {
+            return Region::all()->pluck('name', 'id')->toArray();
+        }, function ($value) { // if the filter is active
+            $this->crud->query = $this->crud->query->whereHas('regions', function ($query) use ($value) {
+                $query->where('id', $value);
+            });
+        });
+
         $this->crud->addFilter(
             [
                 'type'  => 'checkbox',
-                'name'  => 'is_recommeded',
+                'name'  => 'is_recommended',
                 'label' => 'Đề cử'
             ],
             false, // the simple filter has no values, just the "Draft" label specified above
@@ -72,17 +125,43 @@ class MovieCrudController extends CrudController
             }
         );
 
-        CRUD::addColumn(['name' => 'name', 'label' => 'Tên', 'type' => 'text',]);
+        $this->crud->addFilter(
+            [
+                'type'  => 'checkbox',
+                'name'  => 'is_shown_in_theater',
+                'label' => 'Chiếu rạp'
+            ],
+            false,
+            function ($val) {
+                $this->crud->addClause('where', 'is_shown_in_theater', $val);
+            }
+        );
+
+        CRUD::addColumn([
+            'name' => 'name',
+            'origin_name' => 'origin_name',
+            'publish_year' => 'publish_year',
+            'status' => 'status',
+            'movie_type' => 'type',
+            'episode_current' => 'episode_current',
+            'label' => 'Thông tin',
+            'type' => 'view',
+            'view' => 'ophim::movies.columns.column_movie_info',
+            'searchLogic' => function ($query, $column, $searchTerm) {
+                $query->where('name', 'like', '%' . $searchTerm . '%')->orWhere('origin_name', 'like', '%' . $searchTerm . '%');
+            }
+        ]);
+
         CRUD::addColumn([
             'name' => 'thumb_url', 'label' => 'Ảnh thumb', 'type' => 'image',
             'height' => '100px',
-            'width'  => 'auto',
+            'width'  => '68px',
         ]);
-        CRUD::addColumn(['name' => 'status', 'label' => 'Tình trạng', 'type' => 'text',]);
         CRUD::addColumn(['name' => 'categories', 'label' => 'Thể loại', 'type' => 'relationship',]);
         CRUD::addColumn(['name' => 'regions', 'label' => 'Khu vực', 'type' => 'relationship',]);
-        CRUD::addColumn(['name' => 'publish_year', 'label' => 'Năm', 'type' => 'text',]);
-        CRUD::addColumn(['name' => 'user_name', 'label' => 'Cập nhật bởi', 'type' => 'text',]);
+        CRUD::addColumn(['name' => 'updated_at', 'label' => 'Cập nhật lúc', 'type' => 'datetime', 'format' => 'DD/MM/YYYY HH:mm:ss']);
+        // CRUD::addColumn(['name' => 'user_name', 'label' => 'Cập nhật bởi', 'type' => 'text',]);
+        CRUD::addColumn(['name' => 'view_total', 'label' => 'Lượt xem', 'type' => 'number',]);
     }
 
     /**
@@ -116,7 +195,7 @@ class MovieCrudController extends CrudController
         CRUD::addField(['name' => 'poster_url', 'label' => 'Ảnh Poster', 'type' => 'ckfinder', 'preview' => ['width' => 'auto', 'height' => '340px'], 'tab' => 'Thông tin phim']);
 
         CRUD::addField(['name' => 'content', 'label' => 'Nội dung', 'type' => 'summernote', 'tab' => 'Thông tin phim']);
-        CRUD::addField(['name' => 'notify', 'label' => 'Thông báo / ghi chú', 'type' => 'summernote', 'tab' => 'Thông tin phim']);
+        CRUD::addField(['name' => 'notify', 'label' => 'Thông báo / ghi chú', 'type' => 'text', 'attributes' => ['placeholder' => 'Tuần này hoãn chiếu'], 'tab' => 'Thông tin phim']);
 
         CRUD::addField(['name' => 'showtimes', 'label' => 'Lịch chiếu phim', 'type' => 'text', 'attributes' => ['placeholder' => '21h tối hàng ngày'], 'tab' => 'Thông tin phim']);
         CRUD::addField(['name' => 'trailer_url', 'label' => 'Trailer Youtube URL', 'type' => 'text', 'tab' => 'Thông tin phim']);
