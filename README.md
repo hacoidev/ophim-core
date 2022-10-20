@@ -21,7 +21,7 @@ class User extends OphimUser {
     // ...
 }
 ```
-4. Create new user by command: php artisan ophim:user
+4. Create new user by command: `php artisan ophim:user`
 
 5. Remove this route definition in routes/web.php
 ```php
@@ -29,7 +29,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 ```
-6. Run php artisan optimize:clear
+6. Run `php artisan optimize:clear`
 
 # Reset view counter:
 - Setup crontab, add this entry:
