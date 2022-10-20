@@ -2,6 +2,12 @@
 - Laravel Framework 8.
 - PHP 7.3 or higher.
 - MySQL 5.7 or higher.
+# Add-on & Themes:
+- Add-on:
+    [OPhim Crawler](https://github.com/hacoidev/ophim-crawler)
+- Theme:
+    [Ripple](https://github.com/hacoidev/ophim-ripple)
+    [September](https://github.com/phantom0803/ophim-september)
 
 # Installation:
 1. CD to project root and run: `composer require hacoidev/ophim-core`
