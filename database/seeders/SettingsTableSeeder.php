@@ -578,7 +578,7 @@ class SettingsTableSeeder extends Seeder
         ];
 
         foreach ($systems as $index => $setting) {
-            $result = Setting::updateOrCreate(collect($setting)->only('key')->toArray(), collect($setting)->except('key')->toArray());
+            $result = Setting::firstOrCreate(collect($setting)->only('key')->toArray(), collect($setting)->except('key')->toArray());
 
             if (!$result) {
                 $this->command->info("Insert failed at record $index");
@@ -588,7 +588,7 @@ class SettingsTableSeeder extends Seeder
         }
 
         foreach ($generals as $index => $setting) {
-            $result = Setting::updateOrCreate(collect($setting)->only('key')->toArray(), collect($setting)
+            $result = Setting::firstOrCreate(collect($setting)->only('key')->toArray(), collect($setting)
                 ->merge(['group' => 'generals'])->except('key')->toArray());
 
             if (!$result) {
@@ -599,7 +599,7 @@ class SettingsTableSeeder extends Seeder
         }
 
         foreach ($metas as $index => $setting) {
-            $result = Setting::updateOrCreate(collect($setting)->only('key')->toArray(), collect($setting)->merge(['group' => 'metas'])->except('key')->toArray());
+            $result = Setting::firstOrCreate(collect($setting)->only('key')->toArray(), collect($setting)->merge(['group' => 'metas'])->except('key')->toArray());
 
             if (!$result) {
                 $this->command->info("Insert failed at record $index");
@@ -609,7 +609,7 @@ class SettingsTableSeeder extends Seeder
         }
 
         foreach ($players as $index => $setting) {
-            $result = Setting::updateOrCreate(collect($setting)->only('key')->toArray(), collect($setting)->merge(['group' => 'jwplayer'])->except('key')->toArray());
+            $result = Setting::firstOrCreate(collect($setting)->only('key')->toArray(), collect($setting)->merge(['group' => 'jwplayer'])->except('key')->toArray());
 
             if (!$result) {
                 $this->command->info("Insert failed at record $index");
@@ -619,7 +619,7 @@ class SettingsTableSeeder extends Seeder
         }
 
         foreach ($others as $index => $setting) {
-            $result = Setting::updateOrCreate(collect($setting)->only('key')->toArray(), collect($setting)->merge(['group' => 'others'])->except('key')->toArray());
+            $result = Setting::firstOrCreate(collect($setting)->only('key')->toArray(), collect($setting)->merge(['group' => 'others'])->except('key')->toArray());
 
             if (!$result) {
                 $this->command->info("Insert failed at record $index");

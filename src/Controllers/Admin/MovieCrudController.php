@@ -6,6 +6,7 @@ use Ophim\Core\Requests\MovieRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Ophim\Core\Models\Actor;
 use Ophim\Core\Models\Director;
 use Ophim\Core\Models\Movie;
@@ -28,7 +29,9 @@ class MovieCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation {
         update as backpackUpdate;
     }
-    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
+    use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation {
+        destroy as traitDestroy;
+    }
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
     /**
@@ -325,8 +328,30 @@ class MovieCrudController extends CrudController
         $request['studios'] = $studio_ids;
     }
 
-    protected function setupDeleteOperation()
+    // protected function setupDeleteOperation()
+    // {
+    //     $this->authorize('delete', $this->crud->getEntryWithLocale($this->crud->getCurrentEntryId()));
+    // }
+
+    public function destroy($id)
     {
-        $this->authorize('delete', $this->crud->getEntryWithLocale($this->crud->getCurrentEntryId()));
+        $this->crud->hasAccessOrFail('delete');
+        $movie = Movie::find($id);
+
+        // Delete images
+        if (!filter_var($movie->thumb_url, FILTER_VALIDATE_URL) && file_exists(public_path($movie->thumb_url))) {
+            unlink(public_path($movie->thumb_url));
+        }
+        if (!filter_var($movie->poster_url, FILTER_VALIDATE_URL) && file_exists(public_path($movie->poster_url))) {
+            unlink(public_path($movie->poster_url));
+        }
+
+        // get entry ID from Request (makes sure its the last ID for nested resources)
+        $id = $this->crud->getCurrentEntryId() ?? $id;
+
+        $res = $this->crud->delete($id);
+        if ($res) {
+        }
+        return $res;
     }
 }
