@@ -70,9 +70,9 @@ class MovieCrudController extends CrudController
             'label' => 'Tình trạng'
         ], function () {
             return [
-                'trailer' => 'Trailer',
-                'ongoing' => 'Đang chiếu',
-                'completed' => 'Hoàn thành'
+                'trailer' => 'trailer',
+                'ongoing' => 'ongoing',
+                'completed' => 'completed'
             ];
         }, function ($val) {
             $this->crud->addClause('where', 'status', $val);
@@ -84,8 +84,8 @@ class MovieCrudController extends CrudController
             'label' => 'Định dạng'
         ], function () {
             return [
-                'single' => 'Phim Lẻ',
-                'series' => 'Phim bộ'
+                'single' => 'single',
+                'series' => 'series'
             ];
         }, function ($val) {
             $this->crud->addClause('where', 'type', $val);
@@ -99,7 +99,7 @@ class MovieCrudController extends CrudController
             return Category::all()->pluck('name', 'id')->toArray();
         }, function ($value) { // if the filter is active
             $this->crud->query = $this->crud->query->whereHas('categories', function ($query) use ($value) {
-                $query->where('id', $value);
+                $query->where('name', $value);
             });
         });
 
@@ -111,7 +111,7 @@ class MovieCrudController extends CrudController
             return Region::all()->pluck('name', 'id')->toArray();
         }, function ($value) { // if the filter is active
             $this->crud->query = $this->crud->query->whereHas('regions', function ($query) use ($value) {
-                $query->where('id', $value);
+                $query->where('name', $value);
             });
         });
 
