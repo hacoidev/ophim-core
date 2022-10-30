@@ -6,6 +6,7 @@
 - Add-on:
     - [OPhim Crawler](https://github.com/hacoidev/ophim-crawler)
 - Theme:
+    - [XIAO (New)](https://github.com/phantom0803/ophim-theme-xiao)
     - [PMC (New)](https://github.com/phantom0803/ophim-theme-pmc)
     - [HHTQ (New)](https://github.com/phantom0803/ophim-theme-hhtq)
     - [PNO (New)](https://github.com/phantom0803/ophim-theme-pno)
