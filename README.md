@@ -6,16 +6,6 @@
 - Add-on:
     - [OPhim Crawler](https://github.com/hacoidev/ophim-crawler)
 - Theme:
-    - [XIAO (New)](https://github.com/phantom0803/ophim-theme-xiao)
-    - [PMC (New)](https://github.com/phantom0803/ophim-theme-pmc)
-    - [HHTQ (New)](https://github.com/phantom0803/ophim-theme-hhtq)
-    - [PNO (New)](https://github.com/phantom0803/ophim-theme-pno)
-    - [IPC (New)](https://github.com/phantom0803/ophim-theme-ipc)
-    - [PCC (New)](https://github.com/phantom0803/ophim-theme-pcc)
-    - [F365 (New)](https://github.com/phantom0803/ophim-theme-f365)
-    - [LEGEND (New)](https://github.com/phantom0803/ophim-theme-legend)
-    - [BCCO (New)](https://github.com/phantom0803/ophim-theme-bcco)
-    - [BPTV (New)](https://github.com/phantom0803/ophim-theme-bptv)
     - [Ripple](https://github.com/hacoidev/ophim-ripple)
     - [September](https://github.com/phantom0803/ophim-september)
 
