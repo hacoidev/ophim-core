@@ -31,6 +31,11 @@ Route::get('/', function () {
 ```
 6. Run `php artisan optimize:clear`
 
+# Note
+ - Configure a production environment `.env`
+    + `APP_ENV=production`
+    + `APP_URL=https://your-domain.com`
+    
 # Reset view counter:
 - Setup crontab, add this entry:
 ```
