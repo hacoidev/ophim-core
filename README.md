@@ -23,7 +23,7 @@
     - [September](https://github.com/phantom0803/ophim-september)
 
 # Installation:
-1. CD to project root and run: `composer require hacoidev/ophim-core`
+1. CD to project root and run: `composer require hacoidev/ophim-core -W`
 2. Then, run command: `php artisan ophim:install`
 3. Change app\Models\User:
 ```php
@@ -43,6 +43,11 @@ Route::get('/', function () {
 });
 ```
 6. Run `php artisan optimize:clear`
+
+# Update:
+1. CD to project root and run: `composer update hacoidev/ophim-core -W`
+2. Then, run command: `php artisan ophim:install`
+3. Run `php artisan optimize:clear`
 
 # Note
 - Configure a production environment file `.env`
