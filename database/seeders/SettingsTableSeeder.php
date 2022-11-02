@@ -379,81 +379,7 @@ class SettingsTableSeeder extends Seeder
                 ]),
                 'value' => 'xem phim {name},phim {name},{name} vietsub',
                 'active'      => 0,
-            ],
-            [
-                'key'         => 'site_catalog_single_title',
-                'description' => 'site_catalog_single_title',
-                'name'        => 'Tiêu đề trang phim lẻ',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                    'tab' => 'Danh Sách'
-                ]),
-                'value' => 'Phim Lẻ Hay - Phim Ngắn Mới Nhất Vietsub Thuyết Minh [Tuyển Tập]',
-                'active'      => 0,
-            ],
-            [
-                'key'         => 'site_catalog_single_des',
-                'description' => 'site_catalog_single_des',
-                'name'        => 'Description trang phim lẻ',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                    'tab' => 'Danh Sách'
-                ]),
-                'value' => 'Danh sách phim lẻ hay nhiều thể loại, cập nhập liên tục tuyển chọn phim lẻ mới và hấp dẫn nhất.',
-                'active'      => 0,
-            ],
-            [
-                'key'         => 'site_catalog_single_key',
-                'description' => 'site_catalog_single_key',
-                'name'        => 'Keyword trang phim lẻ',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                    'hint' => '----------------------------------------',
-                    'tab' => 'Danh Sách'
-                ]),
-                'value' => 'Phim lẻ hay, phim lẻ tuyển chọn, phim lẻ 2022, phim lẻ mới',
-                'active'      => 0,
-            ],
-            [
-                'key'         => 'site_catalog_series_title',
-                'description' => 'site_catalog_series_title',
-                'name'        => 'Tiêu đề trang phim bộ',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                    'tab' => 'Danh Sách'
-                ]),
-                'value' => 'Phim bộ Hay - Phim Ngắn Mới Nhất Vietsub Thuyết Minh [Tuyển Tập]',
-                'active'      => 0,
-            ],
-            [
-                'key'         => 'site_catalog_series_des',
-                'description' => 'site_catalog_series_des',
-                'name'        => 'Description trang phim bộ',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                    'tab' => 'Danh Sách'
-                ]),
-                'value' => 'Danh sách phim bộ hay nhiều thể loại, cập nhập liên tục tuyển chọn phim bộ mới và hấp dẫn nhất.',
-                'active'      => 0,
-            ],
-            [
-                'key'         => 'site_catalog_series_key',
-                'description' => 'site_catalog_series_key',
-                'name'        => 'Keyword trang phim bộ',
-                'field'       => json_encode([
-                    'name' => 'value',
-                    'type' => 'text',
-                    'hint' => '----------------------------------------',
-                    'tab' => 'Danh Sách'
-                ]),
-                'value' => 'Phim bộ hay, phim bộ tuyển chọn, phim bộ 2022, phim bộ mới',
-                'active'      => 0,
-            ],
+            ]
         ];
 
         $players = [
@@ -627,5 +553,10 @@ class SettingsTableSeeder extends Seeder
                 return;
             }
         }
+
+        // Delete key not using
+        $all_settings = array_merge($generals, $metas, $players, $systems, $others);
+        $all_settings = array_map( function( $a ) { return $a['key']; }, $all_settings );
+        Setting::whereIn('group', ['generals', 'metas', 'players', 'systems', 'others'])->whereNotIn('key', $all_settings)->delete();
     }
 }

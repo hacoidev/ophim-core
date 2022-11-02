@@ -4,12 +4,14 @@
 <li class="nav-title">Phim</li>
 <li class='nav-item'>
     <a class='nav-link' href='{{ backpack_url('movie') }}'><i class='nav-icon la la-play-circle'></i>
-        Danh sách phim</a>
+        Quản lý phim</a>
 </li>
 
 <li class="nav-item nav-dropdown"><a class="nav-link nav-dropdown-toggle" href="#"><i
             class="nav-icon la la-list"></i> Phân loại</a>
     <ul class="nav-dropdown-items">
+        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('catalog') }}'><i class='nav-icon la la-pagelines'></i>
+                Danh sách</a></li>
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('category') }}'><i class='nav-icon la la-at'></i>
                 Thể loại</a></li>
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('tag') }}'><i class='nav-icon la la-link'></i>

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\URL as LARURL;
 use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
 use Ophim\Core\Models\Actor;
+use Ophim\Core\Models\Catalog;
 use Ophim\Core\Models\Category;
 use Ophim\Core\Models\Director;
 use Ophim\Core\Models\Movie;
@@ -73,7 +74,7 @@ class SiteMapController extends CrudController
         $path = public_path($file_name);
         if(file_exists($path)) {
             $content = file_get_contents($path);
-            $content = str_replace('?>', '?><?xml-stylesheet type="text/xsl" href="'. LARURL::to('/') .'/main-sitemap.xsl"?>', $content);
+            $content = str_replace('?'.'>', '?'.'>'.'<'.'?'.'xml-stylesheet type="text/xsl" href="'. LARURL::to('/') .'/main-sitemap.xsl"?'.'>', $content);
             file_put_contents($path, $content);
         }
     }
@@ -90,17 +91,16 @@ class SiteMapController extends CrudController
             ->setLastModificationDate(now())
             ->setChangeFrequency(Url::CHANGE_FREQUENCY_HOURLY)
             ->setPriority(1));
-
-        $sitemap_page->add(Url::create(route('types.movies.index', ['type' => 'phim-le']))
-            ->setLastModificationDate(now())
-            ->setChangeFrequency(Url::CHANGE_FREQUENCY_HOURLY)
-            ->setPriority(0.9));
-
-        $sitemap_page->add(Url::create(route('types.movies.index', ['type' => 'phim-bo']))
-            ->setLastModificationDate(now())
-            ->setChangeFrequency(Url::CHANGE_FREQUENCY_HOURLY)
-            ->setPriority(0.9));
-
+        Catalog::chunkById(100, function ($catalogs) use ($sitemap_page) {
+            foreach ($catalogs as $catalog) {
+                $sitemap_page->add(
+                    Url::create($catalog->getUrl())
+                        ->setLastModificationDate(now())
+                        ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY)
+                        ->setPriority(0.9)
+                );
+            }
+        });
         $sitemap_page->writeToFile(public_path('sitemap/page-sitemap.xml'));
         $this->add_styles('sitemap/page-sitemap.xml');
         $sitemap_index->add('sitemap/page-sitemap.xml');

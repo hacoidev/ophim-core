@@ -17,6 +17,7 @@ Route::group([
     ),
     'namespace'  => 'Ophim\Core\Controllers\Admin',
 ], function () {
+    Route::crud('catalog', 'CatalogCrudController');
     Route::crud('category', 'CategoryCrudController');
     Route::crud('region', 'RegionCrudController');
     Route::crud('movie', 'MovieCrudController');

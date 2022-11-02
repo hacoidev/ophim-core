@@ -140,6 +140,8 @@ class MovieCrudController extends CrudController
             }
         );
 
+        CRUD::addButtonFromModelFunction('line', 'open_view', 'openView', 'beginning');
+
         CRUD::addColumn([
             'name' => 'name',
             'origin_name' => 'origin_name',

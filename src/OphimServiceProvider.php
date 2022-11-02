@@ -13,6 +13,7 @@ use Ophim\Core\Console\InstallCommand;
 use Ophim\Core\Console\GenerateMenuCommand;
 use Ophim\Core\Middleware\CKFinderAuth;
 use Ophim\Core\Models\Actor;
+use Ophim\Core\Models\Catalog;
 use Ophim\Core\Models\Category;
 use Ophim\Core\Models\Director;
 use Ophim\Core\Models\Episode;
@@ -23,6 +24,7 @@ use Ophim\Core\Models\Studio;
 use Ophim\Core\Models\Tag;
 use Ophim\Core\Models\Theme;
 use Ophim\Core\Policies\ActorPolicy;
+use Ophim\Core\Policies\CatalogPolicy;
 use Ophim\Core\Policies\CategoryPolicy;
 use Ophim\Core\Policies\CrawlSchedulePolicy;
 use Ophim\Core\Policies\DirectorPolicy;
@@ -44,6 +46,7 @@ class OphimServiceProvider extends ServiceProvider
     {
         return [
             Actor::class => ActorPolicy::class,
+            Catalog::class => CatalogPolicy::class,
             Category::class => CategoryPolicy::class,
             Region::class => RegionPolicy::class,
             Director::class => DirectorPolicy::class,

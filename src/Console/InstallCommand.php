@@ -5,6 +5,7 @@ namespace Ophim\Core\Console;
 use Backpack\Settings\app\Models\Setting;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Ophim\Core\Database\Seeders\CatalogsTableSeeder;
 use Ophim\Core\Database\Seeders\CategoriesTableSeeder;
 use Ophim\Core\Database\Seeders\MenusTableSeeder;
 use Ophim\Core\Database\Seeders\PermissionsSeeder;
@@ -111,6 +112,12 @@ class InstallCommand extends Command
 
         $this->call('db:seed', [
             'class' => SettingsTableSeeder::class,
+        ]);
+        $this->progressBar->advance();
+        $this->newLine(1);
+
+        $this->call('db:seed', [
+            'class' => CatalogsTableSeeder::class,
         ]);
         $this->progressBar->advance();
         $this->newLine(1);
