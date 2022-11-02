@@ -341,10 +341,10 @@ class MovieCrudController extends CrudController
         $movie = Movie::find($id);
 
         // Delete images
-        if (!filter_var($movie->thumb_url, FILTER_VALIDATE_URL) && file_exists(public_path($movie->thumb_url))) {
+        if ($movie->thumb_url && !filter_var($movie->thumb_url, FILTER_VALIDATE_URL) && file_exists(public_path($movie->thumb_url))) {
             unlink(public_path($movie->thumb_url));
         }
-        if (!filter_var($movie->poster_url, FILTER_VALIDATE_URL) && file_exists(public_path($movie->poster_url))) {
+        if ($movie->poster_url && !filter_var($movie->poster_url, FILTER_VALIDATE_URL) && file_exists(public_path($movie->poster_url))) {
             unlink(public_path($movie->poster_url));
         }
 
