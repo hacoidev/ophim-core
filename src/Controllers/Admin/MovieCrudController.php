@@ -34,6 +34,10 @@ class MovieCrudController extends CrudController
     }
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
+    use \Ophim\Core\Traits\Operations\BulkDeleteOperation {
+        bulkDelete as traitBulkDelete;
+    }
+
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
      *
@@ -335,11 +339,8 @@ class MovieCrudController extends CrudController
     //     $this->authorize('delete', $this->crud->getEntryWithLocale($this->crud->getCurrentEntryId()));
     // }
 
-    public function destroy($id)
+    public function deleteImage($movie)
     {
-        $this->crud->hasAccessOrFail('delete');
-        $movie = Movie::find($id);
-
         // Delete images
         if ($movie->thumb_url && !filter_var($movie->thumb_url, FILTER_VALIDATE_URL) && file_exists(public_path($movie->thumb_url))) {
             unlink(public_path($movie->thumb_url));
@@ -347,6 +348,15 @@ class MovieCrudController extends CrudController
         if ($movie->poster_url && !filter_var($movie->poster_url, FILTER_VALIDATE_URL) && file_exists(public_path($movie->poster_url))) {
             unlink(public_path($movie->poster_url));
         }
+        return true;
+    }
+
+    public function destroy($id)
+    {
+        $this->crud->hasAccessOrFail('delete');
+        $movie = Movie::find($id);
+
+        $this->deleteImage($movie);
 
         // get entry ID from Request (makes sure its the last ID for nested resources)
         $id = $this->crud->getCurrentEntryId() ?? $id;
@@ -355,5 +365,21 @@ class MovieCrudController extends CrudController
         if ($res) {
         }
         return $res;
+    }
+
+    public function bulkDelete()
+    {
+        $this->crud->hasAccessOrFail('bulkDelete');
+        $entries = request()->input('entries', []);
+        $deletedEntries = [];
+
+        foreach ($entries as $key => $id) {
+            if ($entry = $this->crud->model->find($id)) {
+                $this->deleteImage($entry);
+                $deletedEntries[] = $entry->delete();
+            }
+        }
+
+        return $deletedEntries;
     }
 }
