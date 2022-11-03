@@ -1,6 +1,10 @@
 # Server Requirements:
 - Laravel Framework 8.
 - PHP 7.3 or higher.
+    + Configure `php.ini`:
+    ```
+    max_input_vars=100000
+    ```
 - MySQL 5.7 or higher.
 # Add-on & Themes:
 - Home: [OPhimCMS.Com](https://ophimcms.com)
