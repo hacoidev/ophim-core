@@ -57,6 +57,7 @@ Route::get('/', function () {
 
 # Note
 - Configure a production environment file `.env`
+    + `APP_NAME=your_app_name`
     + `APP_ENV=production`
     + `APP_URL=https://your-domain.com`
 - Configure timezone `/config/app.php`
