@@ -9,7 +9,7 @@
 - MySQL 5.7 or higher.
 # Add-on & Themes:
 - Home: [OPhimCMS.Com](https://ophimcms.com)
-- Admin: [OPhimCMS.Com/Admin](https://ophimcms.com/Admin)
+- Admin: [OPhimCMS.Com/admin](https://ophimcms.com/admin)
 - Free Movies Data: [OPhim1.CC](https://ophim1.cc)
 
 - Add-on:
