@@ -30,8 +30,9 @@
 
 # Installation:
 1. CD to project root and run: `composer require hacoidev/ophim-core -W`
-2. Then, run command: `php artisan ophim:install`
-3. Change app\Models\User:
+2. Configuration your database connection information in file `.env`
+3. Then, run command: `php artisan ophim:install`
+4. Change app\Models\User:
 ```php
 use Ophim\Core\Models\User as OphimUser;
 
@@ -40,15 +41,15 @@ class User extends OphimUser {
     // ...
 }
 ```
-4. Create new user by command: `php artisan ophim:user`
+5. Create new user by command: `php artisan ophim:user`
 
-5. Remove this route definition in routes/web.php
+6. Remove this route definition in routes/web.php
 ```php
 Route::get('/', function () {
     return view('welcome');
 });
 ```
-6. Run `php artisan optimize:clear`
+7. Run `php artisan optimize:clear`
 
 # Update:
 1. CD to project root and run: `composer update hacoidev/ophim-core -W`

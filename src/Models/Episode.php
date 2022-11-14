@@ -80,7 +80,7 @@ class Episode extends Model implements Cacheable, HasUrlInterface, SeoInterface
             ->addProperty('locale', 'vi-VN')
             ->setUrl($this->getUrl())
             ->setDescription(Str::limit(strip_tags($this->movie->content), 150, '...'))
-            ->addImages([$this->thumb_url, $this->poster_url]);
+            ->addImages([$this->movie->thumb_url, $this->movie->poster_url]);
 
         TwitterCard::setSite(setting('site_meta_siteName'))
             ->setTitle($this->getTitle(), false)
