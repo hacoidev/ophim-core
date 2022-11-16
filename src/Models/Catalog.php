@@ -72,7 +72,7 @@ class Catalog extends Model implements TaxonomyInterface, Cacheable, SeoInterfac
             ->setTitle($seo_title, false)
             ->addProperty('type', 'movie')
             ->addProperty('locale', 'vi-VN')
-            ->setUrl($this->getUrl())
+            ->addProperty('url', $this->getUrl())
             ->setDescription($seo_des)
             ->addImages([$this->thumb_url, $this->poster_url]);
 

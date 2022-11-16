@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="{{ setting('app.locale') }}">
+<html lang="{{ config('app.locale') }}">
 
 <head>
     <meta charSet="utf-8" />
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-    <meta http-equiv="content-language" content="{{ setting('app.locale') }}" />
+    <meta http-equiv="content-language" content="{{ config('app.locale') }}" />
     <meta name="robots" content="index,follow" />
     <meta name="revisit-after" content="1 days" />
     <meta name="ROBOTS" content="index,follow" />

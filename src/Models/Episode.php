@@ -78,14 +78,14 @@ class Episode extends Model implements Cacheable, HasUrlInterface, SeoInterface
             ->setTitle($this->getTitle(), false)
             ->addProperty('type', 'episode')
             ->addProperty('locale', 'vi-VN')
-            ->setUrl($this->getUrl())
+            ->addProperty('url', $this->getUrl())
             ->setDescription(Str::limit(strip_tags($this->movie->content), 150, '...'))
-            ->addImages([$this->movie->thumb_url, $this->movie->poster_url]);
+            ->addImages([request()->root() . $this->movie->thumb_url, request()->root() . $this->movie->poster_url]);
 
         TwitterCard::setSite(setting('site_meta_siteName'))
             ->setTitle($this->getTitle(), false)
             ->setType('episode')
-            ->setImages([$this->movie->thumb_url, $this->movie->poster_url])
+            ->setImages([request()->root() . $this->movie->thumb_url, request()->root() . $this->movie->poster_url])
             ->setDescription(Str::limit(strip_tags($this->movie->content), 150, '...'))
             ->setUrl($this->getUrl());
         // ->addValue($key, $value);
@@ -94,7 +94,7 @@ class Episode extends Model implements Cacheable, HasUrlInterface, SeoInterface
             ->setSite(setting('site_meta_siteName'))
             ->setTitle($this->getTitle(), false)
             ->setType('episode')
-            ->setImages([$this->movie->thumb_url, $this->movie->poster_url])
+            ->setImages([request()->root() . $this->movie->thumb_url, request()->root() . $this->movie->poster_url])
             ->setDescription(Str::limit(strip_tags($this->movie->content), 150, '...'))
             ->setUrl($this->getUrl());
         // ->addValue($key, $value);
