@@ -81,6 +81,7 @@ class Movie extends Model implements TaxonomyInterface, Cacheable, SeoInterface
             ->setTitle($this->getTitle(), false)
             ->addProperty('type', 'movie')
             ->addProperty('locale', 'vi-VN')
+            ->addProperty('updated_time', $this->updated_at)
             ->addProperty('url', $this->getUrl())
             ->setDescription(Str::limit(strip_tags($this->content), 150, '...'))
             ->addImages([request()->root() . $this->thumb_url, request()->root() . $this->poster_url]);
@@ -99,6 +100,8 @@ class Movie extends Model implements TaxonomyInterface, Cacheable, SeoInterface
             ->setType('movie')
             ->setDescription(Str::limit(strip_tags($this->content), 150, '...'))
             ->setImages([request()->root() . $this->thumb_url, request()->root() . $this->poster_url])
+            ->addValue('dateCreated', $this->created_at)
+            ->addValue('director', count($this->directors) ? $this->directors()->first()->name : "")
             ->setUrl($this->getUrl());
         // ->addValue($key, $value);
     }

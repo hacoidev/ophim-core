@@ -79,6 +79,7 @@ class Episode extends Model implements Cacheable, HasUrlInterface, SeoInterface
             ->addProperty('type', 'episode')
             ->addProperty('locale', 'vi-VN')
             ->addProperty('url', $this->getUrl())
+            ->addProperty('updated_time', $this->movie->updated_at)
             ->setDescription(Str::limit(strip_tags($this->movie->content), 150, '...'))
             ->addImages([request()->root() . $this->movie->thumb_url, request()->root() . $this->movie->poster_url]);
 
@@ -96,6 +97,8 @@ class Episode extends Model implements Cacheable, HasUrlInterface, SeoInterface
             ->setType('episode')
             ->setImages([request()->root() . $this->movie->thumb_url, request()->root() . $this->movie->poster_url])
             ->setDescription(Str::limit(strip_tags($this->movie->content), 150, '...'))
+            ->addValue('dateCreated', $this->movie->created_at)
+            ->addValue('director', count($this->movie->directors) ? $this->movie->directors()->first()->name : "")
             ->setUrl($this->getUrl());
         // ->addValue($key, $value);
     }
