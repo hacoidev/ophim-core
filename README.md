@@ -55,6 +55,7 @@ Route::get('/', function () {
 1. CD to project root and run: `composer update hacoidev/ophim-core -W`
 2. Then, run command: `php artisan ophim:install`
 3. Run `php artisan optimize:clear`
+4. Clear PHP Opcache in server (if enabled)
 
 # Note
 - Configure a production environment file `.env`
@@ -63,6 +64,7 @@ Route::get('/', function () {
     + `APP_URL=https://your-domain.com`
 - Configure timezone `/config/app.php`
     + `'timezone' => 'Asia/Ho_Chi_Minh'`
+    + `'locale' => 'vi'`
     
 # Reset view counter:
 - Setup crontab, add this entry:
