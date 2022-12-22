@@ -95,7 +95,7 @@
         }
     </style>
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="card-counter primary">
                 <i class="la la-play-circle"></i>
                 <span class="count-numbers counter">{{ $count_movies }}</span>
@@ -103,7 +103,7 @@
             </div>
         </div>
 
-        <div class="col-md-3">
+        <div class="col-md-2">
             <div class="card-counter info">
                 <i class="las la-server"></i>
                 <span class="count-numbers counter">{{ $count_episodes }}</span>
@@ -120,6 +120,14 @@
         </div>
 
         <div class="col-md-2">
+            <div class="card-counter success">
+                <i class="las la-user"></i>
+                <span class="count-numbers counter">{{ $count_users }}</span>
+                <span class="count-name">Users</span>
+            </div>
+        </div>
+
+        <div class="col-md-2">
             <div class="card-counter bg-primary">
                 <i class="la la-paint-brush"></i>
                 <span class="count-numbers counter">{{ $count_themes }}</span>
@@ -128,10 +136,10 @@
         </div>
 
         <div class="col-md-2">
-            <div class="card-counter success">
-                <i class="las la-user"></i>
-                <span class="count-numbers counter">{{ $count_users }}</span>
-                <span class="count-name">Users</span>
+            <div class="card-counter">
+                <i class="las la-puzzle-piece"></i>
+                <span class="count-numbers counter">{{ count(config('plugins')) }}</span>
+                <span class="count-name">Plugins</span>
             </div>
         </div>
     </div>
