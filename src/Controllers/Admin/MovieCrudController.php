@@ -70,13 +70,13 @@ class MovieCrudController extends CrudController
 
         $this->crud->addFilter([
             'name'  => 'status',
-            'type'  => 'select',
+            'type'  => 'select2',
             'label' => 'Tình trạng'
         ], function () {
             return [
-                'trailer' => 'trailer',
-                'ongoing' => 'ongoing',
-                'completed' => 'completed'
+                'trailer' => 'Sắp chiếu',
+                'ongoing' => 'Đang chiếu',
+                'completed' => 'Hoàn thành'
             ];
         }, function ($val) {
             $this->crud->addClause('where', 'status', $val);
@@ -84,12 +84,12 @@ class MovieCrudController extends CrudController
 
         $this->crud->addFilter([
             'name'  => 'type',
-            'type'  => 'select',
+            'type'  => 'select2',
             'label' => 'Định dạng'
         ], function () {
             return [
-                'single' => 'single',
-                'series' => 'series'
+                'single' => 'Phim lẻ',
+                'series' => 'Phim bộ'
             ];
         }, function ($val) {
             $this->crud->addClause('where', 'type', $val);
@@ -97,44 +97,67 @@ class MovieCrudController extends CrudController
 
         $this->crud->addFilter([
             'name'  => 'category_id',
-            'type'  => 'select',
+            'type'  => 'select2',
             'label' => 'Thể loại'
         ], function () {
             return Category::all()->pluck('name', 'id')->toArray();
         }, function ($value) { // if the filter is active
             $this->crud->query = $this->crud->query->whereHas('categories', function ($query) use ($value) {
-                $query->where('name', $value);
+                $query->where('id', $value);
             });
         });
 
         $this->crud->addFilter([
             'name'  => 'region_id',
-            'type'  => 'select',
+            'type'  => 'select2',
             'label' => 'Quốc gia'
         ], function () {
             return Region::all()->pluck('name', 'id')->toArray();
         }, function ($value) { // if the filter is active
             $this->crud->query = $this->crud->query->whereHas('regions', function ($query) use ($value) {
-                $query->where('name', $value);
+                $query->where('id', $value);
             });
+        });
+
+        $this->crud->addFilter([
+            'name'  => 'other',
+            'type'  => 'select2',
+            'label' => 'Thông tin'
+        ], function () {
+            return [
+                'thumb_url-' => 'Thiếu ảnh thumb',
+                'poster_url-' => 'Thiếu ảnh poster',
+                'trailer_url-' => 'Thiếu trailer',
+                'language-vietsub' => 'Vietsub',
+                'language-thuyết minh' => 'Thuyết minh',
+                'language-lồng tiếng' => 'Lồng tiếng',
+            ];
+        }, function ($values) {
+            $value = explode("-", $values);
+            $field = $value[0];
+            $val = $value[1];
+            if($field === 'language') {
+                $this->crud->query->where($field, 'like', '%' . $val . '%');
+            } else {
+                $this->crud->query->where($field, '')->orWhere($field, NULL);
+            }
         });
 
         $this->crud->addFilter(
             [
-                'type'  => 'checkbox',
+                'type'  => 'simple',
                 'name'  => 'is_recommended',
                 'label' => 'Đề cử'
             ],
             false, // the simple filter has no values, just the "Draft" label specified above
             function ($val) {
                 $this->crud->addClause('where', 'is_recommended', $val);
-                // $this->crud->query = $this->crud->query->where('draft', '1');
             }
         );
 
         $this->crud->addFilter(
             [
-                'type'  => 'checkbox',
+                'type'  => 'simple',
                 'name'  => 'is_shown_in_theater',
                 'label' => 'Chiếu rạp'
             ],

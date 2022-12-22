@@ -54,6 +54,7 @@ class EpisodeCrudController extends CrudController
          * - CRUD::column('price')->type('number');
          * - CRUD::addColumn(['name' => 'price', 'type' => 'number','tab'=>'Thông tin phim']);
          */
+        $this->crud->enableExportButtons();
         $this->crud->addClause('where', 'has_report', true);
 
         CRUD::addColumn([
@@ -67,6 +68,7 @@ class EpisodeCrudController extends CrudController
         ]);
         CRUD::addColumn(['name' => 'name', 'label' => 'Tập', 'type' => 'text']);
         CRUD::addColumn(['name' => 'type', 'label' => 'Type', 'type' => 'text']);
+        CRUD::addColumn(['name' => 'link', 'label' => 'Link', 'type' => 'textarea']);
     }
 
     /**

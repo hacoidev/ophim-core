@@ -17,6 +17,11 @@ Route::group([
     ),
     'namespace'  => 'Ophim\Core\Controllers\Admin',
 ], function () {
+    if (config('backpack.base.setup_dashboard_routes')) {
+        Route::get('dashboard', 'AdminController@dashboard')->name('backpack.dashboard');
+        Route::get('/', 'AdminController@redirect')->name('backpack');
+    }
+
     Route::crud('catalog', 'CatalogCrudController');
     Route::crud('category', 'CategoryCrudController');
     Route::crud('region', 'RegionCrudController');

@@ -93,8 +93,8 @@ $episodes = collect(old('episodes', isset($entry) ? $entry->episodes : []));
                             </table>
                         </div>
                         <div class="form-inline justify-content-left mb-3 px-0">
-                            <button type="button" class="btn btn-warning add-episode-btn" data-server="0"
-                                data-server-name="Vietsub #1">
+                            <button type="button" class="btn btn-warning add-episode-btn" data-server="{{ $loop->index }}"
+                                data-server-name="{{ $server }}">
                                 Thêm tập mới
                             </button>
                             <button type="button" class="btn btn-danger ml-2 float-right delete-server">

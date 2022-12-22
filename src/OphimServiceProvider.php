@@ -109,9 +109,8 @@ class OphimServiceProvider extends ServiceProvider
     protected function publishFiles()
     {
         $backpack_menu_contents_view = [
-            __DIR__ . '/../resources/views/core/base/inc/sidebar_content.blade.php'      => resource_path('views/vendor/hacoidev/base/inc/sidebar_content.blade.php'),
-            __DIR__ . '/../resources/views/core/base/inc/topbar_right_content.blade.php'      => resource_path('views/vendor/hacoidev/base/inc/topbar_right_content.blade.php'),
-            __DIR__ . '/../resources/views/core/crud/buttons/bulk_delete.blade.php'      => resource_path('views/vendor/hacoidev/crud/buttons/bulk_delete.blade.php'),
+            __DIR__ . '/../resources/views/core/base/'  => resource_path('views/vendor/hacoidev/base/'),
+            __DIR__ . '/../resources/views/core/crud/'      => resource_path('views/vendor/hacoidev/crud/'),
         ];
 
         $players = [
@@ -145,7 +144,7 @@ class OphimServiceProvider extends ServiceProvider
 
         config(['cachebusting_string' => \PackageVersions\Versions::getVersion('hacoidev/crud')]);
 
-        config(['backpack.base.project_logo' => '<b>Ophim</b>TV']);
+        config(['backpack.base.project_logo' => '<b>Ophim</b>CMS']);
         config(['backpack.base.developer_name' => 'hacoidev']);
         config(['backpack.base.developer_link' => 'mailto:hacoi.dev@gmail.com']);
         config(['backpack.base.show_powered_by' => false]);

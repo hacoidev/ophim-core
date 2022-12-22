@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'version' => explode('@', \PackageVersions\Versions::getVersion('hacoidev/ophim-core') ?? 0)[0],
     'episodes' => [
         'types' => [
             'embed' => 'Nhúng',
