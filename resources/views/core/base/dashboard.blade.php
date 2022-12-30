@@ -138,7 +138,7 @@
         <div class="col-md-2">
             <div class="card-counter">
                 <i class="las la-puzzle-piece"></i>
-                <span class="count-numbers counter">{{ count(config('plugins')) }}</span>
+                <span class="count-numbers counter">{{ count(config('plugins', [])) }}</span>
                 <span class="count-name">Plugins</span>
             </div>
         </div>

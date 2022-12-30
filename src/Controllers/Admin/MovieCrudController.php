@@ -149,9 +149,9 @@ class MovieCrudController extends CrudController
                 'name'  => 'is_recommended',
                 'label' => 'Đề cử'
             ],
-            false, // the simple filter has no values, just the "Draft" label specified above
-            function ($val) {
-                $this->crud->addClause('where', 'is_recommended', $val);
+            false,
+            function () {
+                $this->crud->addClause('where', 'is_recommended', true);
             }
         );
 
@@ -162,8 +162,8 @@ class MovieCrudController extends CrudController
                 'label' => 'Chiếu rạp'
             ],
             false,
-            function ($val) {
-                $this->crud->addClause('where', 'is_shown_in_theater', $val);
+            function () {
+                $this->crud->addClause('where', 'is_shown_in_theater', true);
             }
         );
 
