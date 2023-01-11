@@ -24,6 +24,10 @@ class EpisodeCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
+    use \Ophim\Core\Traits\Operations\BulkDeleteOperation {
+        bulkDelete as traitBulkDelete;
+    }
+
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
      *
@@ -97,5 +101,20 @@ class EpisodeCrudController extends CrudController
         CRUD::addField(['name' => 'link', 'label' => 'Nguồn phát', 'type' => 'url']);
         CRUD::addField(['name' => 'has_report', 'label' => 'Đánh dấu đang lỗi', 'type' => 'checkbox']);
         CRUD::addField(['name' => 'report_message', 'label' => 'Report message', 'type' => 'textarea']);
+    }
+
+    public function bulkDelete()
+    {
+        $this->crud->hasAccessOrFail('bulkDelete');
+        $entries = request()->input('entries', []);
+        $deletedEntries = [];
+
+        foreach ($entries as $key => $id) {
+            if ($entry = $this->crud->model->find($id)) {
+                $deletedEntries[] = $entry->update(['has_report' => 0, 'report_message' => '']);
+            }
+        }
+
+        return $deletedEntries;
     }
 }
