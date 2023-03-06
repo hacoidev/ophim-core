@@ -84,12 +84,15 @@ class Movie extends Model implements TaxonomyInterface, Cacheable, SeoInterface
             ->addProperty('updated_time', $this->updated_at)
             ->addProperty('url', $this->getUrl())
             ->setDescription(Str::limit(strip_tags($this->content), 150, '...'))
-            ->addImages([request()->root() . $this->thumb_url, request()->root() . $this->poster_url]);
+            ->addImages([
+                filter_var($this->thumb_url, FILTER_VALIDATE_URL) ? $this->thumb_url : request()->root() . $this->thumb_url,
+                filter_var($this->poster_url, FILTER_VALIDATE_URL) ? $this->poster_url : request()->root() . $this->poster_url
+            ]);
 
         TwitterCard::setSite(setting('site_meta_siteName'))
             ->setTitle($this->getTitle(), false)
             ->setType('movie')
-            ->setImage(request()->root() . $this->thumb_url)
+            ->setImage(filter_var($this->thumb_url, FILTER_VALIDATE_URL) ? $this->thumb_url : request()->root() . $this->thumb_url)
             ->setDescription(Str::limit(strip_tags($this->content), 150, '...'))
             ->setUrl($this->getUrl());
         // ->addValue($key, $value);
@@ -99,7 +102,10 @@ class Movie extends Model implements TaxonomyInterface, Cacheable, SeoInterface
             ->setTitle($this->getTitle(), false)
             ->setType('movie')
             ->setDescription(Str::limit(strip_tags($this->content), 150, '...'))
-            ->setImages([request()->root() . $this->thumb_url, request()->root() . $this->poster_url])
+            ->setImages([
+                filter_var($this->thumb_url, FILTER_VALIDATE_URL) ? $this->thumb_url : request()->root() . $this->thumb_url,
+                filter_var($this->poster_url, FILTER_VALIDATE_URL) ? $this->poster_url : request()->root() . $this->poster_url
+            ])
             ->addValue('dateCreated', $this->created_at)
             ->addValue('director', count($this->directors) ? $this->directors()->first()->name : "")
             ->setUrl($this->getUrl());

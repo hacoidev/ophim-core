@@ -139,7 +139,7 @@ class MovieCrudController extends CrudController
             if($field === 'language') {
                 $this->crud->query->where($field, 'like', '%' . $val . '%');
             } else {
-                $this->crud->query->where($field, '')->orWhere($field, NULL);
+                $this->crud->query->where($field, '')->orWhere($field, NULL)->orWhere($field, 'like', '%img.ophim%')->orWhere($field, 'like', '%img.hiephanhthienha%');
             }
         });
 

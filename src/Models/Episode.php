@@ -81,12 +81,18 @@ class Episode extends Model implements Cacheable, HasUrlInterface, SeoInterface
             ->addProperty('url', $this->getUrl())
             ->addProperty('updated_time', $this->movie->updated_at)
             ->setDescription(Str::limit(strip_tags($this->movie->content), 150, '...'))
-            ->addImages([request()->root() . $this->movie->thumb_url, request()->root() . $this->movie->poster_url]);
+            ->addImages([
+                filter_var($this->movie->thumb_url, FILTER_VALIDATE_URL) ? $this->movie->thumb_url : request()->root() . $this->movie->thumb_url,
+                filter_var($this->movie->poster_url, FILTER_VALIDATE_URL) ? $this->movie->poster_url : request()->root() . $this->movie->poster_url
+            ]);
 
         TwitterCard::setSite(setting('site_meta_siteName'))
             ->setTitle($this->getTitle(), false)
             ->setType('episode')
-            ->setImages([request()->root() . $this->movie->thumb_url, request()->root() . $this->movie->poster_url])
+            ->setImages([
+                filter_var($this->movie->thumb_url, FILTER_VALIDATE_URL) ? $this->movie->thumb_url : request()->root() . $this->movie->thumb_url,
+                filter_var($this->movie->poster_url, FILTER_VALIDATE_URL) ? $this->movie->poster_url : request()->root() . $this->movie->poster_url
+            ])
             ->setDescription(Str::limit(strip_tags($this->movie->content), 150, '...'))
             ->setUrl($this->getUrl());
         // ->addValue($key, $value);
@@ -95,7 +101,10 @@ class Episode extends Model implements Cacheable, HasUrlInterface, SeoInterface
             ->setSite(setting('site_meta_siteName'))
             ->setTitle($this->getTitle(), false)
             ->setType('episode')
-            ->setImages([request()->root() . $this->movie->thumb_url, request()->root() . $this->movie->poster_url])
+            ->setImages([
+                filter_var($this->movie->thumb_url, FILTER_VALIDATE_URL) ? $this->movie->thumb_url : request()->root() . $this->movie->thumb_url,
+                filter_var($this->movie->poster_url, FILTER_VALIDATE_URL) ? $this->movie->poster_url : request()->root() . $this->movie->poster_url
+            ])
             ->setDescription(Str::limit(strip_tags($this->movie->content), 150, '...'))
             ->addValue('dateCreated', $this->movie->created_at)
             ->addValue('director', count($this->movie->directors) ? $this->movie->directors()->first()->name : "")
