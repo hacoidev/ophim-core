@@ -62,6 +62,25 @@ class Theme extends Model implements Cacheable
         return '<a href="' . backpack_url("theme/{$this->id}/edit") . '" class="btn btn-primary">Edit</a>';
     }
 
+    public function deleteBtn($crud = false)
+    {
+        if ($this->getVersionAttribute() === 'Unknown') {
+
+            $template = <<<EOT
+            <form action="{actionRoute}" method="post" onsubmit="return confirm('Chắc chắn muốn xóa giao diện {display_name}?. ');" style="display: inline">
+                {csrfField}
+                <button class="btn btn-danger" type="submit">Delete</button>
+            </form>
+            EOT;
+            $html = str_replace("{actionRoute}", backpack_url("theme/{$this->id}/delete"), $template);
+            $html = str_replace("{csrfField}", csrf_field(), $html);
+            $html = str_replace("{display_name}", $this->display_name, $html);
+
+            return $html;
+        }
+        return '';
+    }
+
     public function activeBtn($crud = false)
     {
         $template = <<<EOT
@@ -82,7 +101,6 @@ class Theme extends Model implements Cacheable
             $html = str_replace("{name}", 'Activate', $html);
             $html = str_replace("{btnType}", 'btn-primary', $html);
         }
-
 
         return $html;
     }

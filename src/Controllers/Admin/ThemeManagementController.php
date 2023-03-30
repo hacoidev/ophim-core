@@ -47,6 +47,12 @@ class ThemeManagementController extends CrudController
             'uses'      => $controller . '@reset',
             'operation' => 'update',
         ]);
+
+        Route::post($segment . '/{id}/delete', [
+            'as'        => $routeName . '.delete',
+            'uses'      => $controller . '@delete',
+            'operation' => 'update',
+        ]);
     }
 
     /**
@@ -80,6 +86,7 @@ class ThemeManagementController extends CrudController
         $this->crud->addButtonFromModelFunction('line', 'editBtn', 'editBtn', 'beginning');
         $this->crud->addButtonFromModelFunction('line', 'resetBtn', 'resetBtn', 'beginning');
         $this->crud->addButtonFromModelFunction('line', 'activeBtn', 'activeBtn', 'beginning');
+        $this->crud->addButtonFromModelFunction('line', 'deleteBtn', 'deleteBtn', '');
     }
 
     /**
@@ -101,7 +108,22 @@ class ThemeManagementController extends CrudController
         }
     }
 
+    public function delete(Request $request, $id)
+    {
+        if (!backpack_user()->hasPermissionTo('Customize theme')) {
+            abort(403);
+        }
+        $theme = Theme::fromCache()->find($id);
+        if (is_null($theme)) {
+            Alert::warning("Không tìm thấy dữ liệu giao diện")->flash();
+            return redirect(backpack_url('theme'));
+        }
+        // delete row from db
+        $theme->delete();
 
+        Alert::success("Xóa giao diện thành công!")->flash();
+        return redirect(backpack_url('theme'));
+    }
 
     /**
      * Show the form for editing the specified resource.
