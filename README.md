@@ -9,7 +9,7 @@
 - MySQL 5.7 or higher.
 # Add-on & Themes:
 - Home: [OPhimCMS.Com](https://ophimcms.com)
-- Admin: [OPhimCMS.Com/admin](https://ophimcms.com/admin)
+- Admin: [default.OPhimCMS.Com/admin](https://default.ophimcms.com/admin)
 - Free Movies Data: [OPhim1.CC](https://ophim1.cc)
 
 - Add-on:
@@ -58,8 +58,6 @@ Route::get('/', function () {
 4. Clear PHP Opcache in server (if enabled)
 
 # Note
-- Command:
-    + Generate menu categories & regions: `php artisan ophim:menu:generate`
 - Configure a production environment file `.env`
     + `APP_NAME=your_app_name`
     + `APP_ENV=production`
@@ -68,7 +66,10 @@ Route::get('/', function () {
 - Configure timezone `/config/app.php`
     + `'timezone' => 'Asia/Ho_Chi_Minh'`
     + `'locale' => 'vi'`
-    
+
+# Command:
+- Generate menu categories & regions: `php artisan ophim:menu:generate`
+
 # Reset view counter:
 - Setup crontab, add this entry:
 ```
