@@ -46,12 +46,19 @@ class Catalog extends Model implements TaxonomyInterface, Cacheable, SeoInterfac
 
     public static function primaryCacheKey(): string
     {
+        $site_routes = setting('site_routes_types', '/danh-sach/{type}');
+        if (strpos($site_routes, '{type}')) return 'slug';
+        if (strpos($site_routes, '{id}')) return 'id';
         return 'slug';
     }
 
     public function getUrl()
     {
-        return route('types.movies.index', $this->slug);
+        $params = [];
+        $site_routes = setting('site_routes_types', '/danh-sach/{type}');
+        if (strpos($site_routes, '{type}')) $params['type'] = $this->slug;
+        if (strpos($site_routes, '{id}')) $params['id'] = $this->id;
+        return route('types.movies.index', $params);
     }
 
     public function generateSeoTags()
@@ -59,38 +66,59 @@ class Catalog extends Model implements TaxonomyInterface, Cacheable, SeoInterfac
         $seo_title = $this->seo_title;
         $seo_des = $this->seo_des;
         $seo_key = $this->seo_key;
+        $getUrl = $this->getUrl();
+        $site_meta_siteName = setting('site_meta_siteName');
 
         SEOMeta::setTitle($seo_title, false)
             ->setDescription($seo_des)
             ->addKeyword([$seo_key])
-            ->setCanonical($this->getUrl())
+            ->setCanonical($getUrl)
             ->setPrev(request()->root())
             ->setPrev(request()->root());
-        // ->addMeta($meta, $value, 'property');
 
-        OpenGraph::setSiteName(setting('site_meta_siteName'))
+        OpenGraph::setSiteName($site_meta_siteName)
+            ->setType('website')
             ->setTitle($seo_title, false)
-            ->addProperty('type', 'movie')
             ->addProperty('locale', 'vi-VN')
-            ->addProperty('url', $this->getUrl())
-            ->setDescription($seo_des)
-            ->addImages([$this->thumb_url, $this->poster_url]);
+            ->addProperty('url', $getUrl)
+            ->setDescription($seo_des);
 
-        TwitterCard::setSite(setting('site_meta_siteName'))
+        TwitterCard::setSite($site_meta_siteName)
             ->setTitle($seo_title, false)
-            ->setType('movie')
-            ->setImage($this->thumb_url)
+            ->setType('summary')
             ->setDescription($seo_des)
-            ->setUrl($this->getUrl());
-        // ->addValue($key, $value);
+            ->setUrl($getUrl);
 
         JsonLdMulti::newJsonLd()
-        ->setSite(setting('site_meta_siteName'))
-        ->setTitle($seo_title, false)
-        ->setType('movie')
-        ->setDescription($seo_des)
-        ->setUrl($this->getUrl());
-    // ->addValue($key, $value);
+            ->setSite($site_meta_siteName)
+            ->setTitle($seo_title, false)
+            ->setType('WebPage')
+            ->setDescription($seo_des)
+            ->setUrl($getUrl);
+
+        $breadcrumb = [];
+        array_push($breadcrumb, [
+            '@type' => 'ListItem',
+            'position' => 1,
+            'name' => 'Home',
+            'item' => url('/')
+        ]);
+        array_push($breadcrumb, [
+            '@type' => 'ListItem',
+            'position' => 2,
+            'name' => $this->name,
+            'item' => $getUrl
+        ]);
+        array_push($breadcrumb, [
+            '@type' => 'ListItem',
+            'position' => 3,
+            'name' => "Trang " . (request()->get('page') ?: 1),
+        ]);
+        JsonLdMulti::newJsonLd()
+            ->setType('BreadcrumbList')
+            ->addValue('name', '')
+            ->addValue('description', '')
+            ->addValue('itemListElement', $breadcrumb);
     }
 
     public function openView($crud = false)

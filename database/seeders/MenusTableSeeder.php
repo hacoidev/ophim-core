@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Ophim\Core\Models\Category;
 use Ophim\Core\Models\Menu;
 use Ophim\Core\Models\Region;
+use Ophim\Core\Models\Catalog;
 use Ophim\Core\Models\Theme;
 
 class MenusTableSeeder extends Seeder
@@ -19,25 +20,27 @@ class MenusTableSeeder extends Seeder
      */
     public function run()
     {
-        $homeMenu = Menu::firstOrCreate(['name' => 'Trang chủ', 'link' => '/']);
-        $categoryGroup = Menu::firstOrCreate(['name' => 'Thể loại', 'link' => '#']);
+        $homeMenu = Menu::firstOrCreate(['name' => 'Trang chủ', 'link' => '/', 'type' => 'internal_link']);
+        $categoryGroup = Menu::firstOrCreate(['name' => 'Thể loại', 'link' => '#', 'type' => 'internal_link']);
         $categories = Category::all();
         foreach ($categories as $category) {
             Menu::updateOrCreate([
                 'name' => $category->name,
             ], [
-                'link' => '/the-loai/' . $category->slug,
+                'link' => $category->getUrl(false),
+                'type' => 'internal_link',
                 'parent_id' => $categoryGroup->id
             ]);
         }
 
-        $regionGroup = Menu::firstOrCreate(['name' => 'Quốc gia', 'link' => '#']);
+        $regionGroup = Menu::firstOrCreate(['name' => 'Quốc gia', 'link' => '#', 'type' => 'internal_link']);
         $regions = Region::all();
         foreach ($regions as $region) {
             Menu::updateOrCreate([
                 'name' => $region->name,
             ], [
-                'link' => '/quoc-gia/' . $region->slug,
+                'link' => $region->getUrl(false),
+                'type' => 'internal_link',
                 'parent_id' => $regionGroup->id
             ]);
         }

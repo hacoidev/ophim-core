@@ -47,6 +47,32 @@ class SettingsTableSeeder extends Seeder
                 ]),
                 'active'      => 0,
             ],
+            [
+                'key'         => 'site_image_proxy_url',
+                'description' => 'site_image_proxy_url',
+                'name'        => 'Cấu hình proxy',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                    'hint' => '{image_url}: biến hình ảnh'
+                ]),
+                'value' => 'https://images2-focus-opensocial.googleusercontent.com/gadgets/proxy?container=focus&refresh=604800&url={image_url}',
+                'active'      => 0,
+            ],
+            [
+                'key'           => 'site_image_proxy_enable',
+                'description'   => 'site_image_proxy_enable',
+                'name'          => 'Sử dụng Proxy cho đường dẫn hình ảnh',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'switch',
+                    'label'         => 'Use proxy link in image path',
+                    'color'         => 'primary', // May be any bootstrap color class or an hex color
+                    'onLabel'       => '✓',
+                    'offLabel'      => '✕'
+                ]),
+                'active'      => 0,
+            ]
         ];
 
         $metas = [
@@ -118,6 +144,32 @@ class SettingsTableSeeder extends Seeder
                     'type' => 'ckfinder',
                     'tab' => 'General'
                 ]),
+                'active'      => 0,
+            ],
+            [
+                'key'         => 'site_meta_head_tags',
+                'description' => 'site_meta_head_tags',
+                'name'        => 'Head meta tags',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'textarea',
+                    'tab' => 'General',
+                    'attributes' => [
+                        'rows' => 5
+                    ],
+                ]),
+                'value' => <<<EOT
+                <meta charSet="utf-8" />
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+                <meta name="robots" content="index,follow" />
+                <meta name="revisit-after" content="1 days" />
+                <meta name="ROBOTS" content="index,follow" />
+                <meta name="googlebot" content="index,follow" />
+                <meta name="BingBOT" content="index,follow" />
+                <meta name="yahooBOT" content="index,follow" />
+                <meta name="slurp" content="index,follow" />
+                <meta name="msnbot" content="index,follow" />
+                EOT,
                 'active'      => 0,
             ],
             [
@@ -379,7 +431,126 @@ class SettingsTableSeeder extends Seeder
                 ]),
                 'value' => 'xem phim {name},phim {name},{name} vietsub',
                 'active'      => 0,
-            ]
+            ],
+            [
+                'key'         => 'site_routes_movie',
+                'description' => 'site_routes_movie',
+                'name'        => 'Trang thông tin phim',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                    'hint' => '<span class="text-danger">{movie}, {id}</span> Buộc phải có ít nhất 1 param',
+                    'tab' => 'Slug'
+                ]),
+                'value' => '/phim/{movie}',
+                'active'      => 0,
+            ],
+            [
+                'key'         => 'site_routes_episode',
+                'description' => 'site_routes_episode',
+                'name'        => 'Trang xem phim',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                    'hint' => <<<EOT
+                    <span class="text-danger">{movie}, {movie_id}</span> Ít nhất 1<br />
+                    <span class="text-danger">{episode}, {id}</span> Bắt buộc<br />
+                    EOT,
+                    'tab' => 'Slug'
+                ]),
+                'value' => '/phim/{movie}/{episode}-{id}',
+                'active'      => 0,
+            ],
+            [
+                'key'         => 'site_routes_category',
+                'description' => 'site_routes_category',
+                'name'        => 'Trang thể loại',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                    'hint' => <<<EOT
+                    <span class="text-danger">{category}, {id}</span> Ít nhất 1
+                    EOT,
+                    'tab' => 'Slug'
+                ]),
+                'value' => '/the-loai/{category}',
+                'active'      => 0,
+            ],
+            [
+                'key'         => 'site_routes_region',
+                'description' => 'site_routes_region',
+                'name'        => 'Trang quốc gia',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                    'hint' => <<<EOT
+                    <span class="text-danger">{region}, {id}</span> Ít nhất 1
+                    EOT,
+                    'tab' => 'Slug'
+                ]),
+                'value' => '/quoc-gia/{region}',
+                'active'      => 0,
+            ],
+            [
+                'key'         => 'site_routes_tag',
+                'description' => 'site_routes_tag',
+                'name'        => 'Trang từ khóa',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                    'hint' => <<<EOT
+                    <span class="text-danger">{tag}, {id}</span> Ít nhất 1
+                    EOT,
+                    'tab' => 'Slug'
+                ]),
+                'value' => '/tu-khoa/{tag}',
+                'active'      => 0,
+            ],
+            [
+                'key'         => 'site_routes_types',
+                'description' => 'site_routes_types',
+                'name'        => 'Trang danh sách phim',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                    'hint' => <<<EOT
+                    <span class="text-danger">{type}, {id}</span> Ít nhất 1
+                    EOT,
+                    'tab' => 'Slug'
+                ]),
+                'value' => '/danh-sach/{type}',
+                'active'      => 0,
+            ],
+            [
+                'key'         => 'site_routes_actors',
+                'description' => 'site_routes_actors',
+                'name'        => 'Trang danh diễn viên',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                    'hint' => <<<EOT
+                    <span class="text-danger">{actor}, {id}</span> Ít nhất 1
+                    EOT,
+                    'tab' => 'Slug'
+                ]),
+                'value' => '/dien-vien/{actor}',
+                'active'      => 0,
+            ],
+            [
+                'key'         => 'site_routes_directors',
+                'description' => 'site_routes_directors',
+                'name'        => 'Trang danh đạo diễn',
+                'field'       => json_encode([
+                    'name' => 'value',
+                    'type' => 'text',
+                    'hint' => <<<EOT
+                    <span class="text-danger">{director}, {id}</span> Ít nhất 1
+                    EOT,
+                    'tab' => 'Slug'
+                ]),
+                'value' => '/dao-dien/{director}',
+                'active'      => 0,
+            ],
         ];
 
         $players = [

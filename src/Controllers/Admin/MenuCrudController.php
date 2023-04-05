@@ -20,6 +20,10 @@ class MenuCrudController extends CrudController
     use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
     use \Backpack\CRUD\app\Http\Controllers\Operations\ReorderOperation;
 
+    use \Ophim\Core\Traits\Operations\BulkDeleteOperation {
+        bulkDelete as traitBulkDelete;
+    }
+
     public function setup()
     {
         $this->crud->setModel(Menu::class);
@@ -104,5 +108,19 @@ class MenuCrudController extends CrudController
     protected function setupDeleteOperation()
     {
         $this->authorize('delete', $this->crud->getEntryWithLocale($this->crud->getCurrentEntryId()));
+    }
+
+    public function bulkDelete()
+    {
+        $this->crud->hasAccessOrFail('bulkDelete');
+        $entries = request()->input('entries', []);
+        $deletedEntries = [];
+        foreach ($entries as $key => $id) {
+            if ($entry = $this->crud->model->find($id)) {
+                $deletedEntries[] = $entry->delete();
+            }
+        }
+
+        return $deletedEntries;
     }
 }

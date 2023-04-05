@@ -54,12 +54,19 @@ class Tag extends Model implements TaxonomyInterface, Cacheable, SeoInterface
 
     public static function primaryCacheKey(): string
     {
+        $site_routes = setting('site_routes_tag', '/tu-khoa/{tag}');
+        if (strpos($site_routes, '{tag}')) return 'slug';
+        if (strpos($site_routes, '{id}')) return 'id';
         return 'slug';
     }
 
     public function getUrl()
     {
-        return route('tags.movies.index', $this->slug);
+        $params = [];
+        $site_routes = setting('site_routes_tag', '/tu-khoa/{tag}');
+        if (strpos($site_routes, '{tag}')) $params['tag'] = $this->slug;
+        if (strpos($site_routes, '{id}')) $params['id'] = $this->id;
+        return route('tags.movies.index', $params);
     }
 
     protected function titlePattern(): string
@@ -82,38 +89,74 @@ class Tag extends Model implements TaxonomyInterface, Cacheable, SeoInterface
         $seo_title = $this->getTitle();
         $seo_des = Str::limit($this->getDescription(), 150, '...');
         $seo_key = $this->getKeywords();
+        $movie_thumb_url = '';
+        $movie_poster_url = '';
+        $updated_at = '';
+        if(count($this->movies)) {
+            $movie_thumb_url = filter_var($this->movies->last()->thumb_url, FILTER_VALIDATE_URL) ? $this->movies->last()->thumb_url : request()->root() . $this->movies->last()->thumb_url;
+            $movie_poster_url = filter_var($this->movies->last()->poster_url, FILTER_VALIDATE_URL) ? $this->movies->last()->poster_url : request()->root() . $this->movies->last()->poster_url;
+            $updated_at = $this->movies->last()->updated_at;
+        }
+        $getUrl = $this->getUrl();
+        $site_meta_siteName = setting('site_meta_siteName');
 
         SEOMeta::setTitle($seo_title, false)
             ->setDescription($seo_des)
             ->addKeyword([$seo_key])
-            ->setCanonical($this->getUrl())
+            ->setCanonical($getUrl)
             ->setPrev(request()->root())
             ->setPrev(request()->root());
-        // ->addMeta($meta, $value, 'property');
 
-        OpenGraph::setSiteName(setting('site_meta_siteName'))
+        OpenGraph::setSiteName($site_meta_siteName)
+            ->setType('website')
             ->setTitle($seo_title, false)
-            ->addProperty('type', 'movie')
             ->addProperty('locale', 'vi-VN')
-            ->addProperty('url', $this->getUrl())
+            ->addProperty('updated_time', $updated_at)
+            ->addProperty('url', $getUrl)
             ->setDescription($seo_des)
             ->addImages([$this->thumb_url, $this->poster_url]);
 
-        TwitterCard::setSite(setting('site_meta_siteName'))
+        TwitterCard::setSite($site_meta_siteName)
             ->setTitle($seo_title, false)
-            ->setType('movie')
-            ->setImage($this->thumb_url)
+            ->setType('summary')
+            ->setImage($movie_thumb_url)
             ->setDescription($seo_des)
-            ->setUrl($this->getUrl());
-        // ->addValue($key, $value);
+            ->setUrl($getUrl);
 
         JsonLdMulti::newJsonLd()
-        ->setSite(setting('site_meta_siteName'))
-        ->setTitle($seo_title, false)
-        ->setType('movie')
-        ->setDescription($seo_des)
-        ->setUrl($this->getUrl());
-    // ->addValue($key, $value);
+            ->setSite($site_meta_siteName)
+            ->setTitle($seo_title, false)
+            ->setType('WebPage')
+            ->addValue('dateCreated', $updated_at)
+            ->addValue('dateModified', $updated_at)
+            ->addValue('datePublished', $updated_at)
+            ->setDescription($seo_des)
+            ->setImages([$movie_thumb_url, $movie_poster_url])
+            ->setUrl($getUrl);
+
+        $breadcrumb = [];
+        array_push($breadcrumb, [
+            '@type' => 'ListItem',
+            'position' => 1,
+            'name' => 'Home',
+            'item' => url('/')
+        ]);
+        array_push($breadcrumb, [
+            '@type' => 'ListItem',
+            'position' => 2,
+            'name' => $this->name,
+            'item' => $getUrl
+        ]);
+        array_push($breadcrumb, [
+            '@type' => 'ListItem',
+            'position' => 3,
+            'name' => "Trang " . (request()->get('page') ?: 1),
+        ]);
+        JsonLdMulti::newJsonLd()
+            ->setType('BreadcrumbList')
+            ->addValue('name', '')
+            ->addValue('description', '')
+            ->addValue('itemListElement', $breadcrumb);
     }
 
 

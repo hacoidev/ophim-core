@@ -47,11 +47,18 @@ class Episode extends Model implements Cacheable, HasUrlInterface, SeoInterface
 
     public function getUrl()
     {
-        $movie = Cache::remember("cache_movie_by_id:" . $this->movie_id, 5 * 60, function () {
+        $movie = Cache::remember("cache_movie_by_id:" . $this->movie_id, setting('site_cache_ttl', 5 * 60), function () {
             return $this->movie;
         });
 
-        return route('episodes.show', ['movie' => $movie->slug, 'episode' => $this->slug, 'id' => $this->id]);
+        $params = [];
+        $site_routes_movie = setting('site_routes_episode', '/phim/{movie}/{episode}-{id}');
+        if (strpos($site_routes_movie, '{movie}')) $params['movie'] = $movie->slug;
+        if (strpos($site_routes_movie, '{movie_id}')) $params['movie_id'] = $movie->id;
+        if (strpos($site_routes_movie, '{episode}')) $params['episode'] = $this->slug;
+        if (strpos($site_routes_movie, '{id}')) $params['id'] = $this->id;
+
+        return route('episodes.show', $params);
     }
 
     public function openEpisode($crud = false)
@@ -66,50 +73,112 @@ class Episode extends Model implements Cacheable, HasUrlInterface, SeoInterface
 
     public function generateSeoTags()
     {
-        SEOMeta::setTitle($this->getTitle(), false)
-            ->setDescription(Str::limit(strip_tags($this->movie->content), 150, '...'))
+        $movie_thumb_url = filter_var($this->movie->thumb_url, FILTER_VALIDATE_URL) ? $this->movie->thumb_url : request()->root() . $this->movie->thumb_url;
+        $movie_poster_url = filter_var($this->movie->poster_url, FILTER_VALIDATE_URL) ? $this->movie->poster_url : request()->root() . $this->movie->poster_url;
+        $movie_description = Str::limit(strip_tags($this->movie->content), 150, '...');
+        $episode_getUrl = $this->getUrl();
+        $getTitle = $this->getTitle();
+        $site_meta_siteName = setting('site_meta_siteName');
+
+        SEOMeta::setTitle($getTitle, false)
+            ->setDescription($movie_description)
             ->addKeyword($this->movie->tags()->pluck('name')->toArray())
-            ->setCanonical($this->getUrl())
+            ->addMeta('article:published_time', $this->updated_at->toW3CString(), 'property')
+            ->addMeta('article:section', $this->movie->categories->pluck('name')->join(","), 'property')
+            ->addMeta('article:tag', $this->movie->tags->pluck('name')->join(","), 'property')
+            ->setCanonical($episode_getUrl)
             ->setPrev(request()->root())
             ->setPrev(request()->root());
-        // ->addMeta($meta, $value, 'property');
 
-        OpenGraph::setSiteName(setting('site_meta_siteName'))
-            ->setTitle($this->getTitle(), false)
-            ->addProperty('type', 'episode')
+        OpenGraph::setType('video.episode')
+            ->setSiteName($site_meta_siteName)
+            ->setTitle($getTitle, false)
             ->addProperty('locale', 'vi-VN')
-            ->addProperty('url', $this->getUrl())
+            ->addProperty('url', $episode_getUrl)
             ->addProperty('updated_time', $this->movie->updated_at)
-            ->setDescription(Str::limit(strip_tags($this->movie->content), 150, '...'))
-            ->addImages([
-                filter_var($this->movie->thumb_url, FILTER_VALIDATE_URL) ? $this->movie->thumb_url : request()->root() . $this->movie->thumb_url,
-                filter_var($this->movie->poster_url, FILTER_VALIDATE_URL) ? $this->movie->poster_url : request()->root() . $this->movie->poster_url
+            ->setDescription($movie_description)
+            ->addImages([$movie_thumb_url,$movie_poster_url])
+            ->setVideoEpisode([
+                'actor' => $this->movie->actors->pluck('name')->join(","),
+                'director' => $this->movie->directors->pluck('name')->join(","),
+                'duration' => $this->movie->episode_time,
+                'release_date' => $this->created_at,
+                'tag' => $this->movie->tags->pluck('name')->join(", "),
+                'series' => 'video.tv_show'
             ]);
 
-        TwitterCard::setSite(setting('site_meta_siteName'))
-            ->setTitle($this->getTitle(), false)
-            ->setType('episode')
-            ->setImages([
-                filter_var($this->movie->thumb_url, FILTER_VALIDATE_URL) ? $this->movie->thumb_url : request()->root() . $this->movie->thumb_url,
-                filter_var($this->movie->poster_url, FILTER_VALIDATE_URL) ? $this->movie->poster_url : request()->root() . $this->movie->poster_url
-            ])
-            ->setDescription(Str::limit(strip_tags($this->movie->content), 150, '...'))
-            ->setUrl($this->getUrl());
-        // ->addValue($key, $value);
+        TwitterCard::setSite($site_meta_siteName)
+            ->setTitle($getTitle, false)
+            ->setType('summary')
+            ->setImage($movie_thumb_url)
+            ->setDescription($movie_description)
+            ->setUrl($episode_getUrl);
 
         JsonLdMulti::newJsonLd()
-            ->setSite(setting('site_meta_siteName'))
-            ->setTitle($this->getTitle(), false)
-            ->setType('episode')
-            ->setImages([
-                filter_var($this->movie->thumb_url, FILTER_VALIDATE_URL) ? $this->movie->thumb_url : request()->root() . $this->movie->thumb_url,
-                filter_var($this->movie->poster_url, FILTER_VALIDATE_URL) ? $this->movie->poster_url : request()->root() . $this->movie->poster_url
+            ->setSite($site_meta_siteName)
+            ->addValue('dateCreated', $this->created_at)
+            ->addValue('dateModified', $this->updated_at)
+            ->addValue('datePublished', $this->created_at)
+            ->setTitle($getTitle, false)
+            ->setType('Movie')
+            ->setDescription($movie_description)
+            ->setImages([$movie_thumb_url,$movie_poster_url])
+            ->addValue('aggregateRating', [
+                '@type' => 'AggregateRating',
+                'bestRating' => "10",
+                'worstRating' => "1",
+                'ratingValue' => $this->movie->getRatingStar(),
+                'reviewCount' => $this->movie->getRatingCount()
             ])
-            ->setDescription(Str::limit(strip_tags($this->movie->content), 150, '...'))
-            ->addValue('dateCreated', $this->movie->created_at)
-            ->addValue('director', count($this->movie->directors) ? $this->movie->directors()->first()->name : "")
-            ->setUrl($this->getUrl());
+            ->addValue('director', count($this->movie->directors) ? $this->movie->directors->map(function ($director) {
+                return ['@type'=> 'Person', 'name' => $director->name];
+            }) : "")
+            ->addValue('actor', count($this->movie->actors) ? $this->movie->actors->map(function ($actor) {
+                return ['@type'=> 'Person', 'name' => $actor->name];
+            }) : "")
+            ->setUrl($episode_getUrl);
         // ->addValue($key, $value);
+
+        $breadcrumb = [];
+        array_push($breadcrumb, [
+            '@type' => 'ListItem',
+            'position' => 1,
+            'name' => 'Home',
+            'item' => url('/')
+        ]);
+        foreach ($this->movie->regions as $item) {
+            array_push($breadcrumb, [
+                '@type' => 'ListItem',
+                'position' => 2,
+                'name' => $item->name,
+                'item' => $item->getUrl(),
+            ]);
+        }
+        foreach ($this->movie->categories as $item) {
+            array_push($breadcrumb, [
+                '@type' => 'ListItem',
+                'position' => 2,
+                'name' => $item->name,
+                'item' => $item->getUrl(),
+            ]);
+        }
+        array_push($breadcrumb, [
+            '@type' => 'ListItem',
+            'position' => 3,
+            'name' => $this->movie->name,
+            'item' => $this->movie->getUrl()
+        ]);
+        array_push($breadcrumb, [
+            '@type' => 'ListItem',
+            'position' => 4,
+            'name' => "Tập " . $this->name,
+        ]);
+
+        JsonLdMulti::newJsonLd()
+            ->setType('BreadcrumbList')
+            ->addValue('name', '')
+            ->addValue('description', '')
+            ->addValue('itemListElement', $breadcrumb);
     }
 
     /*

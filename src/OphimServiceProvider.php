@@ -169,25 +169,32 @@ class OphimServiceProvider extends ServiceProvider
             'seotools.meta.defaults.title' => setting('site_homepage_title'),
             'seotools.meta.defaults.description' => setting('site_meta_description'),
             'seotools.meta.defaults.keywords' => [setting('site_meta_keywords')],
-            'seotools.meta.defaults.canonical' => 'current'
+            'seotools.meta.defaults.canonical' => url("/")
         ]);
 
         config([
             'seotools.opengraph.defaults.title' => setting('site_homepage_title'),
             'seotools.opengraph.defaults.description' => setting('site_meta_description'),
-            'seotools.opengraph.defaults.url' => 'current',
+            'seotools.opengraph.defaults.type' => 'website',
+            'seotools.opengraph.defaults.url' => url("/"),
             'seotools.opengraph.defaults.site_name' => setting('site_meta_siteName'),
             'seotools.opengraph.defaults.images' => [setting('site_meta_image')],
         ]);
 
         config([
-            'seotools.twitter.defaults.site' => setting('site_meta_siteName')
+            'seotools.twitter.defaults.card' => 'website',
+            'seotools.twitter.defaults.title' => setting('site_homepage_title'),
+            'seotools.twitter.defaults.description' => setting('site_meta_description'),
+            'seotools.twitter.defaults.url' => url("/"),
+            'seotools.twitter.defaults.site' => setting('site_meta_siteName'),
+            'seotools.twitter.defaults.image' => setting('site_meta_image'),
         ]);
 
         config([
             'seotools.json-ld.defaults.title' => setting('site_homepage_title'),
+            'seotools.json-ld.defaults.type' => 'WebPage',
             'seotools.json-ld.defaults.description' => setting('site_meta_description'),
-            'seotools.json-ld.defaults.images' => [setting('site_meta_image')],
+            'seotools.json-ld.defaults.images' => setting('site_meta_image'),
         ]);
     }
 

@@ -13,6 +13,7 @@ use Ophim\Core\Contracts\TaxonomyInterface;
 use Hacoidev\CachingModel\Contracts\Cacheable;
 use Hacoidev\CachingModel\HasCache;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Ophim\Core\Contracts\SeoInterface;
 use Ophim\Core\Traits\ActorLog;
 use Ophim\Core\Traits\HasFactory;
@@ -59,62 +60,175 @@ class Movie extends Model implements TaxonomyInterface, Cacheable, SeoInterface
 
     public static function primaryCacheKey(): string
     {
+        $site_routes = setting('site_routes_movie', '/phim/{movie}');
+        if (strpos($site_routes, '{movie}')) return 'slug';
+        if (strpos($site_routes, '{id}')) return 'id';
         return 'slug';
     }
 
     public function getUrl()
     {
-        return route('movies.show', $this->slug);
+        $params = [];
+        $site_routes = setting('site_routes_movie', '/phim/{movie}');
+        if (strpos($site_routes, '{movie}')) $params['movie'] = $this->slug;
+        if (strpos($site_routes, '{id}')) $params['id'] = $this->id;
+        return route('movies.show', $params);
+    }
+
+    public function getThumbUrl()
+    {
+        if (setting('site_image_proxy_enable', false)) {
+            $image_url = filter_var($this->thumb_url, FILTER_VALIDATE_URL) ? $this->thumb_url : url('/') . $this->thumb_url;
+            return str_replace('{image_url}', urlencode($image_url), setting('site_image_proxy_url', ''));
+        }
+        return $this->thumb_url;
+    }
+
+    public function getPosterUrl()
+    {
+        if ($this->poster_url) {
+            if (setting('site_image_proxy_enable', false)) {
+                $image_url = filter_var($this->poster_url, FILTER_VALIDATE_URL) ? $this->poster_url : url('/') . $this->poster_url;
+                return str_replace('{image_url}', urlencode($image_url), setting('site_image_proxy_url', ''));
+            }
+            return $this->poster_url;
+        }
+        return $this->getThumbUrl();
+    }
+
+    public function getRatingStar()
+    {
+        return number_format($this->rating_star > 0 ? $this->rating_star : 8, 1);
+    }
+
+    public function getRatingCount()
+    {
+        return $this->rating_count >= 1 ? $this->rating_count : 1;
     }
 
     public function generateSeoTags()
     {
-        SEOMeta::setTitle($this->getTitle(), false)
-            ->setDescription(Str::limit(strip_tags($this->content), 150, '...'))
+        $movie_thumb_url = filter_var($this->thumb_url, FILTER_VALIDATE_URL) ? $this->thumb_url : request()->root() . $this->thumb_url;
+        $movie_poster_url = filter_var($this->poster_url, FILTER_VALIDATE_URL) ? $this->poster_url : request()->root() . $this->poster_url;
+        $seo_des = Str::limit(strip_tags($this->content), 150, '...');
+        $getTitle = $this->getTitle();
+        $getUrl = $this->getUrl();
+        $site_meta_siteName = setting('site_meta_siteName');
+
+        SEOMeta::setTitle($getTitle, false)
+            ->setDescription($seo_des)
             ->addKeyword($this->tags()->pluck('name')->toArray())
-            ->setCanonical($this->getUrl())
-            ->setPrev(request()->root())
-            ->setPrev(request()->root());
-        // ->addMeta($meta, $value, 'property');
+            ->addMeta('article:published_time', $this->updated_at->toW3CString(), 'property')
+            ->addMeta('article:section', $this->categories->pluck('name')->join(","), 'property')
+            ->addMeta('article:tag', $this->tags->pluck('name')->join(","), 'property')
+            ->setCanonical($getUrl)
+            ->setPrev(url('/'))
+            ->setPrev(url('/'));
 
-        OpenGraph::setSiteName(setting('site_meta_siteName'))
-            ->setTitle($this->getTitle(), false)
-            ->addProperty('type', 'movie')
-            ->addProperty('locale', 'vi-VN')
-            ->addProperty('updated_time', $this->updated_at)
-            ->addProperty('url', $this->getUrl())
-            ->setDescription(Str::limit(strip_tags($this->content), 150, '...'))
-            ->addImages([
-                filter_var($this->thumb_url, FILTER_VALIDATE_URL) ? $this->thumb_url : request()->root() . $this->thumb_url,
-                filter_var($this->poster_url, FILTER_VALIDATE_URL) ? $this->poster_url : request()->root() . $this->poster_url
-            ]);
+        if ($this->type === 'single') {
+            OpenGraph::setType('video.movie')
+                ->setTitle($getTitle, false)
+                ->setDescription($seo_des)
+                ->setSiteName($site_meta_siteName)
+                ->addProperty('locale', 'vi-VN')
+                ->addProperty('updated_time', $this->updated_at)
+                ->addProperty('url', $getUrl)
+                ->addImages([$movie_thumb_url,$movie_poster_url])
+                ->setVideoMovie([
+                    'actor' => $this->actors->pluck('name')->join(","),
+                    'director' => $this->directors->pluck('name')->join(","),
+                    'duration' => $this->episode_time,
+                    'release_date' => $this->created_at,
+                    'tag' => $this->tags->pluck('name')->join(", ")
+                ]);
+        } else {
+            OpenGraph::setType('video.tv_show')
+                ->setTitle($getTitle, false)
+                ->setDescription($seo_des)
+                ->setSiteName($site_meta_siteName)
+                ->addProperty('locale', 'vi-VN')
+                ->addProperty('updated_time', $this->updated_at)
+                ->addProperty('url', $getUrl)
+                ->addImages([$movie_thumb_url,$movie_poster_url])
+                ->setVideoTVShow([
+                    'actor' => $this->actors->pluck('name')->join(","),
+                    'director' => $this->directors->pluck('name')->join(","),
+                    'duration' => $this->episode_time,
+                    'release_date' => $this->created_at,
+                    'tag' => $this->tags->pluck('name')->join(", ")
+                ]);
+        }
 
-        TwitterCard::setSite(setting('site_meta_siteName'))
-            ->setTitle($this->getTitle(), false)
-            ->setType('movie')
-            ->setImage(filter_var($this->thumb_url, FILTER_VALIDATE_URL) ? $this->thumb_url : request()->root() . $this->thumb_url)
-            ->setDescription(Str::limit(strip_tags($this->content), 150, '...'))
-            ->setUrl($this->getUrl());
-        // ->addValue($key, $value);
+        TwitterCard::setSite($site_meta_siteName)
+            ->setTitle($getTitle, false)
+            ->setType('summary')
+            ->setImage($movie_thumb_url)
+            ->setDescription($seo_des)
+            ->setUrl($getUrl);
 
         JsonLdMulti::newJsonLd()
-            ->setSite(setting('site_meta_siteName'))
-            ->setTitle($this->getTitle(), false)
-            ->setType('movie')
-            ->setDescription(Str::limit(strip_tags($this->content), 150, '...'))
-            ->setImages([
-                filter_var($this->thumb_url, FILTER_VALIDATE_URL) ? $this->thumb_url : request()->root() . $this->thumb_url,
-                filter_var($this->poster_url, FILTER_VALIDATE_URL) ? $this->poster_url : request()->root() . $this->poster_url
-            ])
+            ->setSite($site_meta_siteName)
             ->addValue('dateCreated', $this->created_at)
-            ->addValue('director', count($this->directors) ? $this->directors()->first()->name : "")
-            ->setUrl($this->getUrl());
-        // ->addValue($key, $value);
+            ->addValue('dateModified', $this->updated_at)
+            ->addValue('datePublished', $this->created_at)
+            ->setTitle($getTitle, false)
+            ->setType('Movie')
+            ->setDescription($seo_des)
+            ->setImages([$movie_thumb_url, $movie_poster_url])
+            ->addValue('aggregateRating', [
+                '@type' => 'AggregateRating',
+                'bestRating' => "10",
+                'worstRating' => "1",
+                'ratingValue' => $this->getRatingStar(),
+                'reviewCount' => $this->getRatingCount()
+            ])
+            ->addValue('director', count($this->directors) ? $this->directors->map(function ($director) {
+                return ['@type' => 'Person', 'name' => $director->name];
+            }) : "")
+            ->addValue('actor', count($this->actors) ? $this->actors->map(function ($actor) {
+                return ['@type' => 'Person', 'name' => $actor->name];
+            }) : "")
+            ->setUrl($getUrl);
+
+        $breadcrumb = [];
+        array_push($breadcrumb, [
+            '@type' => 'ListItem',
+            'position' => 1,
+            'name' => 'Home',
+            'item' => url('/')
+        ]);
+        foreach ($this->regions as $item) {
+            array_push($breadcrumb, [
+                '@type' => 'ListItem',
+                'position' => 2,
+                'name' => $item->name,
+                'item' => $item->getUrl(),
+            ]);
+        }
+        foreach ($this->categories as $item) {
+            array_push($breadcrumb, [
+                '@type' => 'ListItem',
+                'position' => 2,
+                'name' => $item->name,
+                'item' => $item->getUrl(),
+            ]);
+        }
+        array_push($breadcrumb, [
+            '@type' => 'ListItem',
+            'position' => 3,
+            'name' => $this->name
+        ]);
+
+        JsonLdMulti::newJsonLd()
+            ->setType('BreadcrumbList')
+            ->addValue('name', '')
+            ->addValue('description', '')
+            ->addValue('itemListElement', $breadcrumb);
     }
 
     public function openView($crud = false)
     {
-        return '<a class="btn btn-sm btn-link" target="_blank" href="'.$this->getUrl().'" data-toggle="tooltip" title="View link"><i class="la la-link"></i> View</a>';
+        return '<a class="btn btn-sm btn-link" target="_blank" href="' . $this->getUrl() . '" data-toggle="tooltip" title="View link"><i class="la la-link"></i> View</a>';
     }
 
     /*
