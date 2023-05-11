@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Ophim\Core\Console\CreateUser;
 use Ophim\Core\Console\InstallCommand;
 use Ophim\Core\Console\GenerateMenuCommand;
+use Ophim\Core\Console\ChangeDomainEpisodeCommand;
 use Ophim\Core\Middleware\CKFinderAuth;
 use Ophim\Core\Models\Actor;
 use Ophim\Core\Models\Catalog;
@@ -101,6 +102,7 @@ class OphimServiceProvider extends ServiceProvider
             InstallCommand::class,
             CreateUser::class,
             GenerateMenuCommand::class,
+            ChangeDomainEpisodeCommand::class,
         ]);
 
         $this->bootSeoDefaults();

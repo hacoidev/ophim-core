@@ -67,6 +67,10 @@ Route::get('/', function () {
     + `'timezone' => 'Asia/Ho_Chi_Minh'`
     + `'locale' => 'vi'`
 
+- Command CMS
+    + `php artisan ophim:menu:generate` : Generate menu
+    + `php artisan ophim:episode:change_domain` : Change episode domain play stream
+
 # Command:
 - Generate menu categories & regions: `php artisan ophim:menu:generate`
 
