@@ -180,7 +180,7 @@ class MovieCrudController extends CrudController
             'type' => 'view',
             'view' => 'ophim::movies.columns.column_movie_info',
             'searchLogic' => function ($query, $column, $searchTerm) {
-                $query->where('name', 'like', '%' . $searchTerm . '%')->orWhere('origin_name', 'like', '%' . $searchTerm . '%');
+                $query->whereRaw("MATCH(name, origin_name) AGAINST(? IN BOOLEAN MODE)", [$searchTerm]);
             }
         ]);
 
