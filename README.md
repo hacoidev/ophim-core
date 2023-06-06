@@ -8,25 +8,13 @@
     ```
 - MySQL 5.7 or higher.
 # Add-on & Themes:
-- Home: [OPhimCMS.Com](https://ophimcms.com)
-- Admin: [default.OPhimCMS.Com/admin](https://default.ophimcms.com/admin)
-- Free Movies Data: [OPhim1.CC](https://ophim1.cc)
+- Home: [OPhimCMS.CC](https://ophimcms.cc)
+- Admin: [Demo.OPhimCMS.CC/admin](https://demo.ophimcms.cc/admin)
+- Free Movies Data: [OPhim.Movie](https://ophim.movie)
 
 - Add-on:
     - [OPhim Crawler](https://github.com/hacoidev/ophim-crawler)
-- Theme: [MORE...](https://ophimcms.com)
-    - [XIAO](https://github.com/phantom0803/ophim-theme-xiao)
-    - [PMC](https://github.com/phantom0803/ophim-theme-pmc)
-    - [HHTQ](https://github.com/phantom0803/ophim-theme-hhtq)
-    - [PNO](https://github.com/phantom0803/ophim-theme-pno)
-    - [IPC](https://github.com/phantom0803/ophim-theme-ipc)
-    - [PCC](https://github.com/phantom0803/ophim-theme-pcc)
-    - [F365](https://github.com/phantom0803/ophim-theme-f365)
-    - [LEGEND](https://github.com/phantom0803/ophim-theme-legend)
-    - [BCCO](https://github.com/phantom0803/ophim-theme-bcco)
-    - [BPTV](https://github.com/phantom0803/ophim-theme-bptv)
-    - [Ripple](https://github.com/hacoidev/ophim-ripple)
-    - [September](https://github.com/phantom0803/ophim-september)
+- Theme: [MORE...](https://ophimcms.cc)
 
 # Installation:
 1. CD to project root and run: `composer require hacoidev/ophim-core -W`
