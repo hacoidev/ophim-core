@@ -8,13 +8,13 @@
     ```
 - MySQL 5.7 or higher.
 # Add-on & Themes:
-- Home: [OPhimCMS.CC](https://ophimcms.cc)
+- Home: [OPhimCMS.CC](https://opcms.cc)
 - Admin: [Demo.OPhimCMS.CC/admin](https://demo.ophimcms.cc/admin)
 - Free Movies Data: [OPhim.Movie](https://ophim.movie)
 
 - Add-on:
     - [OPhim Crawler](https://github.com/hacoidev/ophim-crawler)
-- Theme: [MORE...](https://ophimcms.cc)
+- Theme: [MORE...](https://opcms.cc)
 
 # Installation:
 1. CD to project root and run: `composer require hacoidev/ophim-core -W`
