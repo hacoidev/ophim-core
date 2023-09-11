@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "laravel/framework": "^6|^7|^8",
+        "laravel/framework": "^6|^7|^8|^9|^10",
         "ckfinder/ckfinder-laravel-package": "v3.5.2.1",
         "hacoidev/laravel-caching-model": "^1.0.0",
         "hacoidev/crud": "^1.0.0",
