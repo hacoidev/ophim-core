@@ -1,5 +1,5 @@
 # Server Requirements:
-- Laravel Framework 8.
+- Laravel Framework 8|9|10.
 - PHP 7.3 or higher.
     + Configure `php.ini`:
     
