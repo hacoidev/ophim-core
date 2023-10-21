@@ -136,7 +136,7 @@ class MovieCrudController extends CrudController
             $value = explode("-", $values);
             $field = $value[0];
             $val = $value[1];
-            if($field === 'language') {
+            if ($field === 'language') {
                 $this->crud->query->where($field, 'like', '%' . $val . '%');
             } else {
                 $this->crud->query->where($field, '')->orWhere($field, NULL)->orWhere($field, 'like', '%img.ophim%')->orWhere($field, 'like', '%img.hiephanhthienha%');
@@ -180,7 +180,8 @@ class MovieCrudController extends CrudController
             'type' => 'view',
             'view' => 'ophim::movies.columns.column_movie_info',
             'searchLogic' => function ($query, $column, $searchTerm) {
-                $query->whereRaw("MATCH(name, origin_name) AGAINST(? IN BOOLEAN MODE)", [$searchTerm]);
+                $query->where('name', 'like', '%' . $searchTerm . '%')->orWhere('origin_name', 'like', '%' . $searchTerm . '%');
+                // $query->whereRaw("MATCH(name, origin_name) AGAINST(? IN BOOLEAN MODE)", [$searchTerm]);
             }
         ]);
 
