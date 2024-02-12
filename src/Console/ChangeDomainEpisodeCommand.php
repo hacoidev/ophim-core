@@ -43,17 +43,20 @@ class ChangeDomainEpisodeCommand extends Command
     public function handle()
     {
         $domains = array(
-            'vie.haiphim.com' => 'vie.opstream1.com',
-            'hd.1080phim.com' => 'hd1080.opstream2.com',
-            'kd.hd-bophim.com' => 'kd.opstream3.com',
-            '1080.hdphimonline.com' => '1080.opstream4.com',
-            'hd.hdbophim.com' => 'hdbo.opstream5.com',
-            'aa.nguonphimmoi.com' => 'aa.opstream6.com'
+            'vip.opstream10.com' => ['vie.opstream1.com', 'vie.haiphim.com'],
+            'vip.opstream15.com' => ['hd.1080phim.com', 'hd1080.opstream2.com'],
+            'vip.opstream14.com' => ['kd.hd-bophim.com', 'kd.opstream3.com'],
+            'vip.opstream11.com' => ['1080.hdphimonline.com', '1080.opstream4.com'],
+            'vip.opstream16.com' => ['hd.hdbophim.com', 'hdbo.opstream5.com'],
+            'vip.opstream12.com' => ['aa.nguonphimmoi.com', 'aa.opstream6.com'],
+            'vip.opstream13.com' => ['vie2.opstream7.com'],
+            'vip.opstream17.com' => ['vip.opstream8.com'],
         );
-
-        foreach ($domains as $oldDomain => $newDomain) {
-            $this->info("Replace: $oldDomain => $newDomain");
-            Episode::where('link', 'LIKE', '%' . $oldDomain . '%')->update(['link' => DB::raw("REPLACE(link, '$oldDomain', '$newDomain')")]);
+        foreach ($domains as $newDomain => $arrOldDomain) {
+            foreach ($arrOldDomain as $oldDomain) {
+                $this->info("Replace: $oldDomain => $newDomain");
+                Episode::where('link', 'LIKE', '%' . $oldDomain . '%')->update(['link' => DB::raw("REPLACE(link, '$oldDomain', '$newDomain')")]);
+            }
         }
 
         $this->info("Replace Done!");
